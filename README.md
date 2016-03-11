@@ -7,7 +7,7 @@
 ![](http://upload-images.jianshu.io/upload_images/1473110-caeb5bfc486fff5c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/480)
 ### 实现
 + 主界面用ViewPager嵌套RecyclerView
-+ 数据从 http://www.dbmeinv.com/获取
++ 数据获取 http://www.dbmeinv.com/
 + 实现dialog显示大图，并左右滑动
 
 ### 资源链接
