@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,6 +62,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         mViewPager = (ViewPager) findViewById(R.id.viewpager_home);
         mIndicator = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         mIndicator.setTextSize(DPUtils.dip2px(this,16f));
