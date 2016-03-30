@@ -54,8 +54,26 @@ public class ImageDialog extends Dialog implements android.view.View.OnClickList
 
     private void initViewPager() {
         MyApdater apdater=new MyApdater();
+        mViewPager.setOffscreenPageLimit(-1);
         mViewPager.setAdapter(apdater);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                setTitle(mPics.get(position).getDesc());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mViewPager.setCurrentItem(mPosition);
+        setTitle(mPics.get(mPosition).getDesc());
     }
 
 
@@ -76,8 +94,8 @@ public class ImageDialog extends Dialog implements android.view.View.OnClickList
             View v=View.inflate(context,R.layout.dialog_show_pic,null);
             ImageView showPic= (ImageView) v.findViewById(R.id.iv_show_pic);
             showPic.setOnClickListener(ImageDialog.this);
-            ImageLoader.getInstance().displayImage(mPics.get(position).getSrc(),showPic);
-            setTitle(mPics.get(position).getDesc());
+            ImageLoader.getInstance().displayImage(mPics.get(position).getSrc(), showPic);
+
             container.addView(v);
             return v;
         }
