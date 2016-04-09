@@ -1,4 +1,4 @@
-package com.joe.huaban.activity;
+package com.joe.huaban.Home;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.joe.huaban.R;
+import com.joe.huaban.beauty.model.BeautyRequest;
 import com.joe.huaban.pager.BasePager;
 import com.joe.huaban.pager.FacePager;
 import com.joe.huaban.pager.TuiPager;
@@ -35,8 +36,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initView();
-        initData();
-        initAdapter();
+        requestBeauty();
+        /*initData();
+        initAdapter();*/
     }
 
     @Override
@@ -89,15 +91,26 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        pagers.get(0).initData();
+        //pagers.get(0).initData();
     }
 
     private void initData() {
         pagers = new ArrayList<BasePager>();
-        pagers.add(new FacePager(this));
+        /*pagers.add(new FacePager(this));
         pagers.add(new XiongPager(this));
         pagers.add(new TunPager(this));
-        pagers.add(new TuiPager(this));
+        pagers.add(new TuiPager(this));*/
+
+    }
+
+    private void requestBeauty() {
+        new Thread(){
+            @Override
+            public void run() {
+                BeautyRequest.getInstance().getBeautyData();
+            }
+        }.start();
+
     }
 
     class MyAdapter extends PagerAdapter {
