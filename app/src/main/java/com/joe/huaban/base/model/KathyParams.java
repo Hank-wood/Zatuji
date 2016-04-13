@@ -1,4 +1,4 @@
-package com.joe.huaban.global.request;
+package com.joe.huaban.base.model;
 
 import org.xutils.http.RequestParams;
 

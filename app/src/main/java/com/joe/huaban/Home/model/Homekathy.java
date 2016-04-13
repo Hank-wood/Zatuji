@@ -2,10 +2,10 @@ package com.joe.huaban.Home.model;
 
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.joe.huaban.Home.presenter.HomeDataListener;
+import com.joe.huaban.base.model.BaseKathy;
 import com.joe.huaban.global.Constant;
-import com.joe.huaban.global.request.KathyParams;
+import com.joe.huaban.base.model.KathyParams;
 import com.joe.huaban.global.utils.LogUtils;
 
 import org.xutils.common.Callback;
@@ -14,11 +14,13 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 /**
- * 封装主页需要的请求
+ * 主页网络数据请求的操作类
  * Created by Joe on 2016/4/13.
  */
-public class Homekathy {
+public class HomeKathy extends BaseKathy{
+    //请求的地址
     private final String HOME="all";
+    @Override
     public void getHomeData(String max, final HomeDataListener listener){
         RequestParams params = KathyParams.getParams(Constant.HOST+HOME);
         if(!TextUtils.isEmpty(max)) params.addQueryStringParameter("max",max);
@@ -27,7 +29,7 @@ public class Homekathy {
             @Override
             public void onSuccess(String result) {
                 LogUtils.d(result);
-                parseData(listener,result,HomeData.class);
+                listener.onSuccess((HomeData) parseData(result,HomeData.class));
             }
 
             @Override
@@ -37,19 +39,13 @@ public class Homekathy {
 
             @Override
             public void onCancelled(CancelledException cex) {
-
             }
 
             @Override
             public void onFinished() {
-
             }
         });
 
     }
 
-    private void parseData(HomeDataListener listener, String result, Class<HomeData> homeDataClass) {
-        Gson gson=new Gson();
-        listener.onSuccess(gson.fromJson(result,homeDataClass));
-    }
 }

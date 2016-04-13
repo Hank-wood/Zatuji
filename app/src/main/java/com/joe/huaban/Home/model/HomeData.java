@@ -1,5 +1,7 @@
 package com.joe.huaban.Home.model;
 
+import com.joe.huaban.base.model.BaseData;
+
 import org.xutils.http.annotation.HttpResponse;
 import org.xutils.http.app.ResponseParser;
 
@@ -7,9 +9,10 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
+ * 主页面数据实体类
  * Created by Joe on 2016/4/13.
  */
-public class HomeData {
+public class HomeData extends BaseData{
     /**
      * homedata.pins.get(position).pin_id is a key to request second page
      * homedata.pins.file.key is a img url

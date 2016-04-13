@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:screenOrientation="portrait"
-            android:name=".Home.HomeActivity"
+            android:name=".HomeActivity"
             android:label="不要害羞">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
