@@ -3,7 +3,6 @@ package com.joe.huaban.Home.presenter;
 import com.joe.huaban.Home.model.HomeData;
 import com.joe.huaban.Home.model.Homekathy;
 import com.joe.huaban.Home.view.HomeView;
-import com.joe.huaban.beauty.model.BeautyRequest;
 import com.joe.huaban.global.utils.LogUtils;
 
 /**
