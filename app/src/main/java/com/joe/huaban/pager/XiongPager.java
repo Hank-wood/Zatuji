@@ -2,7 +2,7 @@ package com.joe.huaban.pager;
 
 import android.app.Activity;
 
-import com.joe.huaban.utils.ConsUtils;
+import com.joe.huaban.global.Constant;
 
 /**
  * Created by Joe on 2016/3/11.
@@ -15,6 +15,5 @@ public class XiongPager extends BasePager {
     @Override
     protected void initUrl() {
         mTitle="大胸";
-        mUrl= ConsUtils.DA_XIONG;
     }
 }

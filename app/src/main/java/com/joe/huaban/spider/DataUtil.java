@@ -1,6 +1,6 @@
 package com.joe.huaban.spider;
 
-import com.joe.huaban.utils.LogUtils;
+import com.joe.huaban.global.utils.LogUtils;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -27,7 +27,7 @@ public class DataUtil
             conn.setConnectTimeout(5000);  
             conn.setDoInput(true);  
             conn.setDoOutput(true);
-            LogUtils.Logout("返回值："+conn.getResponseCode());
+            LogUtils.e("返回值："+conn.getResponseCode());
             if (conn.getResponseCode() == 200)  
             {
                 InputStream is = conn.getInputStream();

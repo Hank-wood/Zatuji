@@ -2,11 +2,10 @@ package com.joe.huaban.beauty.model;
 
 import com.google.gson.Gson;
 import com.joe.huaban.spider.CommonException;
-import com.joe.huaban.utils.LogUtils;
+import com.joe.huaban.global.utils.LogUtils;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 
 /**
@@ -22,6 +21,7 @@ public class BeautyRequest {
         return instance;
     }
     public BeautyData getBeautyData(){
+
         StringBuffer sb = new StringBuffer();
         Session webServer=new Session();
         try
@@ -35,9 +35,9 @@ public class BeautyRequest {
             headers.put("Host", "api.huaban.com");
             headers.put("Cookie", "_ga=GA1.2.1821778039.1457606239; __auc=99ae7f48153601e54cba88851c7; sid=KNrjNqFKA3WErpcurGxJpHNrlNP.FbRCh2JDSyXDG%2B83%2Fcm0zUTDjK3sjPz%2BIq7IicNkwec");
             headers.put("Upgrade-Insecure-Requests","1");
-            HttpURLConnection conn =webServer.get(HOST_Beauty,headers);
+            HttpURLConnection conn =webServer.get(HOST_HUABAN,headers);
 
-            LogUtils.Logout("返回值："+conn.getResponseCode());
+            LogUtils.e("返回值："+conn.getResponseCode());
             if (conn.getResponseCode() == 200)
             {
                 InputStream is = conn.getInputStream();
@@ -67,7 +67,7 @@ public class BeautyRequest {
     }
 
     private BeautyData pareData(String s) {
-        LogUtils.Logout(s);
+        LogUtils.e(s);
         Gson gson=new Gson();
         return gson.fromJson(s,BeautyData.class);
     }

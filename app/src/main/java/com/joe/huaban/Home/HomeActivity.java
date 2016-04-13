@@ -2,6 +2,7 @@ package com.joe.huaban.Home;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,33 +13,45 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.joe.huaban.Home.model.HomeData;
+import com.joe.huaban.Home.presenter.HomePresenter;
+import com.joe.huaban.Home.presenter.HomePresenterImpl;
+import com.joe.huaban.Home.view.HomeView;
 import com.joe.huaban.R;
 import com.joe.huaban.beauty.model.BeautyRequest;
+import com.joe.huaban.global.utils.LogUtils;
 import com.joe.huaban.pager.BasePager;
-import com.joe.huaban.pager.FacePager;
-import com.joe.huaban.pager.TuiPager;
-import com.joe.huaban.pager.TunPager;
-import com.joe.huaban.pager.XiongPager;
-import com.joe.huaban.utils.DPUtils;
+import com.joe.huaban.global.utils.DPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.RunnableFuture;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements HomeView{
 
 
     private List<BasePager> pagers;
     private ViewPager mViewPager;
     private PagerSlidingTabStrip mIndicator;
+    private HomePresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initView();
-        requestBeauty();
-        /*initData();
-        initAdapter();*/
+        initPresenter();
+        fakeUse();
+//        initAdapter();
+    }
+
+    private void fakeUse() {
+        LogUtils.d("开始请求");
+        mPresenter.getHomeData(null);
+    }
+
+    private void initPresenter() {
+        mPresenter = new HomePresenterImpl(this);
     }
 
     @Override
@@ -111,6 +124,26 @@ public class HomeActivity extends AppCompatActivity {
             }
         }.start();
 
+    }
+
+    @Override
+    public void showLoading() {
+        LogUtils.d("loading");
+    }
+
+    @Override
+    public void stopLoading() {
+        LogUtils.d("done");
+    }
+
+    @Override
+    public void refreshData(HomeData data) {
+        LogUtils.d("返回数据"+data.pins.size());
+    }
+
+    @Override
+    public void loadMore(HomeData data) {
+        LogUtils.d("返回数据"+data.pins.size());
     }
 
     class MyAdapter extends PagerAdapter {

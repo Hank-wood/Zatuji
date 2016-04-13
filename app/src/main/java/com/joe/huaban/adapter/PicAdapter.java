@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.joe.huaban.ImageDialog;
 import com.joe.huaban.R;
 import com.joe.huaban.spider.Picture;
-import com.joe.huaban.utils.LogUtils;
+import com.joe.huaban.global.utils.LogUtils;
 
 import org.xutils.x;
 
@@ -72,7 +72,7 @@ public class PicAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public int getItemCount() {
-        LogUtils.Logout("传入Adapter数据长度："+mPics.size());
+        LogUtils.e("传入Adapter数据长度："+mPics.size());
         return mPics.size();
     }
 }

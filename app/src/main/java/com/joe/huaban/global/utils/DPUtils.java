@@ -1,4 +1,4 @@
-package com.joe.huaban.utils;
+package com.joe.huaban.global.utils;
 
 import android.content.Context;
 

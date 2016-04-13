@@ -1,7 +1,7 @@
 package com.joe.huaban.spider;
 
 
-import com.joe.huaban.utils.LogUtils;
+import com.joe.huaban.global.utils.LogUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -61,7 +61,7 @@ public class Spider {
 				Document doc = Jsoup.parse(htmlStr);
 		        //1��divs
 		        Element waterfall=doc.getElementById("waterfall");
-				LogUtils.Logout("waterfall为空"+(waterfall==null));
+				LogUtils.e("waterfall为空"+(waterfall==null));
 		        //1��div
 		        Elements items=waterfall.getElementsByClass("pin");
 		        for (Element element : items) {
