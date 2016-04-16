@@ -12,9 +12,12 @@ import com.joe.huaban.global.utils.LogUtils;
 public class HomePresenterImpl implements HomePresenter,HomeDataListener{
     private HomeKathy mKathy;
     private HomeView mView;
+    private String LastId;//上一次的最后一个pinID
+    private boolean isLoadingMore;
     public HomePresenterImpl(HomeView mView) {
         this.mView=mView;
         mKathy=new HomeKathy();
+        isLoadingMore=false;
     }
 
     @Override
@@ -23,20 +26,25 @@ public class HomePresenterImpl implements HomePresenter,HomeDataListener{
     }
 
     @Override
-    public void loadMoreData(String max) {
-        mKathy.getHomeData(max,this,true);
+    public void loadMoreData() {
+        if(isLoadingMore) return;
+        mKathy.getHomeData(LastId,this,true);
+        isLoadingMore=true;
     }
 
     @Override
     public void onSuccess(HomeData data,boolean isLoadMore) {
+        isLoadingMore=false;
         if(isLoadMore){
             mView.loadMore(data);
         }else{
             mView.refreshData(data);
         }
+        LastId=data.pins.get(data.pins.size()-1).pin_id;
     }
     @Override
     public void onError(Throwable ex, boolean isOnCallback) {
         LogUtils.d("请求数据失败："+ex.getMessage());
+        isLoadingMore=false;
     }
 }

@@ -1,11 +1,14 @@
 package com.joe.huaban;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.joe.huaban.homepage.HomeFragment;
 import com.joe.huaban.homepage.model.HomeData;
 import com.joe.huaban.homepage.presenter.HomePresenter;
 import com.joe.huaban.homepage.presenter.HomePresenterImpl;
@@ -14,43 +17,28 @@ import com.joe.huaban.base.ui.BaseActivity;
 import com.joe.huaban.global.utils.LogUtils;
 import com.joe.huaban.global.utils.DPUtils;
 
-public class HomeActivity extends BaseActivity implements HomeView{
+public class HomeActivity extends BaseActivity{
 
-
-    private ViewPager mViewPager;
-    private PagerSlidingTabStrip mIndicator;
-    private HomePresenter mPresenter;
-
+    private static final String TAG_HOME_FRAG = "homeFragment";
+    private FragmentManager mFragmentMananger;
     @Override
     protected int getContent() {return R.layout.activity_home;}
-    private void fakeUse() {
-        LogUtils.d("开始请求");
-        mPresenter.getHomeData();
-    }
+
     @Override
-    protected void initPresenter() {
-        mPresenter = new HomePresenterImpl(this);
-        fakeUse();
-    }
+    protected void initPresenter() {}
 
     @Override
     protected void initView() {
         Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mViewPager = (ViewPager) findViewById(R.id.viewpager_home);
-        mIndicator = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        mIndicator.setTextSize(DPUtils.dip2px(this,16f));
-        mIndicator.setTextColorResource(android.R.color.white);
+        initFragment();
     }
 
-    @Override
-    public void refreshData(HomeData data) {
-        LogUtils.d("返回数据"+data.pins.size());
-    }
+    private void initFragment(){
 
-    @Override
-    public void loadMore(HomeData data) {
-        LogUtils.d("返回数据"+data.pins.size());
+        HomeFragment homeFragment=new HomeFragment();
+        mFragmentMananger = getSupportFragmentManager();
+        mFragmentMananger.beginTransaction().add(R.id.fl_container_home,homeFragment,TAG_HOME_FRAG).commit();
     }
 
 

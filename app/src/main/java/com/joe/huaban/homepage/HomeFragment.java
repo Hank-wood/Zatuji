@@ -1,14 +1,14 @@
 package com.joe.huaban.homepage;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.joe.huaban.R;
 import com.joe.huaban.base.ui.BaseFragment;
+import com.joe.huaban.homepage.adapter.HomeAdapter;
 import com.joe.huaban.homepage.model.HomeData;
-import com.joe.huaban.homepage.presenter.HomeDataListener;
 import com.joe.huaban.homepage.presenter.HomePresenter;
 import com.joe.huaban.homepage.presenter.HomePresenterImpl;
 import com.joe.huaban.homepage.view.HomeView;
@@ -22,6 +22,9 @@ public class HomeFragment extends BaseFragment implements HomeView{
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     private HomePresenter mPresenter;
+    private HomeAdapter mAdapter;
+    private StaggeredGridLayoutManager  mLayoutManager;
+
     @Override
     protected int getLayout() {
         return R.layout.fragment_stagerd_base;
@@ -31,7 +34,10 @@ public class HomeFragment extends BaseFragment implements HomeView{
     protected void initView() {
         mRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swipe_fragment_base);
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.recycler_fragment_base);
-
+        mAdapter = new HomeAdapter(mActivity);
+        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -41,9 +47,6 @@ public class HomeFragment extends BaseFragment implements HomeView{
         mPresenter.getHomeData();
     }
 
-    @Override
-    protected void destroyPresenter() {
-    }
 
     @Override
     protected void initListener() {
@@ -53,16 +56,30 @@ public class HomeFragment extends BaseFragment implements HomeView{
                 mPresenter.getHomeData();
             }
         });
+
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int[] visibleItems = mLayoutManager.findLastVisibleItemPositions(null);
+                int lastitem = Math.max(visibleItems[0], visibleItems[1]);
+
+                if (dy > 0 && lastitem > mAdapter.getItemCount() - 5) {
+                    mPresenter.loadMoreData();
+                }
+            }
+        });
     }
 
     @Override
     public void refreshData(HomeData data) {
-
+        mRefreshLayout.setRefreshing(false);
+        mAdapter.refreshData(data,false);
     }
 
     @Override
     public void loadMore(HomeData data) {
-
+        mAdapter.refreshData(data,true);
     }
 
 }

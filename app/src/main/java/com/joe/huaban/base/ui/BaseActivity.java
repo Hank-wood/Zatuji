@@ -13,8 +13,8 @@ import com.joe.huaban.global.utils.LogUtils;
  */
 public abstract class BaseActivity extends AppCompatActivity implements LoadingView{
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(getContent());
         initView();
         initPresenter();

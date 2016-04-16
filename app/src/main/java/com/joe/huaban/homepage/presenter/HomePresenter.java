@@ -6,5 +6,5 @@ package com.joe.huaban.homepage.presenter;
  */
 public interface HomePresenter {
     void getHomeData();
-    void loadMoreData(String max);
+    void loadMoreData();
 }

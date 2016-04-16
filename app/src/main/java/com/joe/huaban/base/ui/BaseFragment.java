@@ -13,9 +13,15 @@ import com.joe.huaban.base.LoadingView;
 /**
  * Created by Joe on 2016/4/16.
  */
-public abstract class BaseFragment extends Fragment implements LoadingView{
+public abstract class BaseFragment extends android.support.v4.app.Fragment implements LoadingView{
     protected Activity mActivity;
     protected View mRootView;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.mActivity=getActivity();
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -55,12 +61,5 @@ public abstract class BaseFragment extends Fragment implements LoadingView{
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        destroyPresenter();
-    }
 
-    //销毁presenter
-    protected abstract void destroyPresenter();
 }

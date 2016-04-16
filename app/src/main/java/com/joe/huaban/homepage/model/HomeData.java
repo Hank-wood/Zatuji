@@ -16,8 +16,9 @@ public class HomeData extends BaseData{
     public List<PinsBean> pins;
 
     public static class PinsBean {
-        public int pin_id;
+        public String pin_id;
         public FileBean file;
+        public String raw_text;
 
         public static class FileBean {
             public String key;

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="8dp"
+    app:cardCornerRadius="0dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-    <android.support.v7.widget.CardView
-
-        android:elevation="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    android:layout_height="wrap_content">
         <RelativeLayout
             android:background="@android:color/white"
             android:layout_width="match_parent"
@@ -16,19 +17,23 @@
             android:id="@+id/iv_pic_item"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxHeight="50dp"
+            />
         <TextView
             android:id="@+id/tv_desc_item"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:background="@android:color/white"
             android:gravity="center_vertical"
-            android:padding="5dp"
+            android:padding="10dp"
+            android:lineSpacingExtra="3dp"
             android:layout_below="@id/iv_pic_item"
             android:layout_alignLeft="@id/iv_pic_item"
             android:layout_alignRight="@id/iv_pic_item"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-</RelativeLayout>
