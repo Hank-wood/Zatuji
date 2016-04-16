@@ -1,7 +1,7 @@
 package com.joe.huaban.homepage.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -9,7 +9,8 @@ import com.joe.huaban.base.adapter.BaseStagerdAdapter;
 import com.joe.huaban.base.adapter.DataViewHolder;
 import com.joe.huaban.base.model.BaseData;
 import com.joe.huaban.global.Constant;
-import com.joe.huaban.homepage.model.HomeData;
+import com.joe.huaban.base.model.PicData;
+import com.joe.huaban.picdetail.PicDetailActivity;
 
 import org.xutils.x;
 
@@ -20,15 +21,17 @@ import java.util.List;
  */
 public class HomeAdapter extends BaseStagerdAdapter {
 
-    private List<HomeData.PinsBean> mDatas;
+    private List<PicData.PinsBean> mDatas;
+
+
     public HomeAdapter(Context context) {
         super(context);
 
     }
     public void refreshData(BaseData data,boolean isMore){
-        HomeData mData= (HomeData) data;
+         PicData mData = (PicData) data;
         if(isMore){
-            mDatas.addAll(((HomeData) data).pins);
+            mDatas.addAll(((PicData) data).pins);
         }else{
             mDatas=  mData.pins;
         }
@@ -38,11 +41,24 @@ public class HomeAdapter extends BaseStagerdAdapter {
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position) {
         holder.tvDesc.setVisibility(View.VISIBLE);
+        //替换为imageloader
         x.image().bind(holder.ivPic, Constant.HOST_PIC+mDatas.get(position).file.key);
         if(TextUtils.isEmpty((mDatas.get(position).raw_text))){
             holder.tvDesc.setVisibility(View.GONE);
         }
         holder.tvDesc.setText(mDatas.get(position).raw_text);
+        final int pos=position;
+        holder.ivPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(mContext, PicDetailActivity.class);
+                i.putExtra(Constant.PIC_DATA,mDatas.get(pos).file.key);
+                i.putExtra(Constant.PIC_DESC,mDatas.get(pos).raw_text);
+                i.putExtra(Constant.PIC_WIDTH,mDatas.get(pos).file.width);
+                i.putExtra(Constant.PIC_HEIGHT,mDatas.get(pos).file.height);
+                mContext.startActivity(i);
+            }
+        });
     }
 
     @Override

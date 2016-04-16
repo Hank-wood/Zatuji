@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.joe.huaban.R;
 import com.joe.huaban.base.LoadingView;
 
 /**
@@ -16,11 +18,12 @@ import com.joe.huaban.base.LoadingView;
 public abstract class BaseFragment extends android.support.v4.app.Fragment implements LoadingView{
     protected Activity mActivity;
     protected View mRootView;
-
+    protected AlertDialog dialog;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mActivity=getActivity();
+        initLoading();
     }
 
     @Override
@@ -33,13 +36,16 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment imple
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(getLayout(),null);
+
         initView();
         initPresenter();
         initListener();
         return mRootView;
 
     }
-
+    protected void initLoading() {
+        dialog = new AlertDialog.Builder(mActivity).create();
+    }
     protected void initListener() {
 
     }
@@ -53,12 +59,14 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment imple
     protected abstract void initPresenter();
     @Override
     public void showLoading() {
-
+        View loadingView=View.inflate(mActivity, R.layout.dialog_loading,null);
+        dialog.setContentView(loadingView);
+        dialog.show();
     }
 
     @Override
     public void doneLoading() {
-
+        dialog.dismiss();
     }
 
 

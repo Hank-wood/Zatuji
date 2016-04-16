@@ -18,13 +18,13 @@
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="50dp"
+            android:maxHeight="200dp"
             />
         <TextView
             android:id="@+id/tv_desc_item"
             android:textSize="13sp"
             android:background="@android:color/white"
-            android:gravity="center_vertical"
+            android:gravity="start"
             android:padding="10dp"
             android:lineSpacingExtra="3dp"
             android:layout_below="@id/iv_pic_item"

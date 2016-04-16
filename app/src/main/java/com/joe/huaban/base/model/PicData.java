@@ -1,21 +1,22 @@
-package com.joe.huaban.homepage.model;
+package com.joe.huaban.base.model;
 
 import com.joe.huaban.base.model.BaseData;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * 主页面数据实体类
+ * 图片数据实体类
  * Created by Joe on 2016/4/13.
  */
-public class HomeData extends BaseData{
+public class PicData extends BaseData implements Serializable{
     /**
      * homedata.pins.get(position).pin_id is a key to request second page
      * homedata.pins.file.key is a img url
      */
     public List<PinsBean> pins;
 
-    public static class PinsBean {
+    public static class PinsBean implements Serializable{
         public String pin_id;
         public FileBean file;
         public String raw_text;
