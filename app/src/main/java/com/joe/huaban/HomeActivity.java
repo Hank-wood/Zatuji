@@ -1,18 +1,15 @@
 package com.joe.huaban;
 
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.joe.huaban.Home.model.HomeData;
-import com.joe.huaban.Home.presenter.HomePresenter;
-import com.joe.huaban.Home.presenter.HomePresenterImpl;
-import com.joe.huaban.Home.view.HomeView;
-import com.joe.huaban.R;
+import com.joe.huaban.homepage.model.HomeData;
+import com.joe.huaban.homepage.presenter.HomePresenter;
+import com.joe.huaban.homepage.presenter.HomePresenterImpl;
+import com.joe.huaban.homepage.view.HomeView;
 import com.joe.huaban.base.ui.BaseActivity;
 import com.joe.huaban.global.utils.LogUtils;
 import com.joe.huaban.global.utils.DPUtils;
@@ -28,7 +25,7 @@ public class HomeActivity extends BaseActivity implements HomeView{
     protected int getContent() {return R.layout.activity_home;}
     private void fakeUse() {
         LogUtils.d("开始请求");
-        mPresenter.getHomeData(null);
+        mPresenter.getHomeData();
     }
     @Override
     protected void initPresenter() {
@@ -45,15 +42,6 @@ public class HomeActivity extends BaseActivity implements HomeView{
         mIndicator.setTextSize(DPUtils.dip2px(this,16f));
         mIndicator.setTextColorResource(android.R.color.white);
     }
-    @Override
-    public void showLoading() {
-        LogUtils.d("loading");
-    }
-
-    @Override
-    public void stopLoading() {
-        LogUtils.d("done");
-    }
 
     @Override
     public void refreshData(HomeData data) {
@@ -64,6 +52,7 @@ public class HomeActivity extends BaseActivity implements HomeView{
     public void loadMore(HomeData data) {
         LogUtils.d("返回数据"+data.pins.size());
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

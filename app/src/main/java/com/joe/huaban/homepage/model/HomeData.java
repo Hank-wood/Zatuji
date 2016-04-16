@@ -1,11 +1,7 @@
-package com.joe.huaban.Home.model;
+package com.joe.huaban.homepage.model;
 
 import com.joe.huaban.base.model.BaseData;
 
-import org.xutils.http.annotation.HttpResponse;
-import org.xutils.http.app.ResponseParser;
-
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
