@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.jaeger.library.StatusBarUtil;
+import com.joe.huaban.MyApplication;
 import com.joe.huaban.R;
 import com.joe.huaban.base.LoadingView;
+import com.joe.huaban.global.utils.KToast;
 import com.joe.huaban.global.utils.LogUtils;
 
 /**
@@ -21,6 +23,7 @@ import com.joe.huaban.global.utils.LogUtils;
  */
 public abstract class BaseActivity extends AppCompatActivity implements LoadingView{
     protected Activity mActivity;
+    protected MyApplication mApplication;
     private AlertDialog dialog;
     private WindowManager windowManager;
     private View loadingView;
@@ -30,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity implements LoadingV
         super.onCreate(savedInstanceState);
         setContentView(getContent());
         this.mActivity=this;
+        this.mApplication= (MyApplication) getApplication();
         StatusBarUtil.setColor(this,getResources().getColor(R.color.colorPrimary));
         initView();
         initLoading();
@@ -64,5 +68,9 @@ public abstract class BaseActivity extends AppCompatActivity implements LoadingV
     public void doneLoading(){
         dialog.dismiss();
         LogUtils.d("doneLoading");
+    }
+    @Override
+    public void showError() {
+        KToast.show("网络好像有问题哦");
     }
 }

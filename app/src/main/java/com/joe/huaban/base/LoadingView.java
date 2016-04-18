@@ -7,4 +7,5 @@ package com.joe.huaban.base;
 public interface LoadingView {
     void showLoading();
     void doneLoading();
+    void showError();
 }

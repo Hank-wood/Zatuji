@@ -1,5 +1,7 @@
 package com.joe.huaban.homepage.presenter;
 
+import android.content.Context;
+
 import com.joe.huaban.base.LoadingView;
 import com.joe.huaban.base.model.PicData;
 import com.joe.huaban.homepage.model.HomeKathy;
@@ -16,30 +18,34 @@ public class HomePresenterImpl implements HomePresenter,HomeDataListener{
     private HomeView mView;
     private String LastId;//上一次的最后一个pinID
     private boolean isLoadingMore;
-    public HomePresenterImpl(HomeView mView, LoadingView mLoading) {
+    private boolean isGetCache=false;
+    public HomePresenterImpl(HomeView mView, LoadingView mLoading, Context context) {
         this.mView=mView;
         this.mLoading=mLoading;
-        mKathy=new HomeKathy();
+        mKathy=new HomeKathy(context);
         isLoadingMore=false;
     }
-
+    public void getCacheData(){
+        mLoading.showLoading();
+        isGetCache=true;
+        mKathy.getPicDataFromCache(null,this,false);
+    }
     @Override
     public void getHomeData() {
-        mLoading.showLoading();
-        mKathy.getHomeData(null,this,false);
+        mKathy.getPicDataFromServer(null,this,false);
     }
 
     @Override
     public void loadMoreData() {
         if(isLoadingMore) return;
-        mKathy.getHomeData(LastId,this,true);
+        mKathy.getPicDataFromServer(LastId,this,true);
         isLoadingMore=true;
 
     }
 
     @Override
     public void onSuccess(PicData data, boolean isLoadMore) {
-        mLoading.doneLoading();
+        if(!isGetCache) mLoading.doneLoading();
         isLoadingMore=false;
         if(isLoadMore){
             mView.loadMore(data);
@@ -47,12 +53,13 @@ public class HomePresenterImpl implements HomePresenter,HomeDataListener{
             mView.refreshData(data);
         }
         LastId=data.pins.get(data.pins.size()-1).pin_id;
-
+        isGetCache=false;
     }
     @Override
     public void onError(Throwable ex, boolean isOnCallback) {
         LogUtils.d("请求数据失败："+ex.getMessage());
         mLoading.doneLoading();
         isLoadingMore=false;
+        mLoading.showError();
     }
 }

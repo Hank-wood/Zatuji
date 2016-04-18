@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.joe.huaban.MyApplication;
 import com.joe.huaban.R;
 import com.joe.huaban.base.LoadingView;
+import com.joe.huaban.global.utils.KToast;
 
 /**
  * Created by Joe on 2016/4/16.
@@ -19,10 +21,12 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment imple
     protected Activity mActivity;
     protected View mRootView;
     protected AlertDialog dialog;
+    protected MyApplication myApplication;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mActivity=getActivity();
+        this.myApplication= (MyApplication) mActivity.getApplication();
         initLoading();
     }
 
@@ -69,5 +73,12 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment imple
         dialog.dismiss();
     }
 
+    @Override
+    public void showError() {
+        KToast.show("网络好像有问题哦");
+    }
 
+    protected void showEmptyView(){
+
+    }
 }

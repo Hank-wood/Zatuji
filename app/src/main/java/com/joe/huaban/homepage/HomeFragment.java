@@ -20,8 +20,9 @@ import com.joe.huaban.homepage.view.HomeView;
 public class HomeFragment extends BaseFragment implements HomeView{
 
     private SwipeRefreshLayout mRefreshLayout;
+
     private RecyclerView mRecyclerView;
-    private HomePresenter mPresenter;
+    private HomePresenterImpl mPresenter;
     private HomeAdapter mAdapter;
     private StaggeredGridLayoutManager  mLayoutManager;
 
@@ -43,9 +44,9 @@ public class HomeFragment extends BaseFragment implements HomeView{
     @Override
     protected void initPresenter() {
         HomeActivity loadingView= (HomeActivity) mActivity;
-        mPresenter =  new HomePresenterImpl(this,loadingView);
+        mPresenter =  new HomePresenterImpl(this,loadingView,myApplication);
         //加载数据
-        mPresenter.getHomeData();
+        mPresenter.getCacheData();
     }
 
 
