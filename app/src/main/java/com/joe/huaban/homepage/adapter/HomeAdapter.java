@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.joe.huaban.base.adapter.BaseStagerdAdapter;
+import com.joe.huaban.base.adapter.BaseStaggeredAdapter;
 import com.joe.huaban.base.adapter.DataViewHolder;
 import com.joe.huaban.base.model.BaseData;
 import com.joe.huaban.global.Constant;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Joe on 2016/4/16.
  */
-public class HomeAdapter extends BaseStagerdAdapter {
+public class HomeAdapter extends BaseStaggeredAdapter {
 
     private List<PicData.PinsBean> mDatas;
 
@@ -40,13 +40,8 @@ public class HomeAdapter extends BaseStagerdAdapter {
 
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position) {
-        holder.tvDesc.setVisibility(View.VISIBLE);
         //替换为imageloader
         x.image().bind(holder.ivPic, Constant.HOST_PIC+mDatas.get(position).file.key);
-        if(TextUtils.isEmpty((mDatas.get(position).raw_text))){
-            holder.tvDesc.setVisibility(View.GONE);
-        }
-        holder.tvDesc.setText(mDatas.get(position).raw_text);
         final int pos=position;
         holder.ivPic.setOnClickListener(new View.OnClickListener() {
             @Override

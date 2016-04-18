@@ -20,8 +20,6 @@ public class HomeActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         initFragment();
     }
 

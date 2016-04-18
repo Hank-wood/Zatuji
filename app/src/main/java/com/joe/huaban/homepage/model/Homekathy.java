@@ -65,6 +65,15 @@ public class HomeKathy extends BaseKathy{
 
     }
 
+    public boolean isCacheAvilable(){
+        File picFile=null;
+        picFile=new File(mContext.getCacheDir(),"pic.txt");
+        if(!picFile.exists()) {
+            return false;
+        }else{
+            return true;
+        }
+    }
     //从缓存获取数据
     @Override
     public void getPicDataFromCache(String max, HomeDataListener listener, boolean isLoadMore) {

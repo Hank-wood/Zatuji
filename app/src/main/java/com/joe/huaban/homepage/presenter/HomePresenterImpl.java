@@ -27,8 +27,12 @@ public class HomePresenterImpl implements HomePresenter,HomeDataListener{
     }
     public void getCacheData(){
         mLoading.showLoading();
-        isGetCache=true;
-        mKathy.getPicDataFromCache(null,this,false);
+        if(mKathy.isCacheAvilable()) {
+            isGetCache = true;
+            mKathy.getPicDataFromCache(null, this, false);
+        }else{
+            getHomeData();
+        }
     }
     @Override
     public void getHomeData() {

@@ -19,10 +19,10 @@ import java.util.List;
 /**
  * Created by Joe on 2016/4/16.
  */
-public class BaseStagerdAdapter extends RecyclerView.Adapter<DataViewHolder> {
+public class BaseStaggeredAdapter extends RecyclerView.Adapter<DataViewHolder> {
     protected Context mContext;
     protected LayoutInflater mInflater;
-    public BaseStagerdAdapter(Context context) {
+    public BaseStaggeredAdapter(Context context) {
         this.mContext=context;
         mInflater=LayoutInflater.from(mContext);
     }

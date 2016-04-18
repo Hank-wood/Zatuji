@@ -9,6 +9,12 @@ import org.xutils.http.RequestParams;
 public class KathyParams {
     //获取一个带有header的请求
     public static RequestParams getParams(String url){
+        RequestParams mParams=getNormalParams(url);
+        mParams.addQueryStringParameter("limit","20");
+        return mParams;
+    }
+
+    public static RequestParams getNormalParams(String url){
         RequestParams mParams=new RequestParams(url);
         mParams.setHeader("Accept","*/*");
         mParams.setHeader("X-Client-ID:", "gzip, deflate, sdch");
@@ -18,7 +24,6 @@ public class KathyParams {
         mParams.setHeader("Host", "api.huaban.com");
         mParams.setHeader("Cookie", "_ga=GA1.2.1821778039.1457606239; __auc=99ae7f48153601e54cba88851c7; sid=KNrjNqFKA3WErpcurGxJpHNrlNP.FbRCh2JDSyXDG%2B83%2Fcm0zUTDjK3sjPz%2BIq7IicNkwec");
         mParams.setHeader("Upgrade-Insecure-Requests","1");
-        mParams.addQueryStringParameter("limit","20");
         return mParams;
     }
 }

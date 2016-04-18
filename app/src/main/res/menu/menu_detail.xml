@@ -6,15 +6,17 @@
         android:id="@+id/action_save"
         android:orderInCategory="100"
         android:title="收藏"
-        app:showAsAction="never" />
+        android:icon="@drawable/icon_favorite"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_download"
         android:orderInCategory="100"
-        android:title="下载"
-        app:showAsAction="never" />
+        android:title="保存"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_share"
         android:orderInCategory="100"
         android:title="分享"
-        app:showAsAction="never" />
+        android:icon="@drawable/icon_share"
+        app:showAsAction="ifRoom" />
 </menu>

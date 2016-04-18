@@ -16,6 +16,7 @@ import com.joe.huaban.R;
 import com.joe.huaban.base.ui.BaseActivity;
 import com.joe.huaban.global.Constant;
 import com.joe.huaban.global.utils.LogUtils;
+import com.joe.huaban.picdetail.presenter.PicDetailPresenter;
 
 import org.xutils.x;
 
@@ -29,10 +30,21 @@ public class PicDetailActivity extends BaseActivity{
     private Toolbar toolbar;
     private AppBarLayout appBarLayout;
     private ActionBar mActionBar;
+    private boolean dontShowTv=false;
+    private PicDetailPresenter mPresenter;
+    private String img;
+    private String desc;
+    private int width;
+    private int height;
 
     @Override
     protected int getContent() {
         return R.layout.activity_pic_detail;
+    }
+
+    @Override
+    protected void initPresenter() {
+        mPresenter = new PicDetailPresenter(mApplication,this);
     }
 
     @Override
@@ -50,11 +62,15 @@ public class PicDetailActivity extends BaseActivity{
         initData();
     }
     private void initData() {
-        String img=getIntent().getStringExtra(Constant.PIC_DATA);
-        String desc=getIntent().getStringExtra(Constant.PIC_DESC);
+        img = getIntent().getStringExtra(Constant.PIC_DATA);
+        desc = getIntent().getStringExtra(Constant.PIC_DESC);
         countPicSize();
-        x.image().bind(ivPic,Constant.HOST_PIC+img);
-        if(!TextUtils.isEmpty(desc)) tvDesc.setText(desc);
+        x.image().bind(ivPic,Constant.HOST_PIC+ img);
+        if(!TextUtils.isEmpty(desc)){
+            tvDesc.setText(desc);
+        }else{
+            dontShowTv=true;
+        }
     }
 
     @Override
@@ -69,9 +85,16 @@ public class PicDetailActivity extends BaseActivity{
             case android.R.id.home:
                 finish();
                 break;
-
+            case R.id.action_save://收藏
+                mPresenter.saveToFavorite(img,desc,width,height);
+                break;
+            case R.id.action_download://保存
+                mPresenter.saveToPhone(img);
+                break;
+            case R.id.action_share://分享
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -84,30 +107,29 @@ public class PicDetailActivity extends BaseActivity{
                     toolbar.setVisibility(View.INVISIBLE);
                     appBarLayout.setVisibility(View.INVISIBLE);
                 }else{
-                    tvDesc.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
                     appBarLayout.setVisibility(View.VISIBLE);
+                    if(!dontShowTv) tvDesc.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
 
     private void countPicSize() {
-        int width=getIntent().getIntExtra(Constant.PIC_WIDTH,-1);
-        int height=getIntent().getIntExtra(Constant.PIC_HEIGHT,-1);
+        width = getIntent().getIntExtra(Constant.PIC_WIDTH,-1);
+        height = getIntent().getIntExtra(Constant.PIC_HEIGHT,-1);
         //获取屏幕宽高
         DisplayMetrics dm =getResources().getDisplayMetrics();
         int w_screen = dm.widthPixels;
         int h_screen = dm.heightPixels;
-        LogUtils.d("before:W="+width+" H="+height+" Screen:W="+w_screen+"H="+h_screen);
+        LogUtils.d("before:W="+ width +" H="+ height +" Screen:W="+w_screen+"H="+h_screen);
         RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams) ivPic.getLayoutParams();
-        double times= (w_screen+0.0)/(width+0.0);
+        double times= (w_screen+0.0)/(width +0.0);
         //宽与屏幕对齐
-        width=w_screen;
-        params.width=width;
+        params.width=w_screen;
         LogUtils.d("times="+times);
-        params.height= (int) (height*times);
-        LogUtils.d("after:W="+width+" H="+params.height);
+        params.height= (int) (height *times);
+        LogUtils.d("after:W="+ width +" H="+params.height);
         ivPic.setLayoutParams(params);
         ivPic.setScaleType(ImageView.ScaleType.FIT_START);
     }

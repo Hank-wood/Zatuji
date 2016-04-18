@@ -25,7 +25,6 @@ public abstract class BaseActivity extends AppCompatActivity implements LoadingV
     protected Activity mActivity;
     protected MyApplication mApplication;
     private AlertDialog dialog;
-    private WindowManager windowManager;
     private View loadingView;
 
     @Override
@@ -57,10 +56,8 @@ public abstract class BaseActivity extends AppCompatActivity implements LoadingV
 
     @Override
     public void showLoading(){
-
-        dialog.setView(loadingView);
-//        dialog.setContentView(loadingView);
         dialog.show();
+        dialog.setContentView(loadingView);
 
         LogUtils.d("loading");
     }
