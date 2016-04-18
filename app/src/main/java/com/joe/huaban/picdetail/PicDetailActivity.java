@@ -102,7 +102,7 @@ public class PicDetailActivity extends BaseActivity{
         ivPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(tvDesc.getVisibility()==View.VISIBLE){
+                if(appBarLayout.getVisibility()==View.VISIBLE){
                     tvDesc.setVisibility(View.INVISIBLE);
                     toolbar.setVisibility(View.INVISIBLE);
                     appBarLayout.setVisibility(View.INVISIBLE);

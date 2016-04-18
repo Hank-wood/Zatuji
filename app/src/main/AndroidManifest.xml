@@ -15,7 +15,7 @@
         <activity
             android:screenOrientation="portrait"
             android:name=".HomeActivity"
-            android:label="杂图集">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

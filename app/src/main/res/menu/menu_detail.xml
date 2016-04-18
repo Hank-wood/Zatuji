@@ -12,6 +12,7 @@
         android:id="@+id/action_download"
         android:orderInCategory="100"
         android:title="保存"
+        android:icon="@drawable/icon_download"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_share"

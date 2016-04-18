@@ -31,4 +31,7 @@ dependencies {
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.jaeger.statusbaruitl:library:1.0.0'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.ashokvarma.android:bottom-navigation-bar:1.0.0'
 }
