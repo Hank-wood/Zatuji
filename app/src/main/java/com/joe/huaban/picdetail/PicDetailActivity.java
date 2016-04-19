@@ -2,13 +2,19 @@ package com.joe.huaban.picdetail;
 
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +42,7 @@ public class PicDetailActivity extends BaseActivity{
     private String desc;
     private int width;
     private int height;
+    private ListView mList;
 
     @Override
     protected int getContent() {
@@ -49,8 +56,8 @@ public class PicDetailActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        ivPic = (ImageView) findViewById(R.id.iv_pic_item);
         tvDesc = (TextView) findViewById(R.id.tv_desc_item);
+        mList = (ListView) findViewById(R.id.list_pic_detail);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
@@ -64,13 +71,13 @@ public class PicDetailActivity extends BaseActivity{
     private void initData() {
         img = getIntent().getStringExtra(Constant.PIC_DATA);
         desc = getIntent().getStringExtra(Constant.PIC_DESC);
-        countPicSize();
-        x.image().bind(ivPic,Constant.HOST_PIC+ img);
         if(!TextUtils.isEmpty(desc)){
             tvDesc.setText(desc);
         }else{
             dontShowTv=true;
         }
+        PicDetailAdapter mAdapter=new PicDetailAdapter();
+        mList.setAdapter(mAdapter);
     }
 
     @Override
@@ -99,9 +106,9 @@ public class PicDetailActivity extends BaseActivity{
 
     @Override
     protected void initListener() {
-        ivPic.setOnClickListener(new View.OnClickListener() {
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(appBarLayout.getVisibility()==View.VISIBLE){
                     tvDesc.setVisibility(View.INVISIBLE);
                     toolbar.setVisibility(View.INVISIBLE);
@@ -114,8 +121,45 @@ public class PicDetailActivity extends BaseActivity{
             }
         });
     }
+    class PicDetailAdapter extends BaseAdapter{
 
-    private void countPicSize() {
+        @Override
+        public int getCount() {
+            return 1;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder=null;
+            if(convertView==null){
+                holder=new ViewHolder();
+                convertView=new ImageView(mApplication);
+                holder.mIv= (ImageView) convertView;
+                convertView.setTag(holder);
+            }else{
+                holder= (ViewHolder) convertView.getTag();
+            }
+            AbsListView.LayoutParams params= new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            holder.mIv.setLayoutParams(params);
+            holder.mIv.setScaleType(ImageView.ScaleType.FIT_XY);
+            countPicSize(holder.mIv);
+            x.image().bind(holder.mIv,Constant.HOST_PIC+ img);
+            return convertView;
+        }
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 1;
+        }
+    }
+    class ViewHolder{
+        ImageView mIv;
+    }
+    private void countPicSize(ImageView mIv) {
         width = getIntent().getIntExtra(Constant.PIC_WIDTH,-1);
         height = getIntent().getIntExtra(Constant.PIC_HEIGHT,-1);
         //获取屏幕宽高
@@ -123,14 +167,16 @@ public class PicDetailActivity extends BaseActivity{
         int w_screen = dm.widthPixels;
         int h_screen = dm.heightPixels;
         LogUtils.d("before:W="+ width +" H="+ height +" Screen:W="+w_screen+"H="+h_screen);
-        RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams) ivPic.getLayoutParams();
+        AbsListView.LayoutParams params= (AbsListView.LayoutParams) mIv.getLayoutParams();
         double times= (w_screen+0.0)/(width +0.0);
         //宽与屏幕对齐
         params.width=w_screen;
         LogUtils.d("times="+times);
         params.height= (int) (height *times);
         LogUtils.d("after:W="+ width +" H="+params.height);
-        ivPic.setLayoutParams(params);
-        ivPic.setScaleType(ImageView.ScaleType.FIT_START);
+        mIv.setLayoutParams(params);
+        mIv.setScaleType(ImageView.ScaleType.FIT_START);
     }
+
+
 }

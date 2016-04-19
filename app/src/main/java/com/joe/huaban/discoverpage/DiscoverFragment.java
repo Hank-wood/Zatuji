@@ -23,6 +23,7 @@ public class DiscoverFragment extends BaseFragment implements HomeView{
     private HomeAdapter mAdapter;
     private StaggeredGridLayoutManager mLayoutManager;
     private DiscoverPresenter mPresenter;
+    private HomeActivity loadingView;
 
     @Override
     protected int getLayout() {
@@ -31,8 +32,8 @@ public class DiscoverFragment extends BaseFragment implements HomeView{
 
     @Override
     protected void initPresenter() {
-        HomeActivity loadingView= (HomeActivity) mActivity;
-        mPresenter = new DiscoverPresenter(this,loadingView,myApplication);
+        loadingView = (HomeActivity) mActivity;
+        mPresenter = new DiscoverPresenter(this, loadingView,myApplication);
         mPresenter.getInitData();
     }
 
@@ -60,7 +61,11 @@ public class DiscoverFragment extends BaseFragment implements HomeView{
                 super.onScrolled(recyclerView, dx, dy);
                 int[] visibleItems = mLayoutManager.findLastVisibleItemPositions(null);
                 int lastitem = Math.max(visibleItems[0], visibleItems[1]);
-
+                if(dy>0) {
+                    loadingView.hideOrShowFAB(true);
+                }else{
+                    loadingView.hideOrShowFAB(false);
+                }
                 if (dy > 0 && lastitem > mAdapter.getItemCount() - 5) {
                     mPresenter.loadMore();
                 }
@@ -79,6 +84,8 @@ public class DiscoverFragment extends BaseFragment implements HomeView{
     }
 
     public void loadTagData(int tag){
+        mRecyclerView.scrollToPosition(0);
         mPresenter.getAnotherData(tag);
+
     }
 }

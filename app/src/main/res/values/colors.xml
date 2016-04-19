@@ -7,5 +7,11 @@
     <color name="Green">#42BD56</color>
     <color name="ALPHGreen">#6942bd56</color>
     <color name="DarkGreen">#3CA353</color>
+    <!--default pic color-->
+    <color name="DefaultBlue">#3a9bb3</color>
+    <color name="DefaultGreen">#5ba73a</color>
+    <color name="DefaultRed">#9b4c39</color>
+    <color name="DefaultPurple">#75388f</color>
+    <color name="FAB">#c0484c</color>
 
 </resources>

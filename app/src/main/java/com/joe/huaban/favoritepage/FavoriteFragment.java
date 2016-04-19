@@ -22,6 +22,7 @@ public class FavoriteFragment extends BaseFragment implements HomeView{
     private HomeAdapter mAdapter;
     private StaggeredGridLayoutManager mLayoutManager;
     private FavoritePresenter mPresenter;
+    private HomeActivity activity;
 
     @Override
     protected int getLayout() {
@@ -30,8 +31,8 @@ public class FavoriteFragment extends BaseFragment implements HomeView{
 
     @Override
     protected void initPresenter() {
-        HomeActivity activity= (HomeActivity) mActivity;
-        mPresenter = new FavoritePresenter(this,activity,myApplication);
+        activity = (HomeActivity) mActivity;
+        mPresenter = new FavoritePresenter(this, activity,myApplication);
         mPresenter.getFavoriteData();
     }
 
@@ -59,7 +60,11 @@ public class FavoriteFragment extends BaseFragment implements HomeView{
                 super.onScrolled(recyclerView, dx, dy);
                 int[] visibleItems = mLayoutManager.findLastVisibleItemPositions(null);
                 int lastitem = Math.max(visibleItems[0], visibleItems[1]);
-
+                if(dy>0) {
+                    activity.hideOrShowFAB(true);
+                }else{
+                    activity.hideOrShowFAB(false);
+                }
                 if (dy > 0 && lastitem > mAdapter.getItemCount() - 5) {
                     mPresenter.loadMoreData();
                 }

@@ -7,6 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import com.joe.huaban.HomeActivity;
 import com.joe.huaban.R;
 import com.joe.huaban.base.ui.BaseFragment;
+import com.joe.huaban.global.utils.LogUtils;
 import com.joe.huaban.homepage.adapter.HomeAdapter;
 import com.joe.huaban.base.model.PicData;
 import com.joe.huaban.homepage.presenter.HomePresenter;
@@ -25,6 +26,7 @@ public class HomeFragment extends BaseFragment implements HomeView{
     private HomePresenterImpl mPresenter;
     private HomeAdapter mAdapter;
     private StaggeredGridLayoutManager  mLayoutManager;
+    private HomeActivity loadingView;
 
     @Override
     protected int getLayout() {
@@ -43,8 +45,8 @@ public class HomeFragment extends BaseFragment implements HomeView{
 
     @Override
     protected void initPresenter() {
-        HomeActivity loadingView= (HomeActivity) mActivity;
-        mPresenter =  new HomePresenterImpl(this,loadingView,myApplication);
+        loadingView = (HomeActivity) mActivity;
+        mPresenter =  new HomePresenterImpl(this, loadingView,myApplication);
         //加载数据
         mPresenter.getCacheData();
     }
@@ -63,6 +65,12 @@ public class HomeFragment extends BaseFragment implements HomeView{
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                LogUtils.d("y"+dy);
+                if(dy>0) {
+                    loadingView.hideOrShowFAB(true);
+                }else{
+                    loadingView.hideOrShowFAB(false);
+                }
                 int[] visibleItems = mLayoutManager.findLastVisibleItemPositions(null);
                 int lastitem = Math.max(visibleItems[0], visibleItems[1]);
 

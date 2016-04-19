@@ -21,6 +21,7 @@ public class FavoritePresenter implements HomeDataListener {
     private int currentPage;
     private int limit=20;
     private boolean isLoadingMore;
+    private boolean noMoreData=false;
 
     public FavoritePresenter(HomeView mView, LoadingView mLoading, Context context){
         this.mView=mView;
@@ -32,10 +33,12 @@ public class FavoritePresenter implements HomeDataListener {
     public void getFavoriteData(){
         currentPage=1;
         mLoading.showLoading();
+        noMoreData=false;
         mKathy.getFavoriteData(currentPage,limit);
     }
     public void loadMoreData(){
         if(isLoadingMore) return;
+        if(noMoreData) return;
         currentPage++;
         mKathy.getFavoriteData(currentPage,limit);
     }
@@ -56,6 +59,7 @@ public class FavoritePresenter implements HomeDataListener {
         if(currentPage>1){
             KToast.show("没有更多数据啦");
             currentPage--;
+            noMoreData=true;
         }else{
             KToast.show("你还没收藏哦");
         }

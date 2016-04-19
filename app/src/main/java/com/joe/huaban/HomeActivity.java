@@ -1,5 +1,6 @@
 package com.joe.huaban;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,11 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.joe.huaban.discoverpage.DiscoverFragment;
 import com.joe.huaban.favoritepage.FavoriteFragment;
+import com.joe.huaban.global.utils.KToast;
 import com.joe.huaban.global.utils.LogUtils;
 import com.joe.huaban.homepage.HomeFragment;
 import com.joe.huaban.base.ui.BaseActivity;
@@ -34,6 +37,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     private int currentPos;//当前fragment
     private int tag=1;
     private ActionBar mActionbar;
+    private FloatingActionButton mFab;
 
     @Override
     protected int getContent() {return R.layout.activity_home;}
@@ -43,6 +47,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     protected void initView() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         bottomNavigationBar
                 .addItem(new BottomNavigationItem(R.drawable.bottom_home, "首页"))
@@ -52,7 +57,14 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
                 .initialise();
         bottomNavigationBar.setTabSelectedListener(this);
         mActionbar = getSupportActionBar();
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KToast.show("开发扛不住睡觉了，我还是个摆设");
+            }
+        });
         initFragment();
+
     }
 
     private void initFragment(){
@@ -82,6 +94,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case 3:
                 changeFragment(settingFragment,TAG_SETTING_FRAG);
+                settingFragment.getCache();
                 break;
         }
         currentPos=position;
@@ -211,5 +224,13 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
             menu.setGroupVisible(R.id.menu_discover,false);
         }
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void hideOrShowFAB(boolean hide){
+        if(hide){
+            mFab.hide();
+        }else{
+            mFab.show();
+        }
     }
 }

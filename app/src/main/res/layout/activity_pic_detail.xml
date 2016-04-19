@@ -5,14 +5,13 @@
     android:background="@android:color/white"
     android:layout_width="fill_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:layout_centerInParent="true"
-        android:id="@+id/iv_pic_item"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:maxHeight="100dp"
-        android:scaleType="fitXY"
-         />
+    <ListView
+        android:id="@+id/list_pic_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:scrollbars="none"
+        />
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:theme="@style/AppTheme.AppBarOverlay"
