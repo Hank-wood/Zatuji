@@ -178,5 +178,9 @@ public class PicDetailActivity extends BaseActivity{
         mIv.setScaleType(ImageView.ScaleType.FIT_START);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter=null;
+    }
 }

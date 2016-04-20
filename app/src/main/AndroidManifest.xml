@@ -26,6 +26,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:name=".picdetail.PicDetailActivity"/>
+        <activity
+            android:screenOrientation="portrait"
+            android:label="寻觅"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".searchingpage.SearchingActivity"/>
     </application>
 
 </manifest>

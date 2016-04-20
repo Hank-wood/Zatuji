@@ -67,7 +67,7 @@ public abstract class BaseActivity extends AppCompatActivity implements LoadingV
         LogUtils.d("doneLoading");
     }
     @Override
-    public void showError() {
-        KToast.show("网络好像有问题哦");
+    public void showError(String str) {
+        KToast.show(str);
     }
 }

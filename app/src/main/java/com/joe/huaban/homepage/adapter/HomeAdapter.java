@@ -48,6 +48,7 @@ public class HomeAdapter extends BaseStaggeredAdapter {
         RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams) holder.ivPic.getLayoutParams();
         params.height=picData.height;
         if(picData.height> DPUtils.dip2px(mContext,300)) params.height=DPUtils.dip2px(mContext,300);
+        if(picData.height< DPUtils.dip2px(mContext,120)) params.height=DPUtils.dip2px(mContext,120);
         holder.ivPic.setBackgroundColor(mContext.getResources().getColor(getRandomColor()));
         holder.ivPic.setLayoutParams(params);
         //替换为imageloader

@@ -63,6 +63,6 @@ public class DiscoverPresenter  implements HomeDataListener{
         LogUtils.d("请求数据失败："+ex.getMessage());
         mLoading.doneLoading();
         isLoadingMore=false;
-        mLoading.showError();
+        mLoading.showError("加载失败╮(╯▽╰)╭");
     }
 }

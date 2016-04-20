@@ -1,5 +1,6 @@
 package com.joe.huaban;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,7 @@ import com.joe.huaban.global.utils.KToast;
 import com.joe.huaban.global.utils.LogUtils;
 import com.joe.huaban.homepage.HomeFragment;
 import com.joe.huaban.base.ui.BaseActivity;
+import com.joe.huaban.searchingpage.SearchingActivity;
 import com.joe.huaban.settingpage.SettingFragment;
 
 public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener{
@@ -60,7 +62,8 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KToast.show("开发扛不住睡觉了，我还是个摆设");
+                Intent i=new Intent(mActivity, SearchingActivity.class);
+                startActivity(i);
             }
         });
         initFragment();

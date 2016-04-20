@@ -74,8 +74,8 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment imple
     }
 
     @Override
-    public void showError() {
-        KToast.show("网络好像有问题哦");
+    public void showError(String str) {
+        KToast.show(str);
     }
 
     protected void showEmptyView(){
