@@ -81,4 +81,9 @@ public class SearchingActivity extends BaseActivity implements HomeView{
     public void loadMore(PicData data) {
         mAdapter.refreshData(data,true);
     }
+
+    @Override
+    public void stopRefresh() {
+
+    }
 }

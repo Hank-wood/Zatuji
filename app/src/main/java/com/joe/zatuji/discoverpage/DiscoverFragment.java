@@ -82,6 +82,11 @@ public class DiscoverFragment extends BaseFragment implements HomeView{
         mAdapter.refreshData(data,true);
     }
 
+    @Override
+    public void stopRefresh() {
+        mRefreshLayout.setRefreshing(false);
+    }
+
     public void loadTagData(int tag){
         mRecyclerView.scrollToPosition(0);
         mPresenter.getAnotherData(tag);

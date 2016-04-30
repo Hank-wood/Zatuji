@@ -63,6 +63,7 @@ public class HomePresenterImpl implements HomePresenter,HomeDataListener{
     public void onError(Throwable ex, boolean isOnCallback) {
         LogUtils.d("请求数据失败："+ex.getMessage());
         mLoading.doneLoading();
+        mView.stopRefresh();
         isLoadingMore=false;
         mLoading.showError("嗯，你的网络有问题(⊙﹏⊙)b");
     }

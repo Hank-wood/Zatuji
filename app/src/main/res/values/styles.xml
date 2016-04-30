@@ -18,4 +18,44 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="setting_cardview">
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="setting_tv_title">
+        <item name="android:padding">20dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="setting_tv_desc">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--sign and register-->
+    <style name="login_edit_line">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:drawableBottom">@drawable/selector_edit_line_white</item>
+    </style>
+    <style name="login_button">
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/selector_button_login</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>

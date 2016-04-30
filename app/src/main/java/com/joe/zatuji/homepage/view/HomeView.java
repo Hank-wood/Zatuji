@@ -9,4 +9,5 @@ import com.joe.zatuji.base.model.PicData;
 public interface HomeView {
     void refreshData(PicData data);
     void loadMore(PicData data);
+    void stopRefresh();
 }

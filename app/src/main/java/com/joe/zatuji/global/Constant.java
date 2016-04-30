@@ -19,4 +19,6 @@ public class Constant {
    //文件夹
     public static final String DIR_APP="ZaTuJi";//文件夹
     public static final String DIR_DOWNLOAD="Download";//图片长
+
+    public static final String BMOB_KEY="396b7abd4336bd6e9564a34a310e2365";
 }

@@ -54,6 +54,7 @@ public class FavoritePresenter implements HomeDataListener {
     @Override
     public void onError(Throwable ex, boolean isOnCallback) {
         mLoading.doneLoading();
+        mView.stopRefresh();
         if(currentPage>1){
             KToast.show("没有更多数据啦");
             currentPage--;

@@ -1,11 +1,13 @@
 package com.joe.zatuji;
 
 import android.content.Intent;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +39,8 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     private int tag=1;
     private ActionBar mActionbar;
     private FloatingActionButton mFab;
+    private Toolbar mToolbar;
+    private AppBarLayout mAppBar;
 
     @Override
     protected int getContent() {return R.layout.activity_home;}
@@ -55,6 +59,9 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
                 .addItem(new BottomNavigationItem(R.drawable.bottom_setting, "偏好"))
                 .initialise();
         bottomNavigationBar.setTabSelectedListener(this);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+        setSupportActionBar(mToolbar);
         mActionbar = getSupportActionBar();
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +89,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     public void onTabSelected(int position) {
         LogUtils.d("onSelected:"+position);
+        if(mAppBar.getVisibility()==View.GONE&&position!=3) mAppBar.setVisibility(View.VISIBLE);
         switch (position){
             case 0:
                 changeFragment(homeFragment,TAG_HOME_FRAG);
@@ -94,7 +102,10 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case 3:
                 changeFragment(settingFragment,TAG_SETTING_FRAG);
+                mFab.hide();
                 settingFragment.getCache();
+                mAppBar.setVisibility(View.GONE);
+                //mToolbar.setVisibility(View.GONE);
                 break;
         }
         currentPos=position;

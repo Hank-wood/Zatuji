@@ -81,4 +81,9 @@ public class FavoriteFragment extends BaseFragment implements HomeView{
     public void loadMore(PicData data) {
         mAdapter.refreshData(data,true);
     }
+
+    @Override
+    public void stopRefresh() {
+        mRefreshLayout.setRefreshing(false);
+    }
 }

@@ -91,4 +91,9 @@ public class HomeFragment extends BaseFragment implements HomeView{
         mAdapter.refreshData(data,true);
     }
 
+    @Override
+    public void stopRefresh() {
+        mRefreshLayout.setRefreshing(false);
+    }
+
 }

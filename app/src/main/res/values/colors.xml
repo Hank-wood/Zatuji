@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#348995</color>
-    <color name="colorPrimaryDark">#346f99</color>
-    <color name="colorAccent">#33907f</color>
+    <color name="colorPrimary">#28344E</color>
+    <color name="colorPrimaryDark">#1c2546</color>
+    <color name="colorAccent">#283465</color>
     <color name="Gray">#EDECEA</color>
     <color name="Green">#42BD56</color>
     <color name="ALPHGreen">#6942bd56</color>
     <color name="DarkGreen">#3CA353</color>
+    <color name="White">#fff</color>
     <!--default pic color-->
     <color name="DefaultBlue">#3a9bb3</color>
     <color name="DefaultGreen">#5ba73a</color>
     <color name="DefaultRed">#9b4c39</color>
     <color name="DefaultPurple">#75388f</color>
     <color name="FAB">#c0484c</color>
+    <!--login-->
+    <color name="BackgroundLogin">#28344E</color>
+    <color name="Line_White_87">#ddffffff</color>
+    <color name="Line_White_30">#4cffffff</color>
+    <color name="daf">#283465</color>
 
+    <!--theme-->
+    <color name="lightColorPrimary">#348995</color>
+    <color name="lightColorPrimaryDark">#346f99</color>
+    <color name="lightColorAccent">#33907f</color>
 </resources>

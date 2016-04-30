@@ -1,15 +1,18 @@
 package com.joe.zatuji.settingpage;
 
 import android.os.Handler;
-import android.support.v7.widget.CardView;
+import android.support.v4.app.FragmentManager;
 import android.text.format.Formatter;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.joe.zatuji.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.global.utils.LogUtils;
+import com.joe.zatuji.settingpage.presenter.UserInfoPresenter;
+import com.joe.zatuji.settingpage.view.SettingView;
 
 import org.xutils.x;
 
@@ -18,10 +21,11 @@ import java.io.File;
 /**
  * Created by Joe on 2016/4/18.
  */
-public class SettingFragment extends BaseFragment{
+public class SettingFragment extends BaseFragment implements SettingView,View.OnClickListener{
 
-    private CardView mClearCache;
+    private RelativeLayout mClearCache;
     private TextView tvCache;
+    private UserInfoPresenter mPresenter;
 
     @Override
     protected int getLayout() {
@@ -30,15 +34,30 @@ public class SettingFragment extends BaseFragment{
 
     @Override
     protected void initPresenter() {
-
+        mPresenter = new UserInfoPresenter(myApplication,this);
     }
 
 
     @Override
     protected void initView() {
-        mClearCache = (CardView) mRootView.findViewById(R.id.card_clear_cache);
+        initUserInfo();
+        mClearCache = (RelativeLayout) mRootView.findViewById(R.id.card_clear_cache);
         tvCache = (TextView) mRootView.findViewById(R.id.tv_cache);
+        mRootView.findViewById(R.id.card_about).setOnClickListener(this);
+        mRootView.findViewById(R.id.card_feedback).setOnClickListener(this);
+        mRootView.findViewById(R.id.card_update).setOnClickListener(this);
+        RelativeLayout mExit = (RelativeLayout) mRootView.findViewById(R.id.card_exit);
+        mExit.setOnClickListener(this);
         getCache();
+    }
+
+    /**
+     * 加载用户信息
+     */
+    private void initUserInfo() {
+        UserFragment userFragment = new UserFragment();
+        FragmentManager fragmentManager = getChildFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fl_container_user,userFragment).commit();
     }
 
     public void getCache() {
@@ -94,4 +113,20 @@ public class SettingFragment extends BaseFragment{
         }
         return size;
     }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void showExit() {
+
+    }
+
+    @Override
+    public void hideExit() {
+
+    }
+
 }

@@ -60,6 +60,7 @@ public class DiscoverPresenter  implements HomeDataListener{
     @Override
     public void onError(Throwable ex, boolean isOnCallback) {
         LogUtils.d("请求数据失败："+ex.getMessage());
+        mView.stopRefresh();
         mLoading.doneLoading();
         isLoadingMore=false;
         mLoading.showError("加载失败╮(╯▽╰)╭");
