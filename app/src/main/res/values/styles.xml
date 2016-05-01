@@ -39,6 +39,8 @@
 
     <!--sign and register-->
     <style name="login_edit_line">
+        <item name="android:singleLine">true</item>
+        <item name="android:imeOptions">actionNext</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">8dp</item>
@@ -47,6 +49,7 @@
         <item name="android:textSize">17sp</item>
         <item name="android:drawablePadding">5dp</item>
         <item name="android:textColor">@color/White</item>
+        <item name="android:textColorHint">@color/Line_White_30</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:background">@null</item>
         <item name="android:drawableBottom">@drawable/selector_edit_line_white</item>
@@ -57,5 +60,15 @@
         <item name="android:textColor">@color/White</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="dialog_theme" parent="AppTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

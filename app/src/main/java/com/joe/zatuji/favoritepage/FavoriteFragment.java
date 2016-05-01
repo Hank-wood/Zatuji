@@ -8,39 +8,46 @@ import com.joe.zatuji.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.model.PicData;
 import com.joe.zatuji.base.ui.BaseFragment;
+import com.joe.zatuji.favoritepage.adapter.FavoriteTagAdapter;
+import com.joe.zatuji.favoritepage.model.FavoriteTag;
 import com.joe.zatuji.favoritepage.presenter.FavoritePresenter;
+import com.joe.zatuji.favoritepage.ui.CreateTagDialog;
+import com.joe.zatuji.favoritepage.view.TagView;
+import com.joe.zatuji.global.utils.KToast;
 import com.joe.zatuji.homepage.adapter.HomeAdapter;
 import com.joe.zatuji.homepage.view.HomeView;
+
+import java.util.ArrayList;
 
 /**
  * Created by Joe on 2016/4/18.
  */
-public class FavoriteFragment extends BaseFragment implements HomeView{
+public class FavoriteFragment extends BaseFragment implements TagView{
     private SwipeRefreshLayout mRefreshLayout;
 
     private RecyclerView mRecyclerView;
-    private HomeAdapter mAdapter;
     private StaggeredGridLayoutManager mLayoutManager;
     private FavoritePresenter mPresenter;
     private HomeActivity activity;
+    private FavoriteTagAdapter mAdapter;
 
     @Override
     protected int getLayout() {
-        return R.layout.fragment_stagerd_base;
+        return R.layout.fragment_favorite;
     }
 
     @Override
     protected void initPresenter() {
         activity = (HomeActivity) mActivity;
         mPresenter = new FavoritePresenter(this, activity,myApplication);
-        mPresenter.getFavoriteData();
+        mPresenter.getFavoriteTag();
     }
 
     @Override
     protected void initView() {
         mRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swipe_fragment_base);
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.recycler_fragment_base);
-        mAdapter = new HomeAdapter(mActivity);
+        mAdapter = new FavoriteTagAdapter(mActivity);
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -50,40 +57,68 @@ public class FavoriteFragment extends BaseFragment implements HomeView{
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.getFavoriteData();
+                mPresenter.getFavoriteTag();
             }
         });
+        mAdapter.setOnItemClickListener(new FavoriteTagAdapter.ItemClickListener() {
+            @Override
+            public void onItemClickListener(int position, FavoriteTag tag, boolean isCreate) {
+                if(isCreate){
+                    //新建tag
+                    showCreateTag();
+                }else{
 
+                }
+            }
+        });
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int[] visibleItems = mLayoutManager.findLastVisibleItemPositions(null);
-                int lastitem = Math.max(visibleItems[0], visibleItems[1]);
                 if(dy>0) {
                     activity.hideOrShowFAB(true);
                 }else{
                     activity.hideOrShowFAB(false);
                 }
-                if (dy > 0 && lastitem > mAdapter.getItemCount() - 5) {
-                    mPresenter.loadMoreData();
-                }
             }
         });
+
+
     }
+
+    private void showCreateTag() {
+        CreateTagDialog dialog = new CreateTagDialog(mActivity);
+        dialog.setOnCreateCallBack(new CreateTagDialog.OnCreateCallBack() {
+            @Override
+            public void OnCreate(FavoriteTag tag) {
+
+                mPresenter.createTag(tag);
+            }
+        });
+        dialog.show();
+    }
+
+
     @Override
-    public void refreshData(PicData data) {
+    public void showTag(ArrayList<FavoriteTag> tags) {
         mRefreshLayout.setRefreshing(false);
-        mAdapter.refreshData(data,false);
+        mAdapter.refreshData(tags,false);
     }
 
     @Override
-    public void loadMore(PicData data) {
-        mAdapter.refreshData(data,true);
+    public void showErrorMsg(String msg) {
+        mRefreshLayout.setRefreshing(false);
+        KToast.show(msg);
     }
 
     @Override
-    public void stopRefresh() {
+    public void showNotSign() {
         mRefreshLayout.setRefreshing(false);
+        mAdapter.refreshData(new ArrayList<FavoriteTag>(),false);
+    }
+
+    @Override
+    public void addTag(ArrayList<FavoriteTag> tags) {
+        mAdapter.refreshData(tags,true);
     }
 }

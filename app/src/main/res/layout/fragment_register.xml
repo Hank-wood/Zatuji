@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/BackgroundLogin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.github.siyamed.shapeimageview.CircularImageView
+        android:layout_marginTop="60dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/iv_register_avatar"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@mipmap/ic_launcher"
+        app:siBorderWidth="2dp"
+        app:siBorderColor="@color/Line_White_30"
+        android:scaleType="fitXY"
+        />
+    <TextView
+        android:text="Upload Avatar"
+        android:textSize="13sp"
+        android:textColor="@color/White"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/et_register_user"
+        style="@style/login_edit_line"
+        android:hint="type your account here"
+        android:drawableLeft="@drawable/icon_login_user"
+        />
+    <EditText
+        android:id="@+id/et_register_nick"
+        android:hint="type your nick name here"
+        style="@style/login_edit_line"
+        android:drawableLeft="@drawable/icon_login_nick"
+        />
+    <EditText
+        android:id="@+id/et_register_pwd"
+        android:hint="type your password here"
+        android:inputType="textPassword"
+        style="@style/login_edit_line"
+        android:drawableLeft="@drawable/icon_login_password"
+        />
+    <Button
+        android:id="@+id/bt_register_register"
+        android:layout_marginTop="20dp"
+        android:text="REGISTER"
+        style="@style/login_button" />
+    <TextView
+        android:layout_marginTop="20dp"
+        android:text="use email as your account in case"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:text="you forgot password"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/FAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

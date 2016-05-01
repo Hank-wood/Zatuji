@@ -1,6 +1,8 @@
 package com.joe.zatuji;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,16 +13,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.joe.zatuji.discoverpage.DiscoverFragment;
 import com.joe.zatuji.favoritepage.FavoriteFragment;
+import com.joe.zatuji.global.Constant;
+import com.joe.zatuji.global.utils.KToast;
 import com.joe.zatuji.global.utils.LogUtils;
 import com.joe.zatuji.homepage.HomeFragment;
 import com.joe.zatuji.base.ui.BaseActivity;
+import com.joe.zatuji.loginpager.model.User;
 import com.joe.zatuji.searchingpage.SearchingActivity;
 import com.joe.zatuji.settingpage.SettingFragment;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
+import com.roughike.bottombar.scrollsweetness.BottomNavigationBehavior;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.listener.SaveListener;
 
 public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener{
 
@@ -41,6 +54,13 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     private FloatingActionButton mFab;
     private Toolbar mToolbar;
     private AppBarLayout mAppBar;
+    private BottomBar bottomBar;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bmob.initialize(this, Constant.BMOB_KEY);
+    }
 
     @Override
     protected int getContent() {return R.layout.activity_home;}
@@ -103,6 +123,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
             case 3:
                 changeFragment(settingFragment,TAG_SETTING_FRAG);
                 mFab.hide();
+                bottomNavigationBar.unHide();
                 settingFragment.getCache();
                 mAppBar.setVisibility(View.GONE);
                 //mToolbar.setVisibility(View.GONE);
@@ -239,9 +260,45 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
 
     public void hideOrShowFAB(boolean hide){
         if(hide){
+            bottomNavigationBar.hide();
             mFab.hide();
         }else{
+            bottomNavigationBar.unHide();
             mFab.show();
         }
+    }
+
+    protected void toggleBarVisibility(boolean visible) {
+        if(visible){
+            bottomNavigationBar.startAnimation(bottomBarAnimation(true));
+        }else{
+            bottomNavigationBar.startAnimation(bottomBarAnimation(false));
+        }
+    }
+
+    private Animation bottomBarAnimation(boolean show) {
+        TranslateAnimation ta = null;
+        if(show){
+            ta = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,
+                    Animation.RELATIVE_TO_SELF,1,Animation.RELATIVE_TO_SELF,0);
+        }else{
+            ta = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,
+                    Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,1);
+        }
+        ta.setDuration(50);
+        ta.setFillAfter(true);
+        return ta;
+    }
+
+    private long lastTime=0;
+    @Override
+    public void onBackPressed() {
+        long duration = SystemClock.currentThreadTimeMillis()-lastTime;
+        lastTime = SystemClock.currentThreadTimeMillis();
+        if(duration<2000)  {
+            finish();
+            return;
+        }
+        KToast.show("再按一次退出");
     }
 }

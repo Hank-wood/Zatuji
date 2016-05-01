@@ -18,17 +18,25 @@ import android.widget.TextView;
 
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseActivity;
+import com.joe.zatuji.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.favoritepage.presenter.FavoritePresenter;
+import com.joe.zatuji.favoritepage.ui.CreateTagDialog;
+import com.joe.zatuji.favoritepage.view.TagView;
 import com.joe.zatuji.global.Constant;
+import com.joe.zatuji.global.utils.KToast;
 import com.joe.zatuji.global.utils.LogUtils;
 import com.joe.zatuji.picdetail.presenter.PicDetailPresenter;
+import com.joe.zatuji.picdetail.ui.ChooseTagDialog;
 
 import org.xutils.x;
+
+import java.util.ArrayList;
 
 /**
  * 大图详情页吗面
  * Created by Joe on 2016/4/16.
  */
-public class PicDetailActivity extends BaseActivity{
+public class PicDetailActivity extends BaseActivity implements TagView{
     private ImageView ivPic;
     private TextView tvDesc;
     private Toolbar toolbar;
@@ -41,6 +49,7 @@ public class PicDetailActivity extends BaseActivity{
     private int width;
     private int height;
     private ListView mList;
+    private FavoritePresenter mFavoritePresenter;
 
     @Override
     protected int getContent() {
@@ -50,6 +59,7 @@ public class PicDetailActivity extends BaseActivity{
     @Override
     protected void initPresenter() {
         mPresenter = new PicDetailPresenter(mApplication,this);
+        mFavoritePresenter = new FavoritePresenter(this,this,mActivity);
     }
 
     @Override
@@ -91,7 +101,8 @@ public class PicDetailActivity extends BaseActivity{
                 finish();
                 break;
             case R.id.action_save://收藏
-                mPresenter.saveToFavorite(img,desc,width,height);
+                showChooseTag();
+                mFavoritePresenter.getFavoriteTag();
                 break;
             case R.id.action_download://保存
                 mPresenter.saveToPhone(img);
@@ -119,6 +130,58 @@ public class PicDetailActivity extends BaseActivity{
             }
         });
     }
+
+    private void showChooseTag() {
+
+    }
+    //让用户选择图集
+    @Override
+    public void showTag(ArrayList<FavoriteTag> tags) {
+        if(tags.size()==0){
+            CreateTagDialog dialog = new CreateTagDialog(this);
+            dialog.setOnCreateCallBack(new CreateTagDialog.OnCreateCallBack() {
+                @Override
+                public void OnCreate(FavoriteTag tag) {
+                    mFavoritePresenter.createTag(tag);
+                }
+            });
+            dialog.show();
+        }else{
+            //从列表中选
+            ChooseTagDialog dialog = new ChooseTagDialog(mActivity,tags);
+            dialog.setCreateTag(new ChooseTagDialog.CreateTag() {
+                @Override
+                public void onCreateTag(ChooseTagDialog dialog) {
+                    dialog.dismiss();
+                    showTag(new ArrayList<FavoriteTag>());
+                }
+            });
+            dialog.setOnChooseTag(new ChooseTagDialog.OnChooseTag() {
+                @Override
+                public void onChooseTag(FavoriteTag tag, ChooseTagDialog dialog) {
+                    dialog.dismiss();
+                    mPresenter.saveToFavorite(img,desc,width,height,tag);
+                }
+            });
+            dialog.show();
+        }
+    }
+
+    @Override
+    public void showErrorMsg(String msg) {
+        KToast.show(msg);
+    }
+
+    @Override
+    public void showNotSign() {
+        KToast.show("请先登录账号");
+    }
+
+    @Override
+    public void addTag(ArrayList<FavoriteTag> tags) {
+        mPresenter.saveToFavorite(img,desc,width,height,tags.get(0));
+    }
+
     class PicDetailAdapter extends BaseAdapter{
 
         @Override

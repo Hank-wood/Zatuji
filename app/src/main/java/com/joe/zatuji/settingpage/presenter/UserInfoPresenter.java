@@ -3,10 +3,14 @@ package com.joe.zatuji.settingpage.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.joe.zatuji.global.Constant;
+import com.joe.zatuji.global.utils.PrefUtils;
 import com.joe.zatuji.loginpager.model.User;
 import com.joe.zatuji.settingpage.model.FeedBack;
 import com.joe.zatuji.settingpage.view.SettingView;
 import com.joe.zatuji.settingpage.view.UserView;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * 用户信息操作
@@ -16,22 +20,30 @@ public class UserInfoPresenter implements UserInfoListener{
     private Context mContext;
     private UserView mView;
     private SettingView mExit;
-    public UserInfoPresenter(Context mContext, UserView mView) {
+    public UserInfoPresenter(Context mContext, UserView mView,SettingView mExit) {
         this.mContext = mContext;
         this.mView = mView;
-    }
-    public UserInfoPresenter(Context mContext, SettingView mExit) {
-        this.mContext = mContext;
         this.mExit = mExit;
     }
     //获取当前用户信息
     public void getUserInfo(){
+        if(PrefUtils.getBoolean(mContext,Constant.IS_EXIT,false)) {
+            onUserNotLogin();
+            return;
+        }
 
+        User user = BmobUser.getCurrentUser(mContext,User.class);
+        if(user!=null){
+            onUserLogin(user);
+        }else{
+            onUserNotLogin();
+        }
     }
 
     //退出登陆
     public void loginOut(){
-
+        onUserNotLogin();
+        PrefUtils.putBoolean(mContext, Constant.IS_EXIT,true);
     }
 
     //意见反馈

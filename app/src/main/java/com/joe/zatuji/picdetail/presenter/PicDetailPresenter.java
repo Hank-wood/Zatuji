@@ -3,8 +3,14 @@ package com.joe.zatuji.picdetail.presenter;
 import android.content.Context;
 
 import com.joe.zatuji.base.LoadingView;
+import com.joe.zatuji.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.global.Constant;
 import com.joe.zatuji.global.utils.KToast;
+import com.joe.zatuji.global.utils.PrefUtils;
+import com.joe.zatuji.loginpager.model.User;
 import com.joe.zatuji.picdetail.model.PicKathy;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by Joe on 2016/4/18.
@@ -20,9 +26,14 @@ public class PicDetailPresenter implements PicDetailListener{
         mKathy = new PicKathy(context,this);
     }
 
-    public void saveToFavorite(String picUrl,String desc,int width,int height){
+    public void saveToFavorite(String picUrl, String desc, int width, int height, FavoriteTag tag){
         loadingView.showLoading();
-        mKathy.saveToFavorite(picUrl,desc,width,height);
+        User user = BmobUser.getCurrentUser(context,User.class);
+        if(user == null ||PrefUtils.getBoolean(context,Constant.IS_EXIT,false)){
+            KToast.show("请先登录账号");
+            return;
+        }
+        mKathy.addFavorite(picUrl,desc,width,height,tag,user);
     }
     public void saveToPhone(String picUrl){
         loadingView.showLoading();

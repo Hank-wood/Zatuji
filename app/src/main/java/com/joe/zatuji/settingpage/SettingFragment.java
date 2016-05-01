@@ -25,7 +25,8 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
 
     private RelativeLayout mClearCache;
     private TextView tvCache;
-    private UserInfoPresenter mPresenter;
+    private RelativeLayout mExit;
+    private UserFragment userFragment;
 
     @Override
     protected int getLayout() {
@@ -34,7 +35,6 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
 
     @Override
     protected void initPresenter() {
-        mPresenter = new UserInfoPresenter(myApplication,this);
     }
 
 
@@ -46,7 +46,7 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
         mRootView.findViewById(R.id.card_about).setOnClickListener(this);
         mRootView.findViewById(R.id.card_feedback).setOnClickListener(this);
         mRootView.findViewById(R.id.card_update).setOnClickListener(this);
-        RelativeLayout mExit = (RelativeLayout) mRootView.findViewById(R.id.card_exit);
+        mExit = (RelativeLayout) mRootView.findViewById(R.id.card_exit);
         mExit.setOnClickListener(this);
         getCache();
     }
@@ -55,9 +55,9 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
      * 加载用户信息
      */
     private void initUserInfo() {
-        UserFragment userFragment = new UserFragment();
+        userFragment = new UserFragment();
         FragmentManager fragmentManager = getChildFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fl_container_user,userFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fl_container_user, userFragment).commit();
     }
 
     public void getCache() {
@@ -116,17 +116,21 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()){
+            case R.id.card_exit:
+                userFragment.exit();
+                break;
+        }
     }
 
     @Override
     public void showExit() {
-
+        mExit.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideExit() {
-
+        mExit.setVisibility(View.GONE);
     }
 
 }

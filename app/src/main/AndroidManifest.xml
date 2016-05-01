@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--允许读取手机状态 用于创建BmobInstallation-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -45,6 +45,18 @@
             android:name=".loginpager.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
+        <activity android:name="com.yongchun.library.view.ImageSelectorActivity"
+            android:label="上传头像"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name="com.yongchun.library.view.ImagePreviewActivity"
+            android:label="头像预览"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name="com.yongchun.library.view.ImageCropActivity"
+            android:label="剪裁头像"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
     </application>
 
 </manifest>

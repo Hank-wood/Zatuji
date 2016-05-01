@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <FrameLayout
-        android:background="@color/colorPrimary"
+        android:background="@color/BackgroundLogin"
         android:id="@+id/fl_container_user"
         android:layout_width="match_parent"
         android:elevation="6dp"
-        android:layout_height="180dp"/>
+        android:layout_height="150dp"/>
 
     <RelativeLayout
         android:layout_marginTop="10dp"
@@ -63,7 +62,6 @@
             style="@style/setting_tv_title"
             />
     </RelativeLayout>
-
 
     <RelativeLayout
         android:visibility="gone"

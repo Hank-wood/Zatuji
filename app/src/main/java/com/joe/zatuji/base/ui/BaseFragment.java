@@ -66,7 +66,6 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment imple
         dialog.setContentView(loadingView);
         dialog.show();
     }
-
     @Override
     public void doneLoading() {
         dialog.dismiss();
