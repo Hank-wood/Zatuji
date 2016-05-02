@@ -16,6 +16,8 @@ public class Constant {
     public static final String PIC_WIDTH="picWidth";//图片宽
     public static final String PIC_HEIGHT="picHeight";//图片长
 
+    public static final String GALLERY_TAG="gallery_tag";//图片长
+
    //文件夹
     public static final String DIR_APP="ZaTuJi";//文件夹
     public static final String DIR_DOWNLOAD="Download";//图片长

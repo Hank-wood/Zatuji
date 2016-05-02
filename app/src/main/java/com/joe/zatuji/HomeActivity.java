@@ -34,6 +34,7 @@ import com.roughike.bottombar.scrollsweetness.BottomNavigationBehavior;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.update.BmobUpdateAgent;
 
 public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener{
 
@@ -60,6 +61,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bmob.initialize(this, Constant.BMOB_KEY);
+        BmobUpdateAgent.update(mActivity);
     }
 
     @Override
@@ -213,6 +215,9 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_add://新建图集
+                favoriteFragment.showCreateTag();
+                break;
             case R.id.action_girl:
                 tag =1;
                 break;
@@ -242,8 +247,10 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
 
         }
-        setCurrentTitle();
-        discoverFragment.loadTagData(tag);
+        if(item.getItemId()!=R.id.action_add){
+            setCurrentTitle();
+            discoverFragment.loadTagData(tag);
+        }
         return true;
     }
 
@@ -254,6 +261,12 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
             menu.setGroupVisible(R.id.menu_discover,true);
         }else{
             menu.setGroupVisible(R.id.menu_discover,false);
+        }
+
+        if(currentPos==2){
+            menu.setGroupVisible(R.id.menu_favorite,true);
+        }else{
+            menu.setGroupVisible(R.id.menu_favorite,false);
         }
         return super.onPrepareOptionsMenu(menu);
     }

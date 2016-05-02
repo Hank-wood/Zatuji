@@ -40,9 +40,11 @@ public class FavoritePresenter implements FavoriteTagListener {
     }
 
     public void getFavoriteTag(){
+        mLoading.showLoading();
         User user = BmobUser.getCurrentUser(mContext,User.class);
         if(user == null || PrefUtils.getBoolean(mContext, Constant.IS_EXIT,false)){
             mView.showNotSign();
+            mLoading.doneLoading();
             return;
         }
 
@@ -50,35 +52,40 @@ public class FavoritePresenter implements FavoriteTagListener {
     }
 
     public void createTag(FavoriteTag tag){
+        mLoading.showLoading();
         User user = BmobUser.getCurrentUser(mContext,User.class);
         if(user == null || PrefUtils.getBoolean(mContext, Constant.IS_EXIT,false)){
             onCreateError("请先登录账号");
             return;
         }
-        mKathy.createTag(tag);
+        mKathy.createTag(tag,user);
     }
     @Override
     public void onSuccess(ArrayList<FavoriteTag> tags) {
+        mLoading.doneLoading();
         mView.showTag(tags);
     }
 
     @Override
     public void onError(String msg) {
+        mLoading.doneLoading();
         mView.showErrorMsg(msg);
     }
 
     @Override
     public void onCreateSuccess(ArrayList<FavoriteTag> tags) {
+        mLoading.doneLoading();
         mView.addTag(tags);
     }
 
     @Override
     public void onCreateError(String msg) {
+        mLoading.doneLoading();
         KToast.show(msg);
     }
 
     @Override
     public void onNotSign() {
-
+        mLoading.doneLoading();
     }
 }

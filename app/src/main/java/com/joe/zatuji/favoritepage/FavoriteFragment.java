@@ -1,21 +1,22 @@
 package com.joe.zatuji.favoritepage;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.joe.zatuji.HomeActivity;
 import com.joe.zatuji.R;
-import com.joe.zatuji.base.model.PicData;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.favoritepage.adapter.FavoriteTagAdapter;
 import com.joe.zatuji.favoritepage.model.FavoriteTag;
 import com.joe.zatuji.favoritepage.presenter.FavoritePresenter;
 import com.joe.zatuji.favoritepage.ui.CreateTagDialog;
+import com.joe.zatuji.gallerypage.GalleryActivity;
+import com.joe.zatuji.favoritepage.ui.LockTagDialog;
 import com.joe.zatuji.favoritepage.view.TagView;
+import com.joe.zatuji.global.Constant;
 import com.joe.zatuji.global.utils.KToast;
-import com.joe.zatuji.homepage.adapter.HomeAdapter;
-import com.joe.zatuji.homepage.view.HomeView;
 
 import java.util.ArrayList;
 
@@ -60,17 +61,26 @@ public class FavoriteFragment extends BaseFragment implements TagView{
                 mPresenter.getFavoriteTag();
             }
         });
+        //点击item
         mAdapter.setOnItemClickListener(new FavoriteTagAdapter.ItemClickListener() {
             @Override
-            public void onItemClickListener(int position, FavoriteTag tag, boolean isCreate) {
-                if(isCreate){
-                    //新建tag
-                    showCreateTag();
+            public void onItemClickListener(int position, FavoriteTag tag) {
+                //判断是否上锁
+                if(tag.is_lock()){
+                    showPwdDialog(tag);
                 }else{
-
+                    jumpFavoriteDetail(tag);
                 }
             }
         });
+        //长按item
+        mAdapter.setOnItemLongClickListener(new FavoriteTagAdapter.ItemLongClickListener() {
+            @Override
+            public void onItemLongClickListener(int position, FavoriteTag tag) {
+
+            }
+        });
+
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -85,13 +95,32 @@ public class FavoriteFragment extends BaseFragment implements TagView{
 
 
     }
+    //调到图集详情页
+    private void jumpFavoriteDetail(FavoriteTag tag) {
+        Intent i = new Intent(mActivity, GalleryActivity.class);
+        i.putExtra(Constant.GALLERY_TAG,tag);
+        mActivity.startActivity(i);
+    }
 
-    private void showCreateTag() {
+    //带锁的图集需要密码
+    private void showPwdDialog(final FavoriteTag tag) {
+        LockTagDialog dialog = new LockTagDialog(mActivity,tag);
+        dialog.setOnPwdListener(new LockTagDialog.OnPwdListener() {
+            @Override
+            public void OnSuccess(LockTagDialog dialog) {
+                //跳转到图集列表页
+                jumpFavoriteDetail(tag);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public void showCreateTag() {
         CreateTagDialog dialog = new CreateTagDialog(mActivity);
         dialog.setOnCreateCallBack(new CreateTagDialog.OnCreateCallBack() {
             @Override
             public void OnCreate(FavoriteTag tag) {
-
                 mPresenter.createTag(tag);
             }
         });

@@ -54,27 +54,26 @@ public class FavoriteTagAdapter extends RecyclerView.Adapter<DataViewHolder> {
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position) {
         holder.ivPic.setBackgroundColor(mContext.getResources().getColor(getRandomColor()));
-        FavoriteTag tag=null;
-
         boolean isCreate=false;
-        if(position == mTags.size()){
-            holder.tvDesc.setText("新建图集");
-            isCreate=true;
-        }else{
-            tag = mTags.get(position);
-            holder.tvDesc.setText(tag.getTag()+"("+tag.getNumber()+")");
-            x.image().bind(holder.ivPic,tag.getFront());
-            //替换为imageloader
-        }
+        FavoriteTag tag = mTags.get(position);
+        holder.tvDesc.setText(tag.getTag()+"("+tag.getNumber()+")");
+        x.image().bind(holder.ivPic,tag.getFront());
+        //替换为imageloader
         final int pos=position;
         final FavoriteTag finalTag = tag;
-        final boolean finalIsCreate = isCreate;
         holder.ivPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mListener!=null){
-                    mListener.onItemClickListener(pos, finalTag, finalIsCreate);
+                    mListener.onItemClickListener(pos, finalTag);
                 }
+            }
+        });
+        holder.ivPic.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mLongListener.onItemLongClickListener(pos,finalTag);
+                return true;
             }
         });
     }
@@ -87,7 +86,7 @@ public class FavoriteTagAdapter extends RecyclerView.Adapter<DataViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mTags==null?1:mTags.size()+1;
+        return mTags==null?0:mTags.size();
     }
 
     private ItemClickListener mListener;
@@ -96,6 +95,15 @@ public class FavoriteTagAdapter extends RecyclerView.Adapter<DataViewHolder> {
     }
 
     public  interface ItemClickListener{
-        void onItemClickListener(int position,FavoriteTag tag,boolean isCreate);
+        void onItemClickListener(int position,FavoriteTag tag);
+    }
+
+    private ItemLongClickListener mLongListener;
+    public void setOnItemLongClickListener(ItemLongClickListener listener){
+        this.mLongListener = listener;
+    }
+
+    public  interface ItemLongClickListener{
+        void onItemLongClickListener(int position,FavoriteTag tag);
     }
 }

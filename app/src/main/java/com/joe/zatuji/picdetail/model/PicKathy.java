@@ -23,9 +23,11 @@ import java.io.File;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * 图片的收藏，保存，分享操作类
@@ -44,7 +46,11 @@ public class PicKathy {
         this.context = context;
         this.listener = listener;
     }
-
+    /**
+     * 添加收藏时先查询是否已经收藏
+     * 先判断该图片是否已经在数据库中，如果在直接setRelation到标签中
+     * 如果数据库中没有该对象，则创建该对象再setRelation
+    */
     //保存到用户收藏标签中
     public void addFavorite(String img, String desc, int width, int height, FavoriteTag tag,User user){
         MyFavorite favorite = new MyFavorite();
@@ -54,8 +60,99 @@ public class PicKathy {
         favorite.setHeight(height);
         favorite.setTag(new BmobRelation(tag));
         favorite.setUser(new BmobRelation(user));
-        alreadyLiked(favorite,tag);
+        //判断是否已经收藏
+        isAlreadyLiked(favorite,tag);
+        //先查询该img，避免重复创建
+        //findImageInCloud(favorite,tag);
+        //alreadyLiked(favorite,tag);
     }
+
+    private void isAlreadyLiked(final MyFavorite favorite, final FavoriteTag tag) {
+        BmobQuery<MyFavorite> query = new BmobQuery<MyFavorite>();
+        query.addWhereEqualTo("img_url",favorite.getImg_url());
+        query.addWhereRelatedTo("img",new BmobPointer(tag));
+        query.findObjects(context, new FindListener<MyFavorite>() {
+            @Override
+            public void onSuccess(List<MyFavorite> list) {
+                if(list.size()>0){
+                    //已经收藏过了
+                    listener.onFavoriteError("已经收藏过咯");
+                }else{
+                    LogUtils.d("没有查到收藏数据");
+                    findImageInCloud(favorite,tag);
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                LogUtils.d("没有查到收藏数据"+s);
+                findImageInCloud(favorite,tag);
+            }
+        });
+    }
+
+    //在云端查询是否有该图片
+    private void findImageInCloud(final MyFavorite favorite, final FavoriteTag tag) {
+        BmobQuery<MyFavorite> query = new BmobQuery<MyFavorite>();
+        query.addWhereEqualTo("img_url",favorite.getImg_url());
+        query.findObjects(context, new FindListener<MyFavorite>() {
+            @Override
+            public void onSuccess(List<MyFavorite> list) {
+                if(list.size()>0){
+                    //已有数据直接关联
+                    LogUtils.d("已有该图片直接关联");
+                    setRelateToTag(list.get(0),tag);
+                }else{
+                    //没有有数据先创建
+                    LogUtils.d("没有有该图片先创建");
+                    saveMyFavoriteToCloud(favorite,tag);
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                LogUtils.d("没有有该图片先创建");
+                saveMyFavoriteToCloud(favorite,tag);
+            }
+        });
+    }
+
+    private void saveMyFavoriteToCloud(final MyFavorite favorite, final FavoriteTag tag) {
+        favorite.save(context, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                LogUtils.d("创建成功 开始关联");
+                setRelateToTag(favorite,tag);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                listener.onFavoriteError("收藏失败");
+            }
+        });
+    }
+
+    //关联数据
+    private void setRelateToTag(MyFavorite favorite, FavoriteTag tag) {
+        BmobRelation relation = new BmobRelation();
+        relation.add(favorite);
+        if(TextUtils.isEmpty(tag.getFront())) tag.setFront(favorite.getImg_url());
+        tag.increment("number");
+        tag.setImg(relation);
+        tag.update(context, new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                LogUtils.d("关联成功");
+                listener.onFavoriteSuccess();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                listener.onFavoriteError("收藏失败");
+            }
+        });
+    }
+
     //保存至数据库
     public void saveToFavorite(String img,String desc,int width,int height){
         if(alreadyLiked(img)){

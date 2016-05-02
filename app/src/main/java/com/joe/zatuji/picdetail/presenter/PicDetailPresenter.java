@@ -31,6 +31,7 @@ public class PicDetailPresenter implements PicDetailListener{
         User user = BmobUser.getCurrentUser(context,User.class);
         if(user == null ||PrefUtils.getBoolean(context,Constant.IS_EXIT,false)){
             KToast.show("请先登录账号");
+            loadingView.doneLoading();
             return;
         }
         mKathy.addFavorite(picUrl,desc,width,height,tag,user);

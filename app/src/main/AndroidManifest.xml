@@ -45,6 +45,9 @@
             android:name=".loginpager.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
+        <activity android:name=".gallerypage.GalleryActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name="com.yongchun.library.view.ImageSelectorActivity"
             android:label="上传头像"
             android:theme="@style/AppTheme.NoActionBar"
@@ -57,6 +60,10 @@
             android:label="剪裁头像"
             android:theme="@style/AppTheme.NoActionBar"
             />
+        <activity
+            android:name="cn.bmob.v3.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
     </application>
 
 </manifest>

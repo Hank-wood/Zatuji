@@ -2,6 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".HomeActivity">
+    <group android:id="@+id/menu_favorite">
+        <item android:id="@+id/action_add"
+            android:icon="@drawable/icon_add"
+            android:orderInCategory="100"
+            android:title="新建图集"
+            app:showAsAction="ifRoom"
+            />
+    </group>
     <group android:id="@+id/menu_discover"
         android:visible="false">
         <item

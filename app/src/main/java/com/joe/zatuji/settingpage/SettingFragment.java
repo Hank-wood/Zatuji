@@ -11,6 +11,7 @@ import com.joe.zatuji.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.global.utils.LogUtils;
+import com.joe.zatuji.settingpage.presenter.SettingPresenter;
 import com.joe.zatuji.settingpage.presenter.UserInfoPresenter;
 import com.joe.zatuji.settingpage.view.SettingView;
 
@@ -27,6 +28,7 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
     private TextView tvCache;
     private RelativeLayout mExit;
     private UserFragment userFragment;
+    private SettingPresenter mPresenter;
 
     @Override
     protected int getLayout() {
@@ -35,6 +37,7 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
 
     @Override
     protected void initPresenter() {
+        mPresenter = new SettingPresenter(mActivity);
     }
 
 
@@ -120,8 +123,12 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
             case R.id.card_exit:
                 userFragment.exit();
                 break;
+            case R.id.card_update:
+                mPresenter.checkUpdate();
+                break;
         }
     }
+
 
     @Override
     public void showExit() {

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.joe.zatuji.base.model.PicData;
 import com.joe.zatuji.favoritepage.presenter.FavoriteTagListener;
+import com.joe.zatuji.global.utils.LogUtils;
 import com.joe.zatuji.homepage.presenter.HomeDataListener;
 import com.joe.zatuji.loginpager.model.User;
 import com.joe.zatuji.picdetail.model.FavoriteOpenHelper;
@@ -18,8 +19,10 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Joe on 2016/4/19.
@@ -39,7 +42,9 @@ public class FavoriteKathy {
 
     public void getFavoriteTag(User user){
         BmobQuery<FavoriteTag> query = new BmobQuery<FavoriteTag>();
-        query.addWhereEqualTo("belong",new BmobPointer(user));
+        query.order("createdAt");
+        query.addWhereRelatedTo("tag",new BmobPointer(user));
+        //query.addWhereEqualTo("belong",new BmobPointer(user));
         query.findObjects(context, new FindListener<FavoriteTag>() {
             @Override
             public void onSuccess(List<FavoriteTag> list) {
@@ -53,17 +58,39 @@ public class FavoriteKathy {
         });
     }
 
-    public void createTag(final FavoriteTag tag){
+    public void createTag(final FavoriteTag tag, final User user){
         tag.save(context, new SaveListener() {
+            @Override
+            public void onSuccess() {
+
+                relateToUser(tag,user);
+
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                listener.onCreateError(s);
+            }
+        });
+    }
+
+    //将该tag与用户绑定
+    private void relateToUser(final FavoriteTag tag, User user) {
+        BmobRelation relation = new BmobRelation();
+        relation.add(tag);
+        user.setTag(relation);
+        user.update(context, new UpdateListener() {
             @Override
             public void onSuccess() {
                 ArrayList<FavoriteTag> tags=new ArrayList<FavoriteTag>();
                 tags.add(tag);
                 listener.onCreateSuccess(tags);
+                LogUtils.d("关联成功");
             }
 
             @Override
             public void onFailure(int i, String s) {
+                LogUtils.d("关联失败"+s);
                 listener.onCreateError(s);
             }
         });

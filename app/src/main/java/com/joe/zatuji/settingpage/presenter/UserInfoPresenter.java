@@ -46,14 +46,6 @@ public class UserInfoPresenter implements UserInfoListener{
         PrefUtils.putBoolean(mContext, Constant.IS_EXIT,true);
     }
 
-    //意见反馈
-    public void feedBack(FeedBack feedBack){
-
-    }
-    //检查更新
-    public void checkUpdate(){
-
-    }
 
     /**
      *以下方法为回调
@@ -91,14 +83,5 @@ public class UserInfoPresenter implements UserInfoListener{
         mView.showError("退出失败，请检查网络");
     }
 
-    @Override
-    public void onFeedBackSuccess() {
-
-    }
-
-    @Override
-    public void onFeedBackError() {
-
-    }
 
 }

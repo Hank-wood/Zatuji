@@ -3,6 +3,7 @@ package com.joe.zatuji.favoritepage.model;
 import com.joe.zatuji.loginpager.model.User;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * 用户自定义的标签model
@@ -15,6 +16,16 @@ public class FavoriteTag extends BmobObject{
     private boolean is_lock;//是否隐私
     private String pwd;//隐私标签需要密码
     private User belong;//属于哪个用户
+    private BmobRelation img;//该标签拥有的img
+
+    public BmobRelation getImg() {
+        return img;
+    }
+
+    public void setImg(BmobRelation img) {
+        this.img = img;
+    }
+
     private String front;//封面
 
     public String getFront() {

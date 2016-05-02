@@ -101,7 +101,6 @@ public class PicDetailActivity extends BaseActivity implements TagView{
                 finish();
                 break;
             case R.id.action_save://收藏
-                showChooseTag();
                 mFavoritePresenter.getFavoriteTag();
                 break;
             case R.id.action_download://保存
@@ -131,9 +130,6 @@ public class PicDetailActivity extends BaseActivity implements TagView{
         });
     }
 
-    private void showChooseTag() {
-
-    }
     //让用户选择图集
     @Override
     public void showTag(ArrayList<FavoriteTag> tags) {

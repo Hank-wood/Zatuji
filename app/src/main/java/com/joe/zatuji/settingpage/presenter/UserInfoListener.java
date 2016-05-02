@@ -10,6 +10,4 @@ public interface UserInfoListener {
     void onUserNotLogin();
     void onLogOutSuccess();
     void onLogOutError();
-    void onFeedBackSuccess();
-    void onFeedBackError();
 }
