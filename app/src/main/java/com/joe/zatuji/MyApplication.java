@@ -1,10 +1,13 @@
 package com.joe.zatuji;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.joe.zatuji.global.Constant;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import org.xutils.x;
 
@@ -15,6 +18,7 @@ import cn.bmob.v3.Bmob;
  */
 public class MyApplication extends Application {
     private static MyApplication myApplication;
+    private RefWatcher refWatcher;//leakCanary
     @Override
     public void onCreate() {
         super.onCreate();
@@ -24,8 +28,14 @@ public class MyApplication extends Application {
         x.Ext.setDebug(true);
         ImageLoaderConfiguration configuration=ImageLoaderConfiguration.createDefault(this);
         ImageLoader.getInstance().init(configuration );
+        refWatcher = LeakCanary.install(this);
     }
 
+
+    public static RefWatcher getRefWatcher(Context context) {
+        MyApplication application = (MyApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
     public static MyApplication getInstance(){
         return myApplication;
     }

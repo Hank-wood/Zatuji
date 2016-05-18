@@ -12,6 +12,7 @@ import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.global.utils.KToast;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
  * Created by Joe on 2016/4/16.
@@ -26,7 +27,13 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment imple
         super.onCreate(savedInstanceState);
         this.mActivity=getActivity();
         this.myApplication= (MyApplication) mActivity.getApplication();
+        initLeakCanary();
         initLoading();
+    }
+
+    protected void initLeakCanary(){
+        RefWatcher refWatcher = MyApplication.getRefWatcher(mActivity);
+        refWatcher.watch(this);
     }
 
     @Override

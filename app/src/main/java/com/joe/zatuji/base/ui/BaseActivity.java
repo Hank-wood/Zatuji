@@ -12,6 +12,7 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.global.utils.KToast;
 import com.joe.zatuji.global.utils.LogUtils;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
  * 所有activity的基类
@@ -30,10 +31,16 @@ public abstract class BaseActivity extends AppCompatActivity implements LoadingV
         this.mActivity=this;
         this.mApplication= (MyApplication) getApplication();
         StatusBarUtil.setColor(this,getResources().getColor(R.color.colorPrimary));
+        initLeakCanary();
         initView();
         initLoading();
         initPresenter();
         initListener();
+    }
+
+    protected void initLeakCanary(){
+        RefWatcher refWatcher = MyApplication.getRefWatcher(this);
+        refWatcher.watch(this);
     }
 
     protected void initLoading() {
