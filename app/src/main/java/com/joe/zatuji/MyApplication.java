@@ -3,9 +3,6 @@ package com.joe.zatuji;
 import android.app.Application;
 import android.content.Context;
 
-import com.joe.zatuji.global.Constant;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -26,8 +23,6 @@ public class MyApplication extends Application {
         Bmob.initialize(this, Constant.BMOB_KEY);
         x.Ext.init(this);
         x.Ext.setDebug(true);
-        ImageLoaderConfiguration configuration=ImageLoaderConfiguration.createDefault(this);
-        ImageLoader.getInstance().init(configuration );
         refWatcher = LeakCanary.install(this);
     }
 

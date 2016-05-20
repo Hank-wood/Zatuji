@@ -18,22 +18,17 @@ import android.view.animation.TranslateAnimation;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.joe.zatuji.discoverpage.DiscoverFragment;
-import com.joe.zatuji.favoritepage.FavoriteFragment;
-import com.joe.zatuji.global.Constant;
-import com.joe.zatuji.global.utils.KToast;
-import com.joe.zatuji.global.utils.LogUtils;
-import com.joe.zatuji.homepage.HomeFragment;
-import com.joe.zatuji.base.ui.BaseActivity;
-import com.joe.zatuji.loginpager.model.User;
-import com.joe.zatuji.searchingpage.SearchingActivity;
-import com.joe.zatuji.settingpage.SettingFragment;
+import com.joe.zatuji.ui.discoverpage.DiscoverFragment;
+import com.joe.zatuji.ui.favoritepage.FavoriteFragment;
+import com.joe.zatuji.utils.KToast;
+import com.joe.zatuji.utils.LogUtils;
+import com.joe.zatuji.ui.homepage.HomeFragment;
+import com.joe.zatuji.base.BaseActivity;
+import com.joe.zatuji.ui.searchingpage.SearchingActivity;
+import com.joe.zatuji.ui.settingpage.SettingFragment;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.BottomBarTab;
-import com.roughike.bottombar.scrollsweetness.BottomNavigationBehavior;
 
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.update.BmobUpdateAgent;
 
 public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener{
@@ -65,7 +60,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     }
 
     @Override
-    protected int getContent() {return R.layout.activity_home;}
+    protected int getLayout() {return R.layout.activity_home;}
 
     @Override
     protected void initPresenter() {}

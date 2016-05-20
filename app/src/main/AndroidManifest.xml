@@ -35,17 +35,17 @@
         <activity
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".picdetail.PicDetailActivity"/>
+            android:name=".ui.picdetail.PicDetailActivity"/>
         <activity
             android:screenOrientation="portrait"
             android:label="寻觅"
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".searchingpage.SearchingActivity"/>
+            android:name=".ui.searchingpage.SearchingActivity"/>
         <activity
-            android:name=".loginpager.LoginActivity"
+            android:name=".ui.loginpager.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
-        <activity android:name=".gallerypage.GalleryActivity"
+        <activity android:name=".ui.gallerypage.GalleryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name="com.yongchun.library.view.ImageSelectorActivity"
