@@ -1,14 +1,14 @@
-package com.joe.zatuji.ui.loginpager.presenter;
+package com.joe.zatuji.ui.loginpage.presenter;
 
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.PrefUtils;
-import com.joe.zatuji.ui.loginpager.model.LoginKathy;
-import com.joe.zatuji.ui.loginpager.model.User;
-import com.joe.zatuji.ui.loginpager.view.FragmentView;
-import com.joe.zatuji.ui.loginpager.view.LoginView;
+import com.joe.zatuji.ui.loginpage.model.LoginKathy;
+import com.joe.zatuji.ui.loginpage.model.User;
+import com.joe.zatuji.ui.loginpage.view.FragmentView;
+import com.joe.zatuji.ui.loginpage.view.LoginView;
 
 /**
  * Created by Joe on 2016/5/1.

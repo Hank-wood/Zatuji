@@ -11,7 +11,7 @@ import com.joe.zatuji.ui.favoritepage.model.FavoriteTag;
 import com.joe.zatuji.ui.favoritepage.model.MyFavorite;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.ui.loginpager.model.User;
+import com.joe.zatuji.ui.loginpage.model.User;
 import com.joe.zatuji.ui.picdetail.presenter.PicDetailListener;
 
 import org.xutils.common.Callback;

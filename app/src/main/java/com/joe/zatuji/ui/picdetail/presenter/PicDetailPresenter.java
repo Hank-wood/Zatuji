@@ -7,7 +7,7 @@ import com.joe.zatuji.ui.favoritepage.model.FavoriteTag;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.PrefUtils;
-import com.joe.zatuji.ui.loginpager.model.User;
+import com.joe.zatuji.ui.loginpage.model.User;
 import com.joe.zatuji.ui.picdetail.model.PicKathy;
 
 import cn.bmob.v3.BmobUser;

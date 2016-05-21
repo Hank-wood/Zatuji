@@ -9,7 +9,7 @@ import com.joe.zatuji.ui.favoritepage.view.TagView;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.PrefUtils;
-import com.joe.zatuji.ui.loginpager.model.User;
+import com.joe.zatuji.ui.loginpage.model.User;
 
 import java.util.ArrayList;
 

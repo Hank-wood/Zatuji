@@ -1,9 +1,9 @@
-package com.joe.zatuji.ui.loginpager.model;
+package com.joe.zatuji.ui.loginpage.model;
 
 import android.content.Context;
 
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.ui.loginpager.presenter.RegisterListener;
+import com.joe.zatuji.ui.loginpage.presenter.RegisterListener;
 
 import java.io.File;
 

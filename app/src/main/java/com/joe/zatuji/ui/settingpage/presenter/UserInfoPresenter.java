@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.PrefUtils;
-import com.joe.zatuji.ui.loginpager.model.User;
+import com.joe.zatuji.ui.loginpage.model.User;
 import com.joe.zatuji.ui.settingpage.view.SettingView;
 import com.joe.zatuji.ui.settingpage.view.UserView;
 

@@ -1,4 +1,4 @@
-package com.joe.zatuji.base;
+package com.joe.zatuji.base.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.view.View;
 import com.jaeger.library.StatusBarUtil;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
+import com.joe.zatuji.base.BaseModel;
+import com.joe.zatuji.base.BasePresenter;
+import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.TUtil;
@@ -18,7 +21,7 @@ import com.squareup.leakcanary.RefWatcher;
  * 所有activity的基类
  * Created by Joe on 2016/4/14.
  */
-public abstract class BaseActivity<T extends BasePresenter,E extends BaseModel> extends AppCompatActivity implements LoadingView{
+public abstract class BaseActivity<T extends BasePresenter,E extends BaseModel> extends AppCompatActivity implements LoadingView {
     protected T mPresenter;
     protected E mModel;
     protected Activity mActivity;

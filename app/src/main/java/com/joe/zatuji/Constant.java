@@ -23,10 +23,15 @@ public class Constant {
     public static final String DIR_DOWNLOAD="Download";//图片长
 
     public static final String BMOB_KEY="396b7abd4336bd6e9564a34a310e2365";
+    public static final String BMOB_REST = "6c6f1d60e461d29e814976fe2531b7b1";
 
     //广播
     public static final String LOGIN_SUCCESS="login_success";
     //share
     public static final String SHARED_CONFIG="config";
     public static final String IS_EXIT="is_exit";
+
+    //DataBase
+    public static final String DATABASE = "Ztj";
+
 }

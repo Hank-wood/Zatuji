@@ -1,6 +1,6 @@
 package com.joe.zatuji.ui.favoritepage.model;
 
-import com.joe.zatuji.ui.loginpager.model.User;
+import com.joe.zatuji.ui.loginpage.model.User;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobRelation;

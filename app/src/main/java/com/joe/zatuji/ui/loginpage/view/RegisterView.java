@@ -1,4 +1,4 @@
-package com.joe.zatuji.ui.loginpager.view;
+package com.joe.zatuji.ui.loginpage.view;
 
 /**
  * Created by Joe on 2016/5/1.

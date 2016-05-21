@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.R;
-import com.joe.zatuji.base.BaseFragment;
+import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.ui.loginpager.LoginActivity;
+import com.joe.zatuji.ui.loginpage.LoginActivity;
 import com.joe.zatuji.ui.settingpage.presenter.UserInfoPresenter;
 import com.joe.zatuji.ui.settingpage.view.SettingView;
 import com.joe.zatuji.ui.settingpage.view.UserView;

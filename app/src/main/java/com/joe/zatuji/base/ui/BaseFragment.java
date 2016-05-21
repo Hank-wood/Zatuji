@@ -1,4 +1,4 @@
-package com.joe.zatuji.base;
+package com.joe.zatuji.base.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
+import com.joe.zatuji.base.BaseModel;
+import com.joe.zatuji.base.BasePresenter;
+import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.TUtil;
 import com.squareup.leakcanary.RefWatcher;
@@ -17,7 +20,7 @@ import com.squareup.leakcanary.RefWatcher;
 /**
  * Created by Joe on 2016/4/16.
  */
-public abstract class BaseFragment<T extends BasePresenter,E extends BaseModel> extends android.support.v4.app.Fragment implements LoadingView{
+public abstract class BaseFragment<T extends BasePresenter,E extends BaseModel> extends android.support.v4.app.Fragment implements LoadingView {
     protected Activity mActivity;
     protected View mRootView;
     protected AlertDialog dialog;

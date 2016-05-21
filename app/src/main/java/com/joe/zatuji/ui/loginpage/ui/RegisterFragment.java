@@ -1,4 +1,4 @@
-package com.joe.zatuji.ui.loginpager.ui;
+package com.joe.zatuji.ui.loginpage.ui;
 
 import android.content.Intent;
 import android.text.TextUtils;
@@ -9,12 +9,12 @@ import android.widget.ImageView;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
-import com.joe.zatuji.base.BaseFragment;
+import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.ui.loginpager.model.User;
-import com.joe.zatuji.ui.loginpager.presenter.RegisterPresenter;
-import com.joe.zatuji.ui.loginpager.view.RegisterView;
+import com.joe.zatuji.ui.loginpage.model.User;
+import com.joe.zatuji.ui.loginpage.presenter.RegisterPresenter;
+import com.joe.zatuji.ui.loginpage.view.RegisterView;
 import com.yongchun.library.view.ImageSelectorActivity;
 
 import org.xutils.x;

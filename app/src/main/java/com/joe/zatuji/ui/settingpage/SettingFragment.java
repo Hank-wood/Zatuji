@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.joe.zatuji.HomeActivity;
+import com.joe.zatuji.ui.homepage.HomeActivity;
 import com.joe.zatuji.R;
-import com.joe.zatuji.base.BaseFragment;
+import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.ui.settingpage.presenter.SettingPresenter;
 import com.joe.zatuji.ui.settingpage.view.SettingView;

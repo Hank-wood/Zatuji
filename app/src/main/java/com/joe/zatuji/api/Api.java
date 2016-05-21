@@ -1,11 +1,15 @@
 package com.joe.zatuji.api;
 
 
+import android.util.Log;
+
 import com.joe.zatuji.Constant;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -18,9 +22,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by baixiaokang on 16/3/9.
  */
 public class Api {
+    //接口地址
+    public static final String HOST="http://api.huaban.com/";//主机地址
+    public static final String HOST_PIC="http://img.hb.aicdn.com/";//图片保存地址
+    public static final String HOST_BMOB = "https://api.bmob.cn ";//后台主机地址
 
-    public Retrofit retrofit;
+
     public ApiService mApiService;
+    public BmobSeivice mBmobService;
 
     Interceptor mInterceptor = new Interceptor() {
         @Override
@@ -38,32 +47,17 @@ public class Api {
         }
     };
 
-
-    //构造方法私有
-    private Api() {
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-//        File cacheFile = new File(App.getAppContext().getCacheDir(), "cache");
-//        Cache cache = new Cache(cacheFile, 1024 * 1024 * 100); //100Mb
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .readTimeout(7676, TimeUnit.MILLISECONDS)
-                .connectTimeout(7676, TimeUnit.MILLISECONDS)
-                .addInterceptor(mInterceptor)
-                .build();
-
-
-
-        retrofit = new Retrofit.Builder()
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(Constant.HOST)
-                .build();
-        mApiService = retrofit.create(ApiService.class);
-    }
-
+    Interceptor mBmobInterceptor = new Interceptor() {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request().newBuilder()
+                    .addHeader("X-Bmob-Application-Id", Constant.BMOB_KEY)
+                    .addHeader("X-Bmob-REST-API-Key", Constant.BMOB_REST)
+                    .addHeader("Content-Type","application/json")
+                    .build();
+            return chain.proceed(request);
+        }
+    };
     //在访问HttpMethods时创建单例
     private static class SingletonHolder {
         private static final Api INSTANCE = new Api();
@@ -74,33 +68,25 @@ public class Api {
         return SingletonHolder.INSTANCE;
     }
 
+    //构造方法私有
+    private Api() {
+        mApiService = getRetrofit(mInterceptor,HOST).create(ApiService.class);
+        mBmobService = getRetrofit(mBmobInterceptor,HOST_BMOB).create(BmobSeivice.class);
+    }
 
-//    class HttpCacheInterceptor implements Interceptor {
-//
-//        @Override
-//        public Response intercept(Chain chain) throws IOException {
-//            Request request = chain.request();
-//            if (!NetWorkUtil.isNetConnected(App.getAppContext())) {
-//                request = request.newBuilder()
-//                        .cacheControl(CacheControl.FORCE_CACHE)
-//                        .build();
-//                Log.d("Okhttp", "no network");
-//            }
-//
-//            Response originalResponse = chain.proceed(request);
-//            if (NetWorkUtil.isNetConnected(App.getAppContext())) {
-//                //有网的时候读接口上的@Headers里的配置，你可以在这里进行统一的设置
-//                String cacheControl = request.cacheControl().toString();
-//                return originalResponse.newBuilder()
-//                        .header("Cache-Control", cacheControl)
-//                        .removeHeader("Pragma")
-//                        .build();
-//            } else {
-//                return originalResponse.newBuilder()
-//                        .header("Cache-Control", "public, only-if-cached, max-stale=2419200")
-//                        .removeHeader("Pragma")
-//                        .build();
-//            }
-//        }
-//    }
+    private Retrofit getRetrofit(Interceptor header,String host){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(7676, TimeUnit.MILLISECONDS)
+                .connectTimeout(7676, TimeUnit.MILLISECONDS)
+                .addInterceptor(header)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(host)
+                .build();
+        return retrofit;
+    }
 }

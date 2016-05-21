@@ -1,12 +1,12 @@
-package com.joe.zatuji.ui.loginpager.presenter;
+package com.joe.zatuji.ui.loginpage.presenter;
 
 import android.content.Context;
 
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.PrefUtils;
-import com.joe.zatuji.ui.loginpager.model.RegisterKathy;
-import com.joe.zatuji.ui.loginpager.model.User;
-import com.joe.zatuji.ui.loginpager.view.RegisterView;
+import com.joe.zatuji.ui.loginpage.model.RegisterKathy;
+import com.joe.zatuji.ui.loginpage.model.User;
+import com.joe.zatuji.ui.loginpage.view.RegisterView;
 
 /**
  * Created by Joe on 2016/5/1.

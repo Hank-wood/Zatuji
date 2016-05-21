@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.joe.zatuji.R;
-import com.joe.zatuji.base.BaseActivity;
+import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.ui.favoritepage.model.FavoriteTag;
 import com.joe.zatuji.ui.favoritepage.presenter.FavoritePresenter;
 import com.joe.zatuji.ui.favoritepage.ui.CreateTagDialog;

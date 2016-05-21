@@ -1,6 +1,6 @@
-package com.joe.zatuji.ui.loginpager.presenter;
+package com.joe.zatuji.ui.loginpage.presenter;
 
-import com.joe.zatuji.ui.loginpager.model.User;
+import com.joe.zatuji.ui.loginpage.model.User;
 
 /**
  * Created by Joe on 2016/5/1.

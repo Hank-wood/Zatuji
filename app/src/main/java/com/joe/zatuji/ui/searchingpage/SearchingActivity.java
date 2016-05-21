@@ -6,7 +6,7 @@ import android.widget.SearchView;
 
 import com.joe.zatuji.R;
 import com.joe.zatuji.data.bean.PicData;
-import com.joe.zatuji.base.BaseActivity;
+import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.ui.homepage.adapter.HomeAdapter;
 import com.joe.zatuji.ui.homepage.view.HomeView;
 import com.joe.zatuji.ui.searchingpage.presenter.SearchPresenter;

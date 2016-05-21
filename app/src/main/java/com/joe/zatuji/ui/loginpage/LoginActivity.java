@@ -1,4 +1,4 @@
-package com.joe.zatuji.ui.loginpager;
+package com.joe.zatuji.ui.loginpage;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,11 +7,11 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.jaeger.library.StatusBarUtil;
 import com.joe.zatuji.R;
-import com.joe.zatuji.base.BaseActivity;
+import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.ui.loginpager.ui.LoginFragment;
-import com.joe.zatuji.ui.loginpager.ui.RegisterFragment;
-import com.joe.zatuji.ui.loginpager.view.FragmentView;
+import com.joe.zatuji.ui.loginpage.ui.LoginFragment;
+import com.joe.zatuji.ui.loginpage.ui.RegisterFragment;
+import com.joe.zatuji.ui.loginpage.view.FragmentView;
 import com.yongchun.library.view.ImageSelectorActivity;
 
 import java.util.ArrayList;

@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.joe.zatuji.R;
-import com.joe.zatuji.base.BaseActivity;
+import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.ui.favoritepage.model.FavoriteTag;
 import com.joe.zatuji.ui.favoritepage.model.MyFavorite;
 import com.joe.zatuji.ui.gallerypage.adapter.GalleryAdapter;

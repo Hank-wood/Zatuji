@@ -5,9 +5,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-import com.joe.zatuji.HomeActivity;
+import com.joe.zatuji.ui.homepage.HomeActivity;
 import com.joe.zatuji.R;
-import com.joe.zatuji.base.BaseFragment;
+import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.ui.favoritepage.adapter.FavoriteTagAdapter;
 import com.joe.zatuji.ui.favoritepage.model.FavoriteTag;
 import com.joe.zatuji.ui.favoritepage.presenter.FavoritePresenter;

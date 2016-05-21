@@ -4,10 +4,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-import com.joe.zatuji.HomeActivity;
+import com.joe.zatuji.ui.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.data.bean.PicData;
-import com.joe.zatuji.base.BaseFragment;
+import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.ui.discoverpage.presenter.DiscoverPresenter;
 import com.joe.zatuji.ui.homepage.adapter.HomeAdapter;
 import com.joe.zatuji.ui.homepage.view.HomeView;

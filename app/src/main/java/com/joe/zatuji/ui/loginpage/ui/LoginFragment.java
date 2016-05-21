@@ -1,4 +1,4 @@
-package com.joe.zatuji.ui.loginpager.ui;
+package com.joe.zatuji.ui.loginpage.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,14 +12,14 @@ import android.widget.EditText;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
-import com.joe.zatuji.base.BaseFragment;
+import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.ui.loginpager.model.User;
-import com.joe.zatuji.ui.loginpager.presenter.LoginPresenter;
-import com.joe.zatuji.ui.loginpager.view.FragmentView;
-import com.joe.zatuji.ui.loginpager.view.LoginView;
+import com.joe.zatuji.ui.loginpage.model.User;
+import com.joe.zatuji.ui.loginpage.presenter.LoginPresenter;
+import com.joe.zatuji.ui.loginpage.view.FragmentView;
+import com.joe.zatuji.ui.loginpage.view.LoginView;
 
 import org.xutils.x;
 

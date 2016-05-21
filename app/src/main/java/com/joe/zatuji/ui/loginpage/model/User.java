@@ -1,4 +1,4 @@
-package com.joe.zatuji.ui.loginpager.model;
+package com.joe.zatuji.ui.loginpage.model;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobRelation;

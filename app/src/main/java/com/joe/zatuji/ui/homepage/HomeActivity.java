@@ -1,4 +1,4 @@
-package com.joe.zatuji;
+package com.joe.zatuji.ui.homepage;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,12 +18,14 @@ import android.view.animation.TranslateAnimation;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.joe.zatuji.Constant;
+import com.joe.zatuji.R;
 import com.joe.zatuji.ui.discoverpage.DiscoverFragment;
 import com.joe.zatuji.ui.favoritepage.FavoriteFragment;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.ui.homepage.HomeFragment;
-import com.joe.zatuji.base.BaseActivity;
+import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.ui.searchingpage.SearchingActivity;
 import com.joe.zatuji.ui.settingpage.SettingFragment;
 import com.roughike.bottombar.BottomBar;

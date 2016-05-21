@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.joe.zatuji.ui.favoritepage.presenter.FavoriteTagListener;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.ui.loginpager.model.User;
+import com.joe.zatuji.ui.loginpage.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

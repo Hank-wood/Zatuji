@@ -1,10 +1,10 @@
-package com.joe.zatuji.ui.loginpager.model;
+package com.joe.zatuji.ui.loginpage.model;
 
 import android.content.Context;
 
-import com.joe.zatuji.ui.loginpager.presenter.AvatarListener;
-import com.joe.zatuji.ui.loginpager.presenter.ForgetListener;
-import com.joe.zatuji.ui.loginpager.presenter.LoginListener;
+import com.joe.zatuji.ui.loginpage.presenter.AvatarListener;
+import com.joe.zatuji.ui.loginpage.presenter.ForgetListener;
+import com.joe.zatuji.ui.loginpage.presenter.LoginListener;
 
 import java.util.List;
 
