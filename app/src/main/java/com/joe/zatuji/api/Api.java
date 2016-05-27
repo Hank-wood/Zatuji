@@ -4,6 +4,7 @@ package com.joe.zatuji.api;
 import android.util.Log;
 
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -58,6 +60,13 @@ public class Api {
             return chain.proceed(request);
         }
     };
+
+    HttpLoggingInterceptor mLog = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+        @Override
+        public void log(String message) {
+            LogUtils.api(message);
+        }
+    });
     //在访问HttpMethods时创建单例
     private static class SingletonHolder {
         private static final Api INSTANCE = new Api();
@@ -75,10 +84,12 @@ public class Api {
     }
 
     private Retrofit getRetrofit(Interceptor header,String host){
+        mLog.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(7676, TimeUnit.MILLISECONDS)
                 .connectTimeout(7676, TimeUnit.MILLISECONDS)
                 .addInterceptor(header)
+                .addInterceptor(mLog)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()

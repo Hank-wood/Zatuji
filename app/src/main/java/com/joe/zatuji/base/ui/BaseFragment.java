@@ -20,20 +20,19 @@ import com.squareup.leakcanary.RefWatcher;
 /**
  * Created by Joe on 2016/4/16.
  */
-public abstract class BaseFragment<T extends BasePresenter,E extends BaseModel> extends android.support.v4.app.Fragment implements LoadingView {
+public abstract class BaseFragment<T extends BasePresenter> extends android.support.v4.app.Fragment implements LoadingView {
     protected Activity mActivity;
     protected View mRootView;
     protected AlertDialog dialog;
     protected MyApplication myApplication;
 
     protected T mPresenter;
-    protected E mModel;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mActivity=getActivity();
         this.myApplication= (MyApplication) mActivity.getApplication();
-        initLeakCanary();
+        //initLeakCanary();
         initLoading();
     }
 
@@ -60,9 +59,8 @@ public abstract class BaseFragment<T extends BasePresenter,E extends BaseModel> 
         return mRootView;
     }
 
-    private void initPM() {
+    protected void initPM() {
         mPresenter = TUtil.getT(this,0);
-        mModel = TUtil.getT(this,1);
         if(mPresenter!=null) mPresenter.onStart();
     }
     protected void initLoading() {
@@ -101,5 +99,9 @@ public abstract class BaseFragment<T extends BasePresenter,E extends BaseModel> 
     public void onDestroy() {
         super.onDestroy();
         if(mPresenter!=null) mPresenter.onRemove();
+    }
+
+    protected View findView(int id){
+        return mRootView.findViewById(id);
     }
 }

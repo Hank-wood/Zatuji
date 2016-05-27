@@ -1,6 +1,6 @@
 package com.joe.zatuji.data.bean;
 
-import com.joe.zatuji.base.BaseData;
+import com.joe.zatuji.data.BaseBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * 图片数据实体类
  * Created by Joe on 2016/4/13.
  */
-public class PicData extends BaseData implements Serializable{
+public class PicData extends BaseBean implements Serializable{
     /**
      * homedata.pins.get(position).pin_id is a key to request second page
      * homedata.pins.file.key is a img url

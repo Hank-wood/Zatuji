@@ -7,8 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.PicData;
+import com.joe.zatuji.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,13 +29,15 @@ public class CacheDao extends BaseDao{
     public static final String WIDTH = "width";
     public static final String HEIGHT = "height";
     public static final String TAG = "tag";
-    public static final String CREATE = "create";
+    public static final String CREATE = "create_date";
     public static final String TYPE ="type";
 
     public CacheDao(Context context) {
         super(context);
     }
-
+    public CacheDao(){
+        super(MyApplication.getInstance());
+    }
     @Override
     protected void createSql() {
         createSql = "create table "
@@ -46,7 +50,7 @@ public class CacheDao extends BaseDao{
                 HEIGHT+" integer,"+
                 TAG+" text,"+
                 TYPE+" text,"+
-                CREATE+"datetime,"+
+                CREATE+" datetime"+
                 ")";
     }
 
@@ -54,7 +58,7 @@ public class CacheDao extends BaseDao{
     //查询数据
     private DataBean queryPicCache(String tag, int limit, long offset){
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        String sql = "select * from "+TABLE_PIC_CACHES+" where tag = ? order by -create limit "+offset+" "+limit +"order";
+        String sql = "select * from "+TABLE_PIC_CACHES+" where tag = ? order by -"+CREATE+" limit "+offset+","+limit;
         Cursor cursor = db.rawQuery(sql,new String[]{"home"});
         DataBean dataBean = new DataBean();
         dataBean.pins = new ArrayList<DataBean.PicBean>();
@@ -125,7 +129,8 @@ public class CacheDao extends BaseDao{
      */
     public void clearCache(){
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        db.delete(TABLE_PIC_CACHES,null,null);
+        int count = db.delete(TABLE_PIC_CACHES,null,null);
+        LogUtils.d("clear cache:"+count);
         close(db);
     }
 

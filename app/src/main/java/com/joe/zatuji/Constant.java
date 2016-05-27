@@ -34,4 +34,6 @@ public class Constant {
     //DataBase
     public static final String DATABASE = "Ztj";
 
+    //Cache
+    public static final String HOME = "home";
 }

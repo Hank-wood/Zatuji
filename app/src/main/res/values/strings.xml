@@ -2,4 +2,6 @@
     <string name="app_name">杂图集</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
+    <!--loading-->
+    <string name="load_new_data">玩儿命加载...</string>
 </resources>

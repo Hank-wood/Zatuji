@@ -24,7 +24,7 @@
         <activity
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
-            android:name=".ui.homepage.HomeActivity"
+            android:name=".module.homepage.HomeActivity"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,17 +35,17 @@
         <activity
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".ui.picdetail.PicDetailActivity"/>
+            android:name=".module.picdetail.PicDetailActivity"/>
         <activity
             android:screenOrientation="portrait"
             android:label="寻觅"
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".ui.searchingpage.SearchingActivity"/>
+            android:name=".module.searchingpage.SearchingActivity"/>
         <activity
-            android:name=".ui.loginpage.LoginActivity"
+            android:name=".module.loginpage.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.gallerypage.GalleryActivity"
+        <activity android:name=".module.gallerypage.GalleryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name="com.yongchun.library.view.ImageSelectorActivity"

@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.data.bean.DataBean;
+import com.joe.zatuji.utils.LogUtils;
 
 /**
  * Created by joe on 16/5/21.
@@ -19,11 +20,12 @@ public class ImageHelper {
      * 普通图片显示
      */
     private static DrawableRequestBuilder<String> baseGlide(ImageView iv, String key){
+//        LogUtils.d("show img");
         return Glide.with(iv.getContext())
                 .load(key)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(null)
-                .placeholder(null);
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+//                .error(null)
+//                .placeholder(null);
     }
     /**
      * gif图片显示
@@ -40,10 +42,11 @@ public class ImageHelper {
      * 展示缩略图
      */
     public static void showSmall(ImageView iv , String key,String type ){
+//        LogUtils.d("type:"+type);
         if(type.contains("gif")){
-            baseGif(iv,key).fitCenter().into(iv);
+            baseGif(iv,Api.HOST_PIC+key).fitCenter().into(iv);
         }else{
-            baseGlide(iv,key).centerCrop().into(iv);
+            baseGlide(iv,Api.HOST_PIC+key).centerCrop().into(iv);
         }
 
     }

@@ -1,5 +1,6 @@
 package com.joe.zatuji.api;
 
+import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.PicData;
 
 import retrofit2.http.GET;
@@ -17,7 +18,7 @@ public interface ApiService {
      * params max 最大id
      */
     @GET("favorite/photography/")
-    Observable<PicData> getHomeData(@Query("limit") String limit,@Query("max") String max);
+    Observable<DataBean> getHomeData(@Query("limit") String limit, @Query("max") String max);
 
     /**
      * 发现标签接口
@@ -26,7 +27,7 @@ public interface ApiService {
      * params max 分页最大id
      */
     @GET("favorite/{tag}/")
-    Observable<PicData> discoveryTag(@Path("tag") String tag,@Query("limit") String limit,@Query("max") String max);
+    Observable<DataBean> discoveryTag(@Path("tag") String tag,@Query("limit") String limit,@Query("max") String max);
 
 
     /**
@@ -36,6 +37,6 @@ public interface ApiService {
      * params query 查询关键字
      */
     @GET("search/")
-    Observable<PicData> search(@Query("page") int page,@Query("per_page") String per,@Query("q") String query);
+    Observable<DataBean> search(@Query("page") int page,@Query("per_page") String per,@Query("q") String query);
 
 }

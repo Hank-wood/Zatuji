@@ -15,20 +15,20 @@ import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.TUtil;
+import com.joe.zatuji.view.LoadingDialog;
 import com.squareup.leakcanary.RefWatcher;
 
 /**
  * 所有activity的基类
  * Created by Joe on 2016/4/14.
  */
-public abstract class BaseActivity<T extends BasePresenter,E extends BaseModel> extends AppCompatActivity implements LoadingView {
+public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements LoadingView {
     protected T mPresenter;
-    protected E mModel;
     protected Activity mActivity;
     protected MyApplication mApplication;
-
     private AlertDialog dialog;
     private View loadingView;
+    protected LoadingDialog mLoadingDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public abstract class BaseActivity<T extends BasePresenter,E extends BaseModel> 
         this.mActivity=this;
         this.mApplication= (MyApplication) getApplication();
         StatusBarUtil.setColor(this,getResources().getColor(R.color.colorPrimary));
-        initLeakCanary();
+        //initLeakCanary();
         initPM();//初始化presenter和model
         initPresenter();
         initView();
@@ -48,7 +48,6 @@ public abstract class BaseActivity<T extends BasePresenter,E extends BaseModel> 
 
     private void initPM() {
         mPresenter = TUtil.getT(this,0);
-        mModel = TUtil.getT(this,1);
         if(mPresenter!=null) mPresenter.onStart();
     }
     protected abstract int getLayout();
@@ -87,6 +86,15 @@ public abstract class BaseActivity<T extends BasePresenter,E extends BaseModel> 
     public void showError(String str) {
         KToast.show(str);
     }
+
+    public void showLoading(String msg){
+        if(mLoadingDialog==null) mLoadingDialog = new LoadingDialog(mActivity,msg);
+        mLoadingDialog.setMessage(msg);
+        mLoadingDialog.show();
+    }
+//    public void doneLoading(){
+//        if(mLoadingDialog!=null&&mLoadingDialog.isShowing()) mLoadingDialog.dismiss();
+//    }
 
     @Override
     protected void onDestroy() {
