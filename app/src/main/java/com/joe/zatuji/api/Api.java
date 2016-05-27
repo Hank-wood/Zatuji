@@ -1,7 +1,6 @@
 package com.joe.zatuji.api;
 
 
-import android.util.Log;
 
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.LogUtils;
@@ -9,8 +8,6 @@ import com.joe.zatuji.utils.LogUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
-import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,6 +29,7 @@ public class Api {
 
     public ApiService mApiService;
     public BmobSeivice mBmobService;
+    public static String sToken="";//
 
     Interceptor mInterceptor = new Interceptor() {
         @Override
@@ -56,6 +54,8 @@ public class Api {
                     .addHeader("X-Bmob-Application-Id", Constant.BMOB_KEY)
                     .addHeader("X-Bmob-REST-API-Key", Constant.BMOB_REST)
                     .addHeader("Content-Type","application/json")
+                    .addHeader("X-Bmob-Session-Token",sToken)
+
                     .build();
             return chain.proceed(request);
         }
