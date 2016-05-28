@@ -1,6 +1,7 @@
 package com.joe.zatuji.module.homepage;
 
 
+import com.joe.zatuji.SConstant;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.helper.RxSubscriber;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredPresenter;
@@ -26,13 +27,11 @@ public class HomePresenter extends BaseStaggeredPresenter<BaseStaggeredView, Hom
     public void loadData() {
         super.loadData();
         LogUtils.d("load data");
-        mMax = "";
-        mOffset = 0;
         Subscription subscription = getObservable()
                 .subscribe(new RxSubscriber<DataBean>() {
                     @Override
                     public void onError(Throwable e) {
-                        mView.showToastMsg("出错啦");
+                        mView.showEmptyView();
                     }
 
                     @Override
@@ -41,37 +40,38 @@ public class HomePresenter extends BaseStaggeredPresenter<BaseStaggeredView, Hom
                         countOffset(dataBean);
                     }
                 });
-        mDataManager.add(subscription);
+        mRxJavaManager.add(subscription);
     }
 
     @Override
     public void reLoadData() {
         super.reLoadData();
         LogUtils.d("noMoreData:"+noMoreData);
-        mMax = "";
-        mOffset = 0;
         Subscription subscription = getObservable()
-                .subscribe(new Action1<DataBean>() {
+                .subscribe(new RxSubscriber<DataBean>() {
                     @Override
-                    public void call(DataBean dataBean) {
+                    public void onError(Throwable e) {
+                        mView.showEmptyView();
+                    }
+
+                    @Override
+                    public void onNext(DataBean dataBean) {
                         mView.refreshData(dataBean.pins);
                         countOffset(dataBean);
                     }
                 });
-        mDataManager.add(subscription);
+        mRxJavaManager.add(subscription);
     }
 
     @Override
     public void loadMoreData() {
         super.loadMoreData();
         LogUtils.d("继续load");
-        mDataManager.add(getObservable().subscribe(new RxSubscriber<DataBean>() {
+        mRxJavaManager.add(getObservable().subscribe(new RxSubscriber<DataBean>() {
             @Override
             public void onError(Throwable e) {
                 LogUtils.d("error no more data");
-                mView.addData(null);
-                mView.disableLoadMore(true);
-                mView.showToastMsg("没有更多图片啦");
+                showNoMoreData();
             }
 
             @Override
@@ -89,7 +89,7 @@ public class HomePresenter extends BaseStaggeredPresenter<BaseStaggeredView, Hom
                     @Override
                     public void call(Throwable throwable) {
                         LogUtils.d("error in api request:" + Thread.currentThread().getName());
-                        mView.showToastMsg("网络不给力～");
+                        mView.showToastMsg(SConstant.NET_NO_GOOD);
                     }
                 }).onErrorReturn(new Func1<Throwable, DataBean>() {
                     @Override

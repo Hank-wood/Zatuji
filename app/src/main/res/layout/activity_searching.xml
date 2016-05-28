@@ -21,8 +21,8 @@
             android:layout_height="match_parent">
         </SearchView>
     </android.support.design.widget.AppBarLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_search"
+    <FrameLayout
+        android:id="@+id/fl_container_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

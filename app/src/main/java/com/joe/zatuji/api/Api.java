@@ -5,7 +5,6 @@ package com.joe.zatuji.api;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.LogUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;

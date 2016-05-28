@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
@@ -59,12 +60,13 @@ public class CacheDao extends BaseDao{
     private DataBean queryPicCache(String tag, int limit, long offset){
         SQLiteDatabase db = mHelper.getWritableDatabase();
         String sql = "select * from "+TABLE_PIC_CACHES+" where tag = ? order by -"+CREATE+" limit "+offset+","+limit;
-        Cursor cursor = db.rawQuery(sql,new String[]{"home"});
+        Cursor cursor = db.rawQuery(sql,new String[]{tag});
         DataBean dataBean = new DataBean();
         dataBean.pins = new ArrayList<DataBean.PicBean>();
         if(cursor!=null) {
             while (cursor.moveToNext()) {
                 DataBean.PicBean picBean = new DataBean.PicBean();
+                LogUtils.d("cache tag:"+cursor.getString(cursor.getColumnIndex(TAG)));
                 picBean.file = new DataBean.PicBean.FileBean();
                 picBean.pin_id = cursor.getString(cursor.getColumnIndex(PIN_ID));
                 picBean.file.key = cursor.getString(cursor.getColumnIndex(KEY));
@@ -130,6 +132,14 @@ public class CacheDao extends BaseDao{
     public void clearCache(){
         SQLiteDatabase db = mHelper.getWritableDatabase();
         int count = db.delete(TABLE_PIC_CACHES,null,null);
+        LogUtils.d("clear cache:"+count);
+        close(db);
+    }
+
+    public void clearTagCache(String tag){
+        LogUtils.d("clear cache:");
+        SQLiteDatabase db = mHelper.getWritableDatabase();
+        int count = db.delete(TABLE_PIC_CACHES,TAG+"=?",new String[]{tag});
         LogUtils.d("clear cache:"+count);
         close(db);
     }

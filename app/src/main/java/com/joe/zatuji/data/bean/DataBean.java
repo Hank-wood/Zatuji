@@ -21,7 +21,7 @@ public class DataBean extends BaseBean implements Serializable{
         public FileBean file;
         public String raw_text;
 
-        public static class FileBean {
+        public static class FileBean implements Serializable {
             public String key;
             public String type;
             public int width;

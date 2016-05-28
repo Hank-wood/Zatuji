@@ -11,7 +11,7 @@ import com.joe.zatuji.base.adapter.DataViewHolder;
 import com.joe.zatuji.module.favoritepage.model.MyFavorite;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.DPUtils;
-import com.joe.zatuji.module.picdetail.PicDetailActivity;
+import com.joe.zatuji.module.picdetailpage.PicDetailActivity;
 
 import org.xutils.x;
 

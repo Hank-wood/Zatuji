@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
+import com.joe.zatuji.module.settingpage.user.UserFragment;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.module.settingpage.presenter.SettingPresenter;
 import com.joe.zatuji.module.settingpage.view.SettingView;

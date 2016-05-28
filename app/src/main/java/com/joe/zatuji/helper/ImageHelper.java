@@ -43,7 +43,7 @@ public class ImageHelper {
      */
     public static void showSmall(ImageView iv , String key,String type ){
 //        LogUtils.d("type:"+type);
-        if(type.contains("gif")){
+        if(type!=null&&type.contains("gif")){
             baseGif(iv,Api.HOST_PIC+key).fitCenter().into(iv);
         }else{
             baseGlide(iv,Api.HOST_PIC+key).centerCrop().into(iv);

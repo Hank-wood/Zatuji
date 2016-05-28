@@ -23,7 +23,7 @@ public class MyApplication extends Application {
         Bmob.initialize(this, Constant.BMOB_KEY);
         x.Ext.init(this);
         x.Ext.setDebug(true);
-        refWatcher = LeakCanary.install(this);
+        //refWatcher = LeakCanary.install(this);
     }
 
 

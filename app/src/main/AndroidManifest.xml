@@ -33,9 +33,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".module.picdetail.PicDetailActivity"/>
+            android:name=".module.picdetailpage.PicDetailActivity"/>
         <activity
             android:screenOrientation="portrait"
             android:label="寻觅"

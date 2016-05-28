@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.R;
-import com.joe.zatuji.dao.CacheDao;
+import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.module.discoverpage.DiscoverFragment;
 import com.joe.zatuji.module.favoritepage.FavoriteFragment;
 import com.joe.zatuji.utils.KToast;
@@ -28,12 +29,13 @@ import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.module.searchingpage.SearchingActivity;
 import com.joe.zatuji.module.settingpage.SettingFragment;
+import com.joe.zatuji.view.DropMenuDialog;
 import com.roughike.bottombar.BottomBar;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.update.BmobUpdateAgent;
 
-public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener{
+public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener,HideFabView{
 
     private final String TAG_HOME_FRAG = "homeFragment";
     private final String TAG_DISCOVER_FRAG = "discoverFragment";
@@ -90,6 +92,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
             }
         });
         initFragment();
+        new DropMenuDialog(mActivity).showAtLocation(mAppBar, Gravity.TOP,0,50);
 
     }
 
@@ -246,11 +249,44 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
         }
         if(item.getItemId()!=R.id.action_add){
             setCurrentTitle();
-            discoverFragment.loadTagData(tag);
+            discoverFragment.loadAnotherTagData(getTag(tag));
         }
         return true;
     }
 
+    public String getTag(int tag){
+        String Tag="";
+        switch (tag){
+            case 1:
+                Tag="beauty";//妹子
+                break;
+            case 2:
+                Tag="men";//型男
+                break;
+            case 3:
+                Tag="kids";//萌宝
+                break;
+            case 4:
+                Tag="photography";//摄影
+                break;
+            case 5:
+                Tag="diy_crafts";//手工
+                break;
+            case 6:
+                Tag="apparel";//女装
+                break;
+            case 7:
+                Tag="travel_places";//旅行
+                break;
+            case 8:
+                Tag="illustration";//插画
+                break;
+            case 9:
+                Tag="architecture";//建筑
+                break;
+        }
+        return Tag;
+    }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         //menu.setGroupVisible();
@@ -268,6 +304,8 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
         return super.onPrepareOptionsMenu(menu);
     }
 
+    /**滑动时隐藏fab*/
+    @Override
     public void hideOrShowFAB(boolean hide){
         if(hide){
             bottomNavigationBar.hide();

@@ -4,4 +4,8 @@
     <string name="title_activity_main">MainActivity</string>
     <!--loading-->
     <string name="load_new_data">玩儿命加载...</string>
+    <string name="load_new_discover">寻觅中...</string>
+
+    <!--error-->
+    <string name="net_disable">网络不给力～</string>
 </resources>

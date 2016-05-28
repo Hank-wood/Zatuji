@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
-import com.joe.zatuji.base.BaseModel;
 import com.joe.zatuji.base.BasePresenter;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.utils.KToast;

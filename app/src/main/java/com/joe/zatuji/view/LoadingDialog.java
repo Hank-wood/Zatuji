@@ -5,22 +5,26 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.joe.zatuji.R;
+import com.joe.zatuji.view.base.BaseDialog;
 
 /**
  * Created by joe on 16/5/27.
  */
-public class LoadingDialog extends Dialog {
+public class LoadingDialog extends BaseDialog {
 
     private TextView mMsg;
 
     public LoadingDialog(Context context,String msg) {
         super(context);
-        setContentView(R.layout.dialog_loading);
-        initView();
         mMsg.setText(msg);
     }
 
-    private void initView() {
+    @Override
+    protected int getLayout() {
+        return R.layout.dialog_loading;
+    }
+
+    protected void initView() {
         mMsg = (TextView) findViewById(R.id.tv_loading_dialog);
     }
 

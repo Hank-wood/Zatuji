@@ -1,5 +1,7 @@
 package com.joe.zatuji.base;
 
+import com.joe.zatuji.base.model.BaseModel;
+import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.utils.TUtil;
 
 /**
@@ -8,16 +10,16 @@ import com.joe.zatuji.utils.TUtil;
 public abstract class BasePresenter<T,E extends BaseModel> {
     protected T mView;
     protected E mModel;
-    protected DataManager mDataManager;
+    protected RxJavaManager mRxJavaManager;
     public void setView(T view){
         this.mView = view;
         this.mModel = TUtil.getT(this,1);//获取model实例
-        mDataManager = new DataManager();
+        mRxJavaManager = new RxJavaManager();
     }
 
     public abstract void onStart();
 
     public void onRemove(){
-        if(mDataManager!=null) mDataManager.remove();
+        if(mRxJavaManager !=null) mRxJavaManager.remove();
     }
 }

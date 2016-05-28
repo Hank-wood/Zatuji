@@ -17,9 +17,10 @@ import android.view.ViewGroup;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
+import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.bean.DataBean;
-import com.joe.zatuji.module.picdetail.PicDetailActivity;
+import com.joe.zatuji.module.picdetailpage.PicDetailActivity;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.TUtil;
@@ -47,6 +48,8 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
     protected MyApplication myApplication;
     protected T mPresenter;
     protected LoadingDialog mLoadingDialog;
+    protected boolean isHideFab = false;
+    protected HideFabView mHideFabView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,25 +125,50 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
             public void onItemClick(RecyclerView.ViewHolder vh, int position) {
                 Intent i = new Intent(mActivity, PicDetailActivity.class);
                 DataBean.PicBean picBean = mAdapter.getItem(position);
-                i.putExtra(Constant.PIC_DATA, picBean.file.key);
-                i.putExtra(Constant.PIC_DESC, picBean.raw_text);
-                i.putExtra(Constant.PIC_WIDTH, picBean.file.width);
-                i.putExtra(Constant.PIC_HEIGHT, picBean.file.height);
+                i.putExtra(Constant.PIC_DATA, picBean);
                 mActivity.startActivity(i);
             }
 
         });
+
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy>0) {
+//                    loadingView.hideOrShowFAB(true);
+                    onScrollDown(recyclerView,dx,dy);
+                }else{
+                    onScrollUp(recyclerView,dx,dy);
+                }
+            }
+        });
+    }
+    /**是否滑动时隐藏fab*/
+    protected void setHomeFabHideEnable(HideFabView hideFabView, boolean isHideFavb){
+        this.mHideFabView = hideFabView;
+        this.isHideFab = isHideFavb;
+    }
+    protected void onScrollUp(RecyclerView recyclerView, int dx, int dy){
+        if(isHideFab && mHideFabView!=null) mHideFabView.hideOrShowFAB(false);
+    }
+
+    protected void onScrollDown(RecyclerView recyclerView, int dx, int dy) {
+        if(isHideFab && mHideFabView!=null) mHideFabView.hideOrShowFAB(true);
     }
 
     protected void toGrid() {
         mLayoutManager = new GridLayoutManager(mActivity, 2);
     }
 
-
+    /************************/
+    /**** 以下是操作UI部分 ****/
+    /****                ****/
     @Override
     public void loadData(List<? extends BaseBean> beanList) {
         LogUtils.d("show data");
         doneLoading();
+        mRefreshLayout.setRefreshing(false);
         mAdapter.setNewData((List<DataBean.PicBean>) beanList);
     }
 
@@ -155,6 +183,15 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
 
         mRecyclerView.loadMoreComplete(addList);
     }
+
+    @Override
+    public void showEmptyView() {
+        mAdapter.setNewData(null);
+        mAdapter.setEmptyView(mActivity.getLayoutInflater().inflate(R.layout.view_empty, (ViewGroup) mRecyclerView.getParent(),false));
+        mLoadingDialog.dismiss();
+        mRefreshLayout.setRefreshing(false);
+    }
+
     /**禁用加载更多*/
     @Override
     public void disableLoadMore(boolean isDisable) {
@@ -174,6 +211,8 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
     public void doneLoading(){
         if(mLoadingDialog!=null&&mLoadingDialog.isShowing()) mLoadingDialog.dismiss();
     }
+    /****                ****/
+    /********** END *********/
 
 
     @Override
