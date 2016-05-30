@@ -9,7 +9,13 @@ import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredFragment;
  */
 public class HomeFragment extends BaseStaggeredFragment<HomePresenter> {
     private HomeActivity homeActivity;
-
+    private static HomeFragment mInstance;
+    public static synchronized HomeFragment getInstance(){
+        if(mInstance==null){
+            mInstance = new HomeFragment();
+        }
+        return mInstance;
+    }
     @Override
     protected void initView() {
         super.initView();

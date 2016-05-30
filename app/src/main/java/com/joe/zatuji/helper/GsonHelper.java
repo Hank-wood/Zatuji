@@ -1,6 +1,8 @@
 package com.joe.zatuji.helper;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * Created by joe on 16/5/21.
@@ -10,7 +12,10 @@ public class GsonHelper {
         Gson gson = new Gson();
         return gson.toJson(object);
     }
-
+    public static JsonElement toJsonObject(Object object){
+        Gson gson = new Gson();
+        return gson.toJsonTree(object);
+    }
     public static <T> T fromJson(String json,Class<T> objectClass){
         Gson gson = new Gson();
         return gson.fromJson(json,objectClass);

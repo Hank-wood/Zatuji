@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.PrefUtils;
 import com.joe.zatuji.module.loginpage.model.LoginKathy;
-import com.joe.zatuji.module.loginpage.model.User;
+import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.module.loginpage.view.FragmentView;
 import com.joe.zatuji.module.loginpage.view.LoginView;
 

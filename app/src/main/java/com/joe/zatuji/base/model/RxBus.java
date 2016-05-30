@@ -62,7 +62,7 @@ public class RxBus {
         }
         Subject<T, T> subject;
         subjectList.add(subject = PublishSubject.create());
-        LogUtils.d("register:"+tag + "  size:" + subjectList.size());
+        //LogUtils.d("register:"+tag + "  size:" + subjectList.size());
         return subject;
     }
 
@@ -91,7 +91,7 @@ public class RxBus {
             subjects.remove((Subject<?, ?>) observable);
             if (isEmpty(subjects)) {
                 subjectMapper.remove(tag);
-                LogUtils.d("unregister:"+tag + "  size:" + subjects.size());
+                //LogUtils.d("unregister:"+tag + "  size:" + subjects.size());
             }
         }
         return $();
@@ -113,7 +113,7 @@ public class RxBus {
         if (!isEmpty(subjectList)) {
             for (Subject subject : subjectList) {
                 subject.onNext(content);
-                LogUtils.d("onEvent:eventName: " + tag);
+                //LogUtils.d("onEvent:eventName: " + tag);
             }
         }
     }

@@ -10,7 +10,7 @@ import android.widget.EditText;
 import com.joe.zatuji.R;
 import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.module.loginpage.model.User;
+import com.joe.zatuji.data.bean.User;
 
 import cn.bmob.v3.BmobUser;
 

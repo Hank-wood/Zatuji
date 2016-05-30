@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.joe.zatuji.module.favoritepage.presenter.FavoriteTagListener;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.module.loginpage.model.User;
+import com.joe.zatuji.data.bean.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,21 +71,21 @@ public class FavoriteKathy {
         BmobRelation relation = new BmobRelation();
         relation.add(tag);
         user.setTag(relation);
-        user.update(context, new UpdateListener() {
-            @Override
-            public void onSuccess() {
-                ArrayList<FavoriteTag> tags=new ArrayList<FavoriteTag>();
-                tags.add(tag);
-                listener.onCreateSuccess(tags);
-                LogUtils.d("关联成功");
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                LogUtils.d("关联失败"+s);
-                listener.onCreateError(s);
-            }
-        });
+//        user.update(context, new UpdateListener() {
+//            @Override
+//            public void onSuccess() {
+//                ArrayList<FavoriteTag> tags=new ArrayList<FavoriteTag>();
+//                tags.add(tag);
+//                listener.onCreateSuccess(tags);
+//                LogUtils.d("关联成功");
+//            }
+//
+//            @Override
+//            public void onFailure(int i, String s) {
+//                LogUtils.d("关联失败"+s);
+//                listener.onCreateError(s);
+//            }
+//        });
     }
 //    public void getFavoriteData(int page,int limit){
 //        FavoriteOpenHelper helper=new FavoriteOpenHelper(context);

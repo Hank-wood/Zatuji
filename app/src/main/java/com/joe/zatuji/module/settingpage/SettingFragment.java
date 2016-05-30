@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.joe.zatuji.module.favoritepage.FavoriteFragment;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
@@ -29,7 +30,13 @@ public class SettingFragment extends BaseFragment implements SettingView,View.On
     private RelativeLayout mExit;
     private UserFragment userFragment;
     private SettingPresenter mPresenter;
-
+    private static SettingFragment mInstance;
+    public static synchronized SettingFragment getInstance(){
+        if(mInstance==null){
+            mInstance = new SettingFragment();
+        }
+        return mInstance;
+    }
     @Override
     protected int getLayout() {
         return R.layout.fragment_setting;

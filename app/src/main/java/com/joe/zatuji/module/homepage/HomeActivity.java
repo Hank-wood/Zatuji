@@ -14,47 +14,44 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
+import com.joe.zatuji.data.bean.TagBean;
 import com.joe.zatuji.module.discoverpage.DiscoverFragment;
 import com.joe.zatuji.module.favoritepage.FavoriteFragment;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.module.searchingpage.SearchingActivity;
 import com.joe.zatuji.module.settingpage.SettingFragment;
+import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.DropMenuDialog;
-import com.roughike.bottombar.BottomBar;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.update.BmobUpdateAgent;
 
-public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener,HideFabView{
+public class HomeActivity extends BaseActivity implements HideFabView, FloatingToolbar.ItemClickListener, DropMenuDialog.OnMenuClickListener {
 
     private final String TAG_HOME_FRAG = "homeFragment";
     private final String TAG_DISCOVER_FRAG = "discoverFragment";
     private final String TAG_FAVORITE_FRAG = "favoriteFragment";
     private final String TAG_SETTING_FRAG = "settingFragment";
-    private FragmentManager mFragmentMananger;
-    private BottomNavigationBar bottomNavigationBar;
+    private FragmentManager mFragmentManager;
     private HomeFragment homeFragment;
     private Fragment mCurrentFragment;
     private DiscoverFragment discoverFragment;
     private SettingFragment settingFragment;
     private FavoriteFragment favoriteFragment;
     private int currentPos;//当前fragment
-    private int tag=1;
     private ActionBar mActionbar;
     private FloatingActionButton mFab;
     private Toolbar mToolbar;
     private AppBarLayout mAppBar;
-    private BottomBar bottomBar;
+    private FloatingToolbar mBottomBar;
+    private DropMenuDialog mTagMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +59,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
         Bmob.initialize(this, Constant.BMOB_KEY);
         BmobUpdateAgent.update(mActivity);
     }
+
 
     @Override
     protected int getLayout() {return R.layout.activity_home;}
@@ -72,119 +70,50 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void initView() {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
-        bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
-        bottomNavigationBar
-                .addItem(new BottomNavigationItem(R.drawable.bottom_home, "首页"))
-                .addItem(new BottomNavigationItem(R.drawable.bottom_discover, "发现"))
-                .addItem(new BottomNavigationItem(R.drawable.bottom_favorite, "收藏"))
-                .addItem(new BottomNavigationItem(R.drawable.bottom_setting, "偏好"))
-                .initialise();
-        bottomNavigationBar.setTabSelectedListener(this);
+        mBottomBar = (FloatingToolbar) findViewById(R.id.floatingToolbar);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+        mTagMenu = new DropMenuDialog(mActivity);
+        mTagMenu.setOnMenuClickListener(this);
         setSupportActionBar(mToolbar);
         mActionbar = getSupportActionBar();
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(mActivity, SearchingActivity.class);
-                startActivity(i);
-            }
-        });
+        mBottomBar.attachFab(mFab);
+        mBottomBar.setClickListener(this);
         initFragment();
-        new DropMenuDialog(mActivity).showAtLocation(mAppBar, Gravity.TOP,0,50);
-
     }
+
 
     private void initFragment(){
         homeFragment = new HomeFragment();
         discoverFragment = new DiscoverFragment();
         favoriteFragment = new FavoriteFragment();
         settingFragment = new SettingFragment();
-        mFragmentMananger = getSupportFragmentManager();
-        FragmentTransaction transition=mFragmentMananger.beginTransaction().add(R.id.fl_container_home, homeFragment,TAG_HOME_FRAG);
+        mFragmentManager = getSupportFragmentManager();
+        FragmentTransaction transition= mFragmentManager.beginTransaction().add(R.id.fl_container_home, homeFragment,TAG_HOME_FRAG);
         transition.addToBackStack(TAG_HOME_FRAG);
         transition.commit();
         mCurrentFragment=homeFragment;
     }
 
-    @Override
-    public void onTabSelected(int position) {
-        LogUtils.d("onSelected:"+position);
-        if(mAppBar.getVisibility()==View.GONE&&position!=3) mAppBar.setVisibility(View.VISIBLE);
-        switch (position){
-            case 0:
-                changeFragment(homeFragment,TAG_HOME_FRAG);
-                break;
-            case 1:
-                changeFragment(discoverFragment,TAG_DISCOVER_FRAG);
-                break;
-            case 2:
-                changeFragment(favoriteFragment,TAG_FAVORITE_FRAG);
-                break;
-            case 3:
-                changeFragment(settingFragment,TAG_SETTING_FRAG);
-                mFab.hide();
-                bottomNavigationBar.unHide();
-                settingFragment.getCache();
-                mAppBar.setVisibility(View.GONE);
-                //mToolbar.setVisibility(View.GONE);
-                break;
-        }
-        currentPos=position;
-        setCurrentTitle();
-        invalidateOptionsMenu();
-    }
-
     //当前的题目
-    private void setCurrentTitle() {
-        if(currentPos==0){
+    private void setCurrentTitle(int pos) {
+        if(pos==0){
             mActionbar.setTitle("杂图集");
-        }else if(currentPos==2){
+        }else if(pos==2){
             mActionbar.setTitle("收藏");
-        }else if(currentPos==3){
+        }else if(pos==3){
             mActionbar.setTitle("偏好设置");
-        }else{
-            String title="发现-";
-            switch (tag){
-                case 1:
-                    title+="女青年";//妹子
-                    break;
-                case 2:
-                    title+="男青年";//型男
-                    break;
-                case 3:
-                    title+="萌宝";//萌宝
-                    break;
-                case 4:
-                    title+="光影";//摄影
-                    break;
-                case 5:
-                    title+="巧手工";//手工
-                    break;
-                case 6:
-                    title+="衣装";//女装
-                    break;
-                case 7:
-                    title+="在路上";//旅行
-                    break;
-                case 8:
-                    title+="插画";//插画
-                    break;
-                case 9:
-                    title+="建筑";//建筑
-                    break;
-
-            }
-            mActionbar.setTitle(title);
         }
     }
 
+    private void setCurrentTitle(int pos, String tag) {
+            mActionbar.setTitle("发现-"+tag);
+    }
 
     //改变fragment
     private void changeFragment(Fragment switchFragment,String tag) {
         if(mCurrentFragment!=switchFragment){
-            FragmentTransaction transaction=mFragmentMananger.beginTransaction();
+            FragmentTransaction transaction= mFragmentManager.beginTransaction();
             if (!switchFragment.isAdded()) {    // 先判断是否被add过
                 transaction.hide(mCurrentFragment).add(R.id.fl_container_home, switchFragment,tag).commit(); // 隐藏当前的fragment，add下一个到Activity中
             } else {
@@ -193,16 +122,6 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
             mCurrentFragment=switchFragment;
         }
 
-    }
-
-    @Override
-    public void onTabUnselected(int position) {
-
-    }
-
-    @Override
-    public void onTabReselected(int position) {
-        LogUtils.d("onReselected:"+position);
     }
 
 
@@ -218,75 +137,20 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
             case R.id.action_add://新建图集
                 favoriteFragment.showCreateTag();
                 break;
-            case R.id.action_girl:
-                tag =1;
+            case R.id.action_change_tag://选择不同标签
+                if(mTagMenu==null) mTagMenu = new DropMenuDialog(mActivity);
+                mTagMenu.show();
                 break;
-            case R.id.action_men:
-                tag =2;
-                break;
-            case R.id.action_kid:
-                tag =3;
-                break;
-            case R.id.action_photography:
-                tag =4;
-                break;
-            case R.id.action_diy:
-                tag =5;
-                break;
-            case R.id.action_apparel:
-                tag =6;
-                break;
-            case R.id.action_travel:
-                tag =7;
-                break;
-            case R.id.action_illustration:
-                tag =8;
-                break;
-            case R.id.action_architecture:
-                tag =9;
-                break;
-
-        }
-        if(item.getItemId()!=R.id.action_add){
-            setCurrentTitle();
-            discoverFragment.loadAnotherTagData(getTag(tag));
         }
         return true;
     }
 
-    public String getTag(int tag){
-        String Tag="";
-        switch (tag){
-            case 1:
-                Tag="beauty";//妹子
-                break;
-            case 2:
-                Tag="men";//型男
-                break;
-            case 3:
-                Tag="kids";//萌宝
-                break;
-            case 4:
-                Tag="photography";//摄影
-                break;
-            case 5:
-                Tag="diy_crafts";//手工
-                break;
-            case 6:
-                Tag="apparel";//女装
-                break;
-            case 7:
-                Tag="travel_places";//旅行
-                break;
-            case 8:
-                Tag="illustration";//插画
-                break;
-            case 9:
-                Tag="architecture";//建筑
-                break;
-        }
-        return Tag;
+    @Override
+    public void onMenuClick(TagBean.Tag tag) {
+        setCurrentTitle(1,tag.name);
+        discoverFragment.loadAnotherTagData(tag.requestName);
     }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         //menu.setGroupVisible();
@@ -308,45 +172,73 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     public void hideOrShowFAB(boolean hide){
         if(hide){
-            bottomNavigationBar.hide();
+            mBottomBar.hide();
             mFab.hide();
         }else{
-            bottomNavigationBar.unHide();
             mFab.show();
         }
     }
 
-    protected void toggleBarVisibility(boolean visible) {
-        if(visible){
-            bottomNavigationBar.startAnimation(bottomBarAnimation(true));
-        }else{
-            bottomNavigationBar.startAnimation(bottomBarAnimation(false));
+    @Override
+    public void onItemClick(MenuItem menuItem) {
+        if(mAppBar.getVisibility()==View.GONE&&menuItem.getItemId()!=R.id.action_setting && menuItem.getItemId()!=R.id.action_search) mAppBar.setVisibility(View.VISIBLE);
+        switch (menuItem.getItemId()){
+            case R.id.action_home:
+                changeFragment(homeFragment,TAG_HOME_FRAG);
+                setCurrentTitle(0);
+                currentPos=0;
+                break;
+            case R.id.action_discover:
+                changeFragment(discoverFragment,TAG_DISCOVER_FRAG);
+                setCurrentTitle(1,MyApplication.getInstance().mDefaultTag.name);
+                currentPos=1;
+                break;
+            case R.id.action_favorite:
+                changeFragment(favoriteFragment,TAG_FAVORITE_FRAG);
+                setCurrentTitle(2);
+                currentPos=2;
+                break;
+            case R.id.action_setting:
+                changeFragment(settingFragment,TAG_SETTING_FRAG);
+                settingFragment.getCache();
+                mAppBar.setVisibility(View.GONE);
+                setCurrentTitle(3);
+                currentPos=3;
+
+                //mToolbar.setVisibility(View.GONE);
+                break;
+            case R.id.action_search:
+                Intent i=new Intent(mActivity, SearchingActivity.class);
+                startActivity(i);
+                break;
         }
+        invalidateOptionsMenu();
     }
 
-    private Animation bottomBarAnimation(boolean show) {
-        TranslateAnimation ta = null;
-        if(show){
-            ta = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,
-                    Animation.RELATIVE_TO_SELF,1,Animation.RELATIVE_TO_SELF,0);
-        }else{
-            ta = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,0,
-                    Animation.RELATIVE_TO_SELF,0,Animation.RELATIVE_TO_SELF,1);
-        }
-        ta.setDuration(50);
-        ta.setFillAfter(true);
-        return ta;
+    @Override
+    public void onItemLongClick(MenuItem menuItem) {
+        KToast.show(menuItem.getTitle()+"");
     }
 
     private long lastTime=0;
     @Override
     public void onBackPressed() {
-        long duration = SystemClock.currentThreadTimeMillis()-lastTime;
-        lastTime = SystemClock.currentThreadTimeMillis();
+        long duration = System.currentTimeMillis()-lastTime;
+        LogUtils.d("onBackPressed:"+duration);
+        lastTime = System.currentTimeMillis();
         if(duration<2000)  {
             finish();
             return;
         }
         KToast.show("再按一次退出");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        homeFragment = null;
+        discoverFragment = null;
+        favoriteFragment = null;
+        settingFragment = null;
     }
 }

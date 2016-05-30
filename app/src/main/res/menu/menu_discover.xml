@@ -12,50 +12,9 @@
     </group>
     <group android:id="@+id/menu_discover"
         android:visible="false">
-        <item
-            android:id="@+id/action_girl"
-            android:orderInCategory="100"
-            android:title="女青年"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_men"
-            android:orderInCategory="100"
-            android:title="男青年"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_kid"
-            android:orderInCategory="100"
-            android:title="萌宝"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_photography"
-            android:orderInCategory="100"
-            android:title="光影"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_diy"
-            android:orderInCategory="100"
-            android:title="巧手工"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_apparel"
-            android:orderInCategory="100"
-            android:title="衣装"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_travel"
-            android:orderInCategory="100"
-            android:title="在路上"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_illustration"
-            android:orderInCategory="100"
-            android:title="插画"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_architecture"
-            android:orderInCategory="100"
-            android:title="建筑"
-            app:showAsAction="never" />
+        <item android:id="@+id/action_change_tag"
+            android:icon="@drawable/icon_tag"
+            android:title="change"
+            app:showAsAction="always"/>
     </group>
 </menu>

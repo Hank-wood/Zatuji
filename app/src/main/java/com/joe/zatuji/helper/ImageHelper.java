@@ -1,5 +1,10 @@
 package com.joe.zatuji.helper;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -8,8 +13,13 @@ import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.data.bean.DataBean;
+import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 /**
@@ -62,6 +72,13 @@ public class ImageHelper {
         }
     }
 
+    public static void showAvatar(CircularImageView iv , String url){
+        baseGlide(iv,url)
+                .transform(new GlideCircleTransform(iv.getContext()))
+                .into(iv);
+        iv.setBorderWidth(DPUtils.dip2px(iv.getContext(),2));
+        iv.setBorderColor(iv.getContext().getResources().getColor(R.color.white));
+    }
     /**
      * 显示大图时重新计算图片的大小
      * 宽同屏幕
@@ -80,5 +97,44 @@ public class ImageHelper {
         }
         iv.setLayoutParams(params);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
+    }
+
+    //转换为圆形的图片
+    public static class GlideCircleTransform extends BitmapTransformation {
+        public GlideCircleTransform(Context context) {
+            super(context);
+        }
+
+        @Override protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+            return circleCrop(pool, toTransform);
+        }
+
+        private  Bitmap circleCrop(BitmapPool pool, Bitmap source) {
+            if (source == null) return null;
+
+            int size = Math.min(source.getWidth(), source.getHeight());
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+
+            // TODO this could be acquired from the pool too
+            Bitmap squared = Bitmap.createBitmap(source, x, y, size, size);
+
+            Bitmap result = pool.get(size, size, Bitmap.Config.ARGB_8888);
+            if (result == null) {
+                result = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            }
+
+            Canvas canvas = new Canvas(result);
+            Paint paint = new Paint();
+            paint.setShader(new BitmapShader(squared, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
+            paint.setAntiAlias(true);
+            float r = size / 2f;
+            canvas.drawCircle(r, r, r, paint);
+            return result;
+        }
+
+        @Override public String getId() {
+            return getClass().getName();
+        }
     }
 }

@@ -1,14 +1,23 @@
 package com.joe.zatuji.module.discoverpage;
 
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredFragment;
 import com.joe.zatuji.R;
+import com.joe.zatuji.module.homepage.HomeFragment;
 
 /**
  * Created by Joe on 2016/4/18.
  */
 public class DiscoverFragment extends BaseStaggeredFragment<DiscoverPresenter>{
-    private String mTag = "beauty";
+    private String mTag = MyApplication.getInstance().mDefaultTag.requestName;
+    private static DiscoverFragment mInstance;
+    public static synchronized DiscoverFragment getInstance(){
+        if(mInstance==null){
+            mInstance = new DiscoverFragment();
+        }
+        return mInstance;
+    }
     @Override
     protected void initView() {
         super.initView();

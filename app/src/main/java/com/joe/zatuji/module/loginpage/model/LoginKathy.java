@@ -2,6 +2,7 @@ package com.joe.zatuji.module.loginpage.model;
 
 import android.content.Context;
 
+import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.module.loginpage.presenter.AvatarListener;
 import com.joe.zatuji.module.loginpage.presenter.ForgetListener;
 import com.joe.zatuji.module.loginpage.presenter.LoginListener;
@@ -28,31 +29,31 @@ public class LoginKathy {
         return bmobUser;
     }
     public void login(User user, final LoginListener mListener){
-        user.login(mContext, new SaveListener() {
-            @Override
-            public void onSuccess() {
-                mListener.loginSuccess();
-            }
-
-            @Override
-            public void onFailure(int i, String msg) {
-                mListener.loginError(msg);
-            }
-        });
+//        user.login(mContext, new SaveListener() {
+//            @Override
+//            public void onSuccess() {
+//                mListener.loginSuccess();
+//            }
+//
+//            @Override
+//            public void onFailure(int i, String msg) {
+//                mListener.loginError(msg);
+//            }
+//        });
     }
 
     public void forgotPwd(String email, final ForgetListener mListener){
-        User.resetPasswordByEmail(mContext, email, new ResetPasswordByEmailListener() {
-            @Override
-            public void onSuccess() {
-                mListener.onForgotSuccess();
-            }
-
-            @Override
-            public void onFailure(int i, String msg) {
-                mListener.onForgotError(msg);
-            }
-        });
+//        User.resetPasswordByEmail(mContext, email, new ResetPasswordByEmailListener() {
+//            @Override
+//            public void onSuccess() {
+//                mListener.onForgotSuccess();
+//            }
+//
+//            @Override
+//            public void onFailure(int i, String msg) {
+//                mListener.onForgotError(msg);
+//            }
+//        });
     }
 
     public void getAvatar(String username, final AvatarListener mListener){

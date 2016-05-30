@@ -6,15 +6,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.jaeger.library.StatusBarUtil;
+import com.joe.zatuji.Event;
 import com.joe.zatuji.R;
+import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.module.loginpage.ui.LoginFragment;
-import com.joe.zatuji.module.loginpage.ui.RegisterFragment;
+import com.joe.zatuji.module.loginpage.register.RegisterFragment;
 import com.joe.zatuji.module.loginpage.view.FragmentView;
 import com.yongchun.library.view.ImageSelectorActivity;
 
 import java.util.ArrayList;
+
+import rx.functions.Action1;
 
 /**
  * Created by Joe on 2016/4/30.
@@ -24,6 +28,7 @@ public class LoginActivity extends BaseActivity implements FragmentView{
     private static final String TAG_RIGISTER_FRAG = "register";
     private FragmentManager mFragmentManager;
     private RegisterFragment mRegisterFragment;
+    private RxJavaManager mRxJavaManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,13 @@ public class LoginActivity extends BaseActivity implements FragmentView{
 
     @Override
     protected void initPresenter() {
-
+        mRxJavaManager = new RxJavaManager();
+        mRxJavaManager.subscribe(Event.LOGIN_SUCCESS, new Action1<Object>() {
+            @Override
+            public void call(Object user) {
+                finish();
+            }
+        });
     }
 
     private void initFragment() {
@@ -73,6 +84,14 @@ public class LoginActivity extends BaseActivity implements FragmentView{
                 mRegisterFragment.setAvatar(mAvatarPath);
                 LogUtils.d(mAvatarPath);
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mRxJavaManager!=null){
+            mRxJavaManager.remove();
         }
     }
 }

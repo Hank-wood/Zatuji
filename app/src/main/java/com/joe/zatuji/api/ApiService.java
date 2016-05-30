@@ -17,7 +17,7 @@ public interface ApiService {
      * 首页图片接口
      * params max 最大id
      */
-    @GET("favorite/photography/")
+    @GET("favorite/")
     Observable<DataBean> getHomeData(@Query("limit") String limit, @Query("max") String max);
 
     /**

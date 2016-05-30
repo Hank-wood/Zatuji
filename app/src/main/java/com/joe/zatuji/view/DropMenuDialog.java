@@ -8,12 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.PopupWindow;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.joe.zatuji.R;
 import com.joe.zatuji.data.bean.TagBean;
 import com.joe.zatuji.utils.LogUtils;
+import com.joe.zatuji.view.base.BaseDialog;
 
 import cc.solart.turbo.BaseTurboAdapter;
 import cc.solart.turbo.BaseViewHolder;
@@ -23,60 +24,59 @@ import cc.solart.turbo.TurboRecyclerView;
 /**
  * Created by joe on 16/5/28.
  */
-public class DropMenuDialog extends PopupWindow {
-    private Context  mContext;
+public class DropMenuDialog extends BaseDialog {
     private TurboRecyclerView mRecyclerView;
     private SimpleAdapter mAdapter;
     private Window window;
-    private View mRootView;
 
     public DropMenuDialog(Context context) {
-        super(context);
-        this.mContext = context;
-        LayoutInflater inflater = (LayoutInflater) mContext
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mRootView = inflater.inflate(R.layout.dialog_drop_menu,null);
-        setContentView(mRootView);
-        initView();
-        initListener();
+        super(context,R.style.dialog_fullscreen);
     }
 
     protected int getLayout() {
-//        window = this.getWindow();
-//        window.requestFeature(Window.FEATURE_NO_TITLE);
+        window = this.getWindow();
+        window.requestFeature(Window.FEATURE_NO_TITLE);
 
         return R.layout.dialog_drop_menu;
     }
-
+    @Override
     protected void initView() {
-        //去掉dialog默认的padding
-//        window.getDecorView().setPadding(0, 0, 0, 0);
-//        WindowManager.LayoutParams lp = window.getAttributes();
-//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//
-//        //设置dialog的位置在底部
-//        lp.gravity = Gravity.BOTTOM;
-//
-//        window.setAttributes(lp);
+//        去掉dialog默认的padding
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        window.setWindowAnimations(R.style.dialog_anim);
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //设置dialog的位置在底部
+        lp.gravity = Gravity.BOTTOM;
+
+        window.setAttributes(lp);
         LogUtils.d("convert dialog");
-        mRecyclerView = (TurboRecyclerView) mRootView.findViewById(R.id.recycler_drop_menu);
+        mRecyclerView = (TurboRecyclerView)findViewById(R.id.recycler_drop_menu);
         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
         mAdapter = new SimpleAdapter(mContext);
         mAdapter.setNewData(new TagBean().tagList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLoadMoreEnabled(false);
     }
-
+    @Override
     protected void initListener() {
         mAdapter.addOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh, int position) {
+                if(mListener!=null) mListener.onMenuClick(mAdapter.getItem(position));
                 dismiss();
             }
         });
     }
-
+    private OnMenuClickListener mListener;
+    public void setOnMenuClickListener(OnMenuClickListener mListener){
+        this.mListener = mListener;
+    }
+    public interface OnMenuClickListener{
+        void onMenuClick(TagBean.Tag tag);
+    }
     class SimpleAdapter extends BaseTurboAdapter<TagBean.Tag,SimpleAdapter.Holder>{
         public SimpleAdapter(Context context) {
             super(context);

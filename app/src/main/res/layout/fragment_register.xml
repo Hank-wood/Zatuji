@@ -18,7 +18,16 @@
         app:siBorderWidth="2dp"
         app:siBorderColor="@color/Line_White_30"
         android:scaleType="fitXY"
+        android:elevation="4dp"
         />
+    <!--<ImageView-->
+        <!--android:layout_marginTop="60dp"-->
+        <!--android:id="@+id/iv_register_avatar"-->
+        <!--android:src="@mipmap/ic_launcher"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:elevation="4dp"-->
+        <!--android:layout_width="120dp"-->
+        <!--android:layout_height="120dp" />-->
     <TextView
         android:text="Upload Avatar"
         android:textSize="13sp"

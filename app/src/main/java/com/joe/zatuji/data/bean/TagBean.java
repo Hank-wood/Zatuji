@@ -21,6 +21,7 @@ public class TagBean {
         tagList.add(new Tag("插画","illustration",8));
         tagList.add(new Tag("建筑","architecture",9));
     }
+
     public class Tag{
         public String name;
         public String requestName;

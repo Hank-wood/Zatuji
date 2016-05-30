@@ -20,6 +20,7 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.bean.DataBean;
+import com.joe.zatuji.module.homepage.HomeFragment;
 import com.joe.zatuji.module.picdetailpage.PicDetailActivity;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
@@ -68,18 +69,19 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.mActivity=getActivity();
+        initPresenter();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(getLayout(),null);
-        initPM();
         initView();
-        initPresenter();
+        initPM();
         initListener();
         return mRootView;
     }
+
 
     protected int getLayout() {
         return R.layout.fragment_staggered_base;
@@ -204,6 +206,8 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
     }
 
     public void showLoading(String msg){
+        LogUtils.d("show loading:"+mActivity.getLocalClassName());
+
         if(mLoadingDialog==null) mLoadingDialog = new LoadingDialog(mActivity,msg);
         mLoadingDialog.setMessage(msg);
         mLoadingDialog.show();

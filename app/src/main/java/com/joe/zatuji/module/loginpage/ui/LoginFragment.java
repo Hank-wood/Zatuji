@@ -14,9 +14,10 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.module.loginpage.model.User;
+import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.module.loginpage.presenter.LoginPresenter;
 import com.joe.zatuji.module.loginpage.view.FragmentView;
 import com.joe.zatuji.module.loginpage.view.LoginView;
@@ -122,20 +123,20 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             return;
         }
         User user =new User();
-        user.setUsername(mAccount.getText().toString());
-        user.setPassword(mPwd.getText().toString());
+//        user.setUsername(mAccount.getText().toString());
+//        user.setPassword(mPwd.getText().toString());
         mLoadingView.showLoading();
         mPresenter.login(user);
     }
 
     @Override
     public void setAvatar(String url) {
-        x.image().bind(mAvatar,url);
+        ImageHelper.showAvatar(mAvatar,url);
     }
 
     @Override
     public void setUserInfo(User user) {
-        mAccount.setText(user.getUsername());
+//        mAccount.setText(user.getUsername());
     }
 
     @Override

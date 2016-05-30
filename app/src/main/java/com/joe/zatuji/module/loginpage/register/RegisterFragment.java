@@ -1,6 +1,5 @@
-package com.joe.zatuji.module.loginpage.ui;
+package com.joe.zatuji.module.loginpage.register;
 
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -10,27 +9,22 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.base.ui.BaseFragment;
-import com.joe.zatuji.Constant;
+import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.module.loginpage.model.User;
-import com.joe.zatuji.module.loginpage.presenter.RegisterPresenter;
-import com.joe.zatuji.module.loginpage.view.RegisterView;
+import com.joe.zatuji.data.bean.User;
 import com.yongchun.library.view.ImageSelectorActivity;
-
-import org.xutils.x;
 
 
 /**
  * Created by Joe on 2016/5/1.
  */
-public class RegisterFragment extends BaseFragment implements View.OnClickListener,RegisterView{
+public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpage.register.RegisterPresenter> implements View.OnClickListener, RegisterView{
 
     private CircularImageView mAvatar;
     private String mAvatarPath;
     private EditText mAccount;
     private EditText mNickName;
     private EditText mPwd;
-    private RegisterPresenter mPresenter;
     private LoadingView mLoadingView;
 
     @Override
@@ -40,7 +34,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void initPresenter() {
-        mPresenter = new RegisterPresenter(mActivity,this);
+        mPresenter.setView(this);
     }
 
     @Override
@@ -84,35 +78,28 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             return;
         }
         User user = new User();
-        user.setUsername(userName);
-        user.setNickname(nickName);
-        user.setPassword(password);
-        if(userName.contains("@")) user.setEmail(userName);
+        user.username =userName;
+        user.nickname=nickName;
+        user.password=password;
+        if(userName.contains("@")) user.email = userName;
         //showLoading();
-        mLoadingView.showLoading();
-        mPresenter.register(user,mAvatarPath);
+        //mLoadingView.showLoading();
+
+        mPresenter.register(user);
 
     }
 
     public void setAvatar(String path){
         mAvatarPath = path;
         mAvatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        x.image().bind(mAvatar,path);
+        ImageHelper.showAvatar(mAvatar,path);
+        //上传头像
+        mPresenter.uploadAvatar(path);
     }
 
-    @Override
-    public void onSuccess() {
-        //注册成功自动登陆
-        mLoadingView.doneLoading();
-        Intent intent = new Intent();
-        intent.setAction(Constant.LOGIN_SUCCESS);
-        mActivity.sendBroadcast(intent);
-        mActivity.finish();
-    }
 
     @Override
-    public void onError(String msg) {
-        mLoadingView.doneLoading();
+    public void showToastMsg(String msg) {
         KToast.show(msg);
     }
 }

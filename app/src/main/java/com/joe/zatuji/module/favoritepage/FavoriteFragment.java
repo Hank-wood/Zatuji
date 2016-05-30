@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import com.joe.zatuji.module.discoverpage.DiscoverFragment;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
@@ -31,7 +32,13 @@ public class FavoriteFragment extends BaseFragment implements TagView{
     private FavoritePresenter mPresenter;
     private HomeActivity activity;
     private FavoriteTagAdapter mAdapter;
-
+    private static FavoriteFragment mInstance;
+    public static synchronized FavoriteFragment getInstance(){
+        if(mInstance==null){
+            mInstance = new FavoriteFragment();
+        }
+        return mInstance;
+    }
     @Override
     protected int getLayout() {
         return R.layout.fragment_favorite;

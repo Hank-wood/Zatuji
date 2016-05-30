@@ -15,7 +15,7 @@ public class LoadingDialog extends BaseDialog {
     private TextView mMsg;
 
     public LoadingDialog(Context context,String msg) {
-        super(context);
+        super(context,R.style.dialog_no_title);
         mMsg.setText(msg);
     }
 
