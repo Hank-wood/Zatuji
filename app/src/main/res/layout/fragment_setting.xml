@@ -18,7 +18,7 @@
         android:elevation="1dp"
         >
         <TextView
-            android:text="清除缓存"
+            android:text="清理图片缓存"
             style="@style/setting_tv_title"
             />
         <TextView

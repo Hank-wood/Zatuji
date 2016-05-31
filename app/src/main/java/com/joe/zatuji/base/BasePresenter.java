@@ -11,10 +11,10 @@ public abstract class BasePresenter<T,E extends BaseModel> {
     protected T mView;
     protected E mModel;
     protected RxJavaManager mRxJavaManager;
+    public BasePresenter(){mRxJavaManager = new RxJavaManager();}
     public void setView(T view){
         this.mView = view;
         this.mModel = TUtil.getT(this,1);//获取model实例
-        mRxJavaManager = new RxJavaManager();
     }
 
     public abstract void onStart();

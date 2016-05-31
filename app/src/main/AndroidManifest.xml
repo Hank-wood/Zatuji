@@ -24,7 +24,7 @@
         <activity
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
-            android:name=".module.homepage.HomeActivity"
+            android:name=".module.welcomepage.WelcomeActivity"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:name=".module.homepage.HomeActivity"
+            />
         <activity
             android:theme="@style/AppTheme.NoActionBar"
             android:name=".module.picdetailpage.PicDetailActivity"/>

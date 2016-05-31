@@ -1,4 +1,4 @@
-package com.joe.zatuji.module.settingpage.model;
+package com.joe.zatuji.module.homesettingpage.model;
 
 import cn.bmob.v3.BmobObject;
 

@@ -39,6 +39,7 @@ public class RegisterPresenter extends BasePresenter<RegisterView, LoginAndRegis
                 .subscribe(new BmobSubscriber<User>() {
                     @Override
                     public void onError(ResultException e) {
+                        LogUtils.d("error" + e.getError() + e.getCode());
                         mView.showToastMsg(e.getError());
                     }
 
@@ -50,25 +51,26 @@ public class RegisterPresenter extends BasePresenter<RegisterView, LoginAndRegis
                 }));
     }
 
-    public void uploadAvatar(String path){
-        mRxJavaManager.add(mModel.upLoadFile(path)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new BmobSubscriber<BmobFile>() {
-            @Override
-            public void onError(ResultException e) {
-                mView.showToastMsg(e.getError());
-            }
+    public void uploadAvatar(String path) {
+        mRxJavaManager.add(mModel.upLoadAvatar(path)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BmobSubscriber<BmobFile>() {
+                    @Override
+                    public void onError(ResultException e) {
+                        mView.showToastMsg(e.getError());
+                    }
 
-            @Override
-            public void onOtherError(Throwable e) {
-                mView.showToastMsg(e.getMessage());
-            }
+                    @Override
+                    public void onOtherError(Throwable e) {
+                        mView.showToastMsg(e.getMessage());
+                    }
 
-            @Override
-            public void onNext(BmobFile bmobFile) {
-                LogUtils.d(bmobFile.toString());
-            }
-        }));
+                    @Override
+                    public void onNext(BmobFile bmobFile) {
+                        LogUtils.d(bmobFile.toString());
+                        mView.setUserAvatar(bmobFile.url);
+                    }
+                }));
     }
 }

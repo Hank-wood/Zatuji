@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.github.siyamed.shapeimageview.CircularImageView;
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.data.bean.DataBean;
@@ -136,5 +137,9 @@ public class ImageHelper {
         @Override public String getId() {
             return getClass().getName();
         }
+    }
+
+    public static void clearCache(){
+        Glide.get(MyApplication.getInstance()).clearDiskCache();
     }
 }

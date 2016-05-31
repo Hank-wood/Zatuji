@@ -35,16 +35,23 @@ public class MyApplication extends Application {
         registerEvent();
         //refWatcher = LeakCanary.install(this);
         mDefaultTag = new TagBean().tagList.get(PrefUtils.getInt(this, Constant.DEFAULT_TAG, 0));
-        LogUtils.d("default:" + PrefUtils.getInt(this, Constant.DEFAULT_TAG, 3) + ":" + mDefaultTag.requestName);
     }
 
     private void registerEvent() {
         mRxManager = new RxJavaManager();
         mRxManager.subscribe(Event.LOGIN_SUCCESS, new Action1<Object>() {
             @Override
-            public void call(Object user) {setUser((User) user);
+            public void call(Object user) {
+                PrefUtils.putBoolean(MyApplication.getInstance(), Constant.IS_EXIT,false);
+                setUser((User) user);
             }
-        });
+        });//登录
+        mRxManager.subscribe(Event.LOGIN_OUT, new Action1<Object>() {
+            @Override
+            public void call(Object o) {
+                PrefUtils.putBoolean(MyApplication.getInstance(), Constant.IS_EXIT,true);
+                setUser(null);}
+        });//退出
     }
     public void setUser(User user) {
         mUser = user;

@@ -2,7 +2,6 @@ package com.joe.zatuji.module.homepage;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +24,7 @@ import com.joe.zatuji.module.favoritepage.FavoriteFragment;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.module.searchingpage.SearchingActivity;
-import com.joe.zatuji.module.settingpage.SettingFragment;
+import com.joe.zatuji.module.homesettingpage.HomeHomeSettingFragment;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.DropMenuDialog;
 
@@ -38,12 +36,12 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     private final String TAG_HOME_FRAG = "homeFragment";
     private final String TAG_DISCOVER_FRAG = "discoverFragment";
     private final String TAG_FAVORITE_FRAG = "favoriteFragment";
-    private final String TAG_SETTING_FRAG = "settingFragment";
+    private final String TAG_SETTING_FRAG = "homeSettingFragment";
     private FragmentManager mFragmentManager;
     private HomeFragment homeFragment;
     private Fragment mCurrentFragment;
     private DiscoverFragment discoverFragment;
-    private SettingFragment settingFragment;
+    private HomeHomeSettingFragment homeSettingFragment;
     private FavoriteFragment favoriteFragment;
     private int currentPos;//当前fragment
     private ActionBar mActionbar;
@@ -87,7 +85,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         homeFragment = new HomeFragment();
         discoverFragment = new DiscoverFragment();
         favoriteFragment = new FavoriteFragment();
-        settingFragment = new SettingFragment();
+        homeSettingFragment = new HomeHomeSettingFragment();
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction transition= mFragmentManager.beginTransaction().add(R.id.fl_container_home, homeFragment,TAG_HOME_FRAG);
         transition.addToBackStack(TAG_HOME_FRAG);
@@ -199,8 +197,9 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
                 currentPos=2;
                 break;
             case R.id.action_setting:
-                changeFragment(settingFragment,TAG_SETTING_FRAG);
-                settingFragment.getCache();
+                changeFragment(homeSettingFragment,TAG_SETTING_FRAG);
+                //homeSettingFragment.getCache();
+                homeSettingFragment.onResume();
                 mAppBar.setVisibility(View.GONE);
                 setCurrentTitle(3);
                 currentPos=3;
@@ -239,6 +238,6 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         homeFragment = null;
         discoverFragment = null;
         favoriteFragment = null;
-        settingFragment = null;
+        homeSettingFragment = null;
     }
 }

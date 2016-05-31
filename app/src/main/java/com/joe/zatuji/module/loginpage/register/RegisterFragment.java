@@ -10,9 +10,11 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.helper.ImageHelper;
+import com.joe.zatuji.utils.DoubleClick;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.data.bean.User;
 import com.yongchun.library.view.ImageSelectorActivity;
+
 
 
 /**
@@ -26,7 +28,7 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
     private EditText mNickName;
     private EditText mPwd;
     private LoadingView mLoadingView;
-
+    private User mUser ;
     @Override
     protected int getLayout() {
         return R.layout.fragment_register;
@@ -51,6 +53,7 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
 
     @Override
     public void onClick(View v) {
+        if(DoubleClick.isDoubleClick(v.getId())) return;
         switch (v.getId()){
             case R.id.iv_register_avatar:
                 ImageSelectorActivity.start(mActivity, 1, ImageSelectorActivity.MODE_SINGLE, true,true,true);
@@ -77,29 +80,40 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
             KToast.show("密码不能为空！");
             return;
         }
-        User user = new User();
-        user.username =userName;
-        user.nickname=nickName;
-        user.password=password;
-        if(userName.contains("@")) user.email = userName;
+        if(mUser==null) mUser = new User();
+        mUser.username =userName;
+        mUser.nickname=nickName;
+        mUser.password=password;
+        if(userName.contains("@")) mUser.email = userName;
         //showLoading();
         //mLoadingView.showLoading();
-
-        mPresenter.register(user);
+        showLoading("注册中...");
+        mPresenter.register(mUser);
 
     }
 
-    public void setAvatar(String path){
+    public void setAvatar(final String path){
         mAvatarPath = path;
         mAvatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
         ImageHelper.showAvatar(mAvatar,path);
         //上传头像
+        showLoading("上传头像...");
         mPresenter.uploadAvatar(path);
+
     }
 
 
     @Override
     public void showToastMsg(String msg) {
+        doneLoading();
         KToast.show(msg);
+    }
+
+    @Override
+    public void setUserAvatar(String url) {
+        doneLoading();
+        showToastMsg("上传成功");
+        if(mUser==null) mUser = new User();
+        mUser.setAvatar(url);
     }
 }

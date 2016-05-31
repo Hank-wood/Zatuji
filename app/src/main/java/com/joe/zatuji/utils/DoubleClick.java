@@ -16,7 +16,7 @@ public class DoubleClick {
     private static DoubleClick instance;
     private int mTag = -1;
     private static long mLastClick = 0;
-    private static long deDuration = 500;
+    private static long deDuration = 1000;
 
     /**
      * init the instance of DoubleClick

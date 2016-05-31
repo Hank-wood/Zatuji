@@ -11,9 +11,8 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.module.loginpage.ui.LoginFragment;
+import com.joe.zatuji.module.loginpage.login.LoginFragment;
 import com.joe.zatuji.module.loginpage.register.RegisterFragment;
-import com.joe.zatuji.module.loginpage.view.FragmentView;
 import com.yongchun.library.view.ImageSelectorActivity;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import rx.functions.Action1;
 /**
  * Created by Joe on 2016/4/30.
  */
-public class LoginActivity extends BaseActivity implements FragmentView{
+public class LoginActivity extends BaseActivity {
     private static final String TAG_LOGIN_FRAG = "login";
     private static final String TAG_RIGISTER_FRAG = "register";
     private FragmentManager mFragmentManager;
@@ -66,7 +65,6 @@ public class LoginActivity extends BaseActivity implements FragmentView{
     }
 
 
-    @Override
     public void changeFragment(String Tag) {
         mRegisterFragment = new RegisterFragment();
         FragmentTransaction transition= mFragmentManager.beginTransaction().add(R.id.fl_container_login, mRegisterFragment,TAG_RIGISTER_FRAG);

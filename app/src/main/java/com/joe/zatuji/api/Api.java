@@ -58,7 +58,7 @@ public class Api {
                     .addHeader("X-Bmob-REST-API-Key", Constant.BMOB_REST)
                     .addHeader("Content-Type","application/json")
                     .addHeader("X-Bmob-Session-Token",sToken)
-                    .addHeader("Content-Transfer-Encoding","binary")
+//                    .addHeader("Content-Transfer-Encoding","binary")
                     .build();
             return chain.proceed(request);
         }

@@ -14,6 +14,7 @@ import com.joe.zatuji.base.BasePresenter;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.TUtil;
+import com.joe.zatuji.view.LoadingDialog;
 import com.squareup.leakcanary.RefWatcher;
 
 /**
@@ -24,7 +25,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends android.supp
     protected View mRootView;
     protected AlertDialog dialog;
     protected MyApplication myApplication;
-
+    protected LoadingDialog mLoadingDialog;
     protected T mPresenter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +84,10 @@ public abstract class BaseFragment<T extends BasePresenter> extends android.supp
     }
     @Override
     public void doneLoading() {
-        dialog.dismiss();
+        if(mLoadingDialog!=null){
+            mLoadingDialog.dismiss();
+        }
+//        dialog.dismiss();
     }
 
     @Override
@@ -94,6 +98,11 @@ public abstract class BaseFragment<T extends BasePresenter> extends android.supp
     protected void showEmptyView(){
     }
 
+    public void showLoading(String msg){
+        if(mLoadingDialog==null) mLoadingDialog = new LoadingDialog(mActivity,msg);
+        mLoadingDialog.setMessage(msg);
+        mLoadingDialog.show();
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -1,7 +1,6 @@
-package com.joe.zatuji.module.loginpage.ui;
+package com.joe.zatuji.module.loginpage.login;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,23 +12,19 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.base.ui.BaseFragment;
-import com.joe.zatuji.Constant;
 import com.joe.zatuji.helper.ImageHelper;
+import com.joe.zatuji.module.loginpage.LoginActivity;
+import com.joe.zatuji.utils.DoubleClick;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.data.bean.User;
-import com.joe.zatuji.module.loginpage.presenter.LoginPresenter;
-import com.joe.zatuji.module.loginpage.view.FragmentView;
-import com.joe.zatuji.module.loginpage.view.LoginView;
 
-import org.xutils.x;
 
 /**
  * Created by Joe on 2016/5/1.
  */
-public class LoginFragment extends BaseFragment implements View.OnClickListener,LoginView{
+public class LoginFragment extends BaseFragment<LoginPresenter> implements LoginView,View.OnClickListener{
 
-    private LoginPresenter mPresenter;
     private CircularImageView mAvatar;
     private EditText mAccount;
     private EditText mPwd;
@@ -42,8 +37,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     protected void initPresenter() {
-        FragmentView fragmentView = (FragmentView) mActivity;
-        mPresenter = new LoginPresenter(mActivity,this,fragmentView);
+        mPresenter.setView(this);
         mPresenter.getCurrentUser();
     }
 
@@ -73,14 +67,15 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!s.toString().contains(".com")) return;
-                mPresenter.queryAvatar(s.toString());
+                if(s.toString().length()<2) return;
+                mPresenter.queryUserByName(s.toString());
             }
         });
     }
 
     @Override
     public void onClick(View v) {
+        if(DoubleClick.isDoubleClick(v.getId())) return;
         switch (v.getId()){
             case R.id.tv_login_forget:
                 showForgetDialog();
@@ -89,7 +84,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 login();
                 break;
             case R.id.tv_login_register:
-                mPresenter.jumpRegister();
+                LoginActivity loginActivity = (LoginActivity) mActivity;
+                loginActivity.changeFragment(null);
                 break;
         }
     }
@@ -102,10 +98,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mLoadingView.showLoading();
+                showLoading("正在重置");
                 LogUtils.d("重设密码");
                 dialog.dismiss();
-                mPresenter.forgotPwd(mAccount.getText().toString());
+                mPresenter.resetPassword(mAccount.getText().toString());
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -123,9 +119,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             return;
         }
         User user =new User();
-//        user.setUsername(mAccount.getText().toString());
-//        user.setPassword(mPwd.getText().toString());
-        mLoadingView.showLoading();
+        user.username = mAccount.getText().toString();
+        user.password = mPwd.getText().toString();
+        showLoading("登录中...");
         mPresenter.login(user);
     }
 
@@ -136,29 +132,16 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void setUserInfo(User user) {
-//        mAccount.setText(user.getUsername());
-    }
-
-    @Override
-    public void doneLogin() {
-        mLoadingView.doneLoading();
-        Intent intent = new Intent();
-        intent.setAction(Constant.LOGIN_SUCCESS);
-        mActivity.sendBroadcast(intent);
-        mActivity.finish();
-    }
-
-    @Override
-    public void showErrorMsg(String msg) {
-        mLoadingView.doneLoading();
-        KToast.show(msg);
+        mAccount.setText(user.username);
+        mPwd.setText(user.password);
+        mPresenter.queryUserByName(user.username);
     }
 
     @Override
     public void resetPwdDone() {
-        mLoadingView.doneLoading();
+        doneLoading();
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle("重置密码？");
+        builder.setTitle("重置密码成功");
         builder.setMessage("重设密码邮件发送成功，请尽快修改密码");
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
@@ -169,9 +152,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         builder.show();
     }
 
+
     @Override
-    public void resetPwdError(String msg) {
-        mLoadingView.doneLoading();
+    public void showToastMsg(String msg) {
+        doneLoading();
         KToast.show(msg);
     }
 }
