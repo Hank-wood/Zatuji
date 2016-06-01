@@ -84,7 +84,7 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
         mUser.username =userName;
         mUser.nickname=nickName;
         mUser.password=password;
-        if(userName.contains("@")) mUser.email = userName;
+//        if(userName.contains("@")) mUser.email = userName;
         //showLoading();
         //mLoadingView.showLoading();
         showLoading("注册中...");

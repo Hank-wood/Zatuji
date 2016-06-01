@@ -2,10 +2,12 @@ package com.joe.zatuji;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
 
 import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.data.bean.TagBean;
 import com.joe.zatuji.data.bean.User;
+import com.joe.zatuji.helper.SettingHelper;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 import com.squareup.leakcanary.RefWatcher;
@@ -34,7 +36,7 @@ public class MyApplication extends Application {
         x.Ext.setDebug(true);
         registerEvent();
         //refWatcher = LeakCanary.install(this);
-        mDefaultTag = new TagBean().tagList.get(PrefUtils.getInt(this, Constant.DEFAULT_TAG, 0));
+        mDefaultTag = new TagBean().tagList.get(SettingHelper.getDefaultTag());
     }
 
     private void registerEvent() {
@@ -72,6 +74,25 @@ public class MyApplication extends Application {
         return mUser != null;
     }
 
+    public int getVersionCode(){
+        PackageManager packageManager = this.getPackageManager();
+        int version = 0;
+        try {
+            version = packageManager.getPackageInfo(getPackageName(),0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
+    }
 
-
+    public String getVersionName(){
+        PackageManager packageManager = this.getPackageManager();
+        String  version = "1.0.0";
+        try {
+            version = packageManager.getPackageInfo(getPackageName(),0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
+    }
 }

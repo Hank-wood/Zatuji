@@ -31,7 +31,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Joe on 2016/5/2.
  */
-public class HomeSettingPresenter extends BasePresenter<HomeSettingView, BaseModel> {
+public class HomeSettingPresenter extends BasePresenter<HomeSettingView, HomeSettingModel> {
     @Override
     public void onStart() {
         mRxJavaManager.subscribe(Event.LOGIN_SUCCESS, new Action1<Object>() {

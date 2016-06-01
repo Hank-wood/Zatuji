@@ -37,12 +37,18 @@ public class Constant {
 
     //Cache
     public static final String HOME = "home";
-    public static final String DEFAULT_TAG = "default_tag" ;
 
 
     //Bmob
     public static final String TOKEN = "token";
     public static final String USER_NAME = "user_name";
     public static final String PWD = "pwd";
+
+    //设置
+    public static final String DEFAULT_TAG = "default_tag" ;//默认的发现tag
+    public static final String CHECK_UPDATE = "check_update";
+    public static final String UPDATE_NO_WIFI = "update_no_wifi";//boolean 无wifi也检查更新
+    public static final String NOTIFY_NO_WIFI = "notify_no_wifi";//boolean 无wifi时提醒用户是否加载图片
+
 }
 

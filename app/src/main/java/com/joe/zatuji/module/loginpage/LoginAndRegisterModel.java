@@ -15,9 +15,7 @@ import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
 import java.io.File;
-import java.util.List;
 
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import rx.Observable;
 import rx.Subscriber;
@@ -76,7 +74,7 @@ public class LoginAndRegisterModel implements BaseModel {
         return fileObservable.flatMap(new Func1<RequestBody, Observable<BmobFile>>() {
             @Override
             public Observable<BmobFile> call(RequestBody params) {
-                return Api.getInstance().mBmobService.uploadFile(path.substring(path.lastIndexOf("/"), path.length()), params);
+                return Api.getInstance().mBmobService.uploadAvatar(path.substring(path.lastIndexOf("/"), path.length()), params);
             }
         });
     }
