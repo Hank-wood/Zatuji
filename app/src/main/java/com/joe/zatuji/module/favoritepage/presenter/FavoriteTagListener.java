@@ -1,6 +1,6 @@
 package com.joe.zatuji.module.favoritepage.presenter;
 
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
 
 import java.util.ArrayList;
 

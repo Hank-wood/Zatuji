@@ -13,8 +13,10 @@ import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.helper.BmobSubscriber;
+import com.joe.zatuji.helper.TableHelper;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.module.loginpage.LoginAndRegisterModel;
+import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -62,11 +64,6 @@ public class WelcomeActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onOtherError(Throwable e) {
-                    toHome();
-                }
-
-                @Override
                 public void onNext(User user) {
                     rxJavaManager.post(Event.LOGIN_SUCCESS,user);
                     toHome();
@@ -80,7 +77,9 @@ public class WelcomeActivity extends BaseActivity {
     private void toHome(){
         end = System.currentTimeMillis();
         duration = end - start;
-        if(duration<2000 && !Constant.IS_DEBUG) duration=2000-duration;
+        LogUtils.d("间隔："+duration);
+        if(duration<2000 ) duration=2000-duration;
+        LogUtils.d("计算后间隔："+duration);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

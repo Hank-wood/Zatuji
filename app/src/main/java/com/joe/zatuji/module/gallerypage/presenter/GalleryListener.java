@@ -1,6 +1,6 @@
 package com.joe.zatuji.module.gallerypage.presenter;
 
-import com.joe.zatuji.module.favoritepage.model.MyFavorite;
+import com.joe.zatuji.data.bean.MyFavorite;
 
 import java.util.ArrayList;
 

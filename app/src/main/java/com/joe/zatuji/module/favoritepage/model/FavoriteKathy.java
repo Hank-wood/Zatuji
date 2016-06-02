@@ -2,8 +2,8 @@ package com.joe.zatuji.module.favoritepage.model;
 
 import android.content.Context;
 
+import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.module.favoritepage.presenter.FavoriteTagListener;
-import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.data.bean.User;
 
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Joe on 2016/4/19.
@@ -70,7 +69,7 @@ public class FavoriteKathy {
     private void relateToUser(final FavoriteTag tag, User user) {
         BmobRelation relation = new BmobRelation();
         relation.add(tag);
-        user.setTag(relation);
+//        user.setTag(relation);
 //        user.update(context, new UpdateListener() {
 //            @Override
 //            public void onSuccess() {

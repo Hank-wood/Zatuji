@@ -3,8 +3,8 @@ package com.joe.zatuji.module.gallerypage.presenter;
 import android.content.Context;
 
 import com.joe.zatuji.base.LoadingView;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
-import com.joe.zatuji.module.favoritepage.model.MyFavorite;
+import com.joe.zatuji.data.bean.FavoriteTag;
+import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.module.gallerypage.model.GalleryKathy;
 import com.joe.zatuji.module.gallerypage.view.GalleryView;
 

@@ -5,16 +5,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-import com.joe.zatuji.module.discoverpage.DiscoverFragment;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.module.favoritepage.adapter.FavoriteTagAdapter;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.module.favoritepage.presenter.FavoritePresenter;
-import com.joe.zatuji.module.favoritepage.ui.CreateTagDialog;
+import com.joe.zatuji.view.CreateTagDialog;
 import com.joe.zatuji.module.gallerypage.GalleryActivity;
-import com.joe.zatuji.module.favoritepage.ui.LockTagDialog;
+import com.joe.zatuji.view.LockTagDialog;
 import com.joe.zatuji.module.favoritepage.view.TagView;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
@@ -29,7 +28,7 @@ public class FavoriteFragment extends BaseFragment implements TagView{
 
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
-    private FavoritePresenter mPresenter;
+//    private FavoritePresenter mPresenter;
     private HomeActivity activity;
     private FavoriteTagAdapter mAdapter;
     private static FavoriteFragment mInstance;
@@ -47,8 +46,8 @@ public class FavoriteFragment extends BaseFragment implements TagView{
     @Override
     protected void initPresenter() {
         activity = (HomeActivity) mActivity;
-        mPresenter = new FavoritePresenter(this, activity,myApplication);
-        mPresenter.getFavoriteTag();
+//        mPresenter = new FavoritePresenter(this, activity,myApplication);
+//        mPresenter.getFavoriteTag();
     }
 
     @Override
@@ -65,7 +64,7 @@ public class FavoriteFragment extends BaseFragment implements TagView{
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.getFavoriteTag();
+//                mPresenter.getFavoriteTag();
             }
         });
         //点击item
@@ -73,7 +72,7 @@ public class FavoriteFragment extends BaseFragment implements TagView{
             @Override
             public void onItemClickListener(int position, FavoriteTag tag) {
                 //判断是否上锁
-                if(tag.is_lock()){
+                if(tag.is_lock){
                     showPwdDialog(tag);
                 }else{
                     jumpFavoriteDetail(tag);
@@ -128,7 +127,7 @@ public class FavoriteFragment extends BaseFragment implements TagView{
         dialog.setOnCreateCallBack(new CreateTagDialog.OnCreateCallBack() {
             @Override
             public void OnCreate(FavoriteTag tag) {
-                mPresenter.createTag(tag);
+//                mPresenter.createTag(tag);
             }
         });
         dialog.show();

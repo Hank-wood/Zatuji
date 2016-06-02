@@ -46,12 +46,20 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:name=".module.searchingpage.SearchingActivity"/>
         <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".module.userpage.UserActivity"/>
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".module.userpage.ChangePasswordActivity"/>
+        <activity
             android:name=".module.loginpage.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity android:name=".module.gallerypage.GalleryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
+
+        <!--框架所需-->
         <activity android:name="com.yongchun.library.view.ImageSelectorActivity"
             android:label="上传头像"
             android:theme="@style/AppTheme.NoActionBar"

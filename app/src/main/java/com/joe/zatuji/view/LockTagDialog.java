@@ -1,4 +1,4 @@
-package com.joe.zatuji.module.favoritepage.ui;
+package com.joe.zatuji.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.joe.zatuji.R;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.utils.KToast;
 
 /**
@@ -37,7 +37,7 @@ public class LockTagDialog extends Dialog implements View.OnClickListener{
 
     private void initView() {
         mTitle = (TextView) findViewById(R.id.tv_title_tag);
-        mTitle.setText(mTag.getTag());
+        mTitle.setText(mTag.tag);
         mPwd = (EditText) findViewById(R.id.et_pwd_tag);
         mCreate = (Button) findViewById(R.id.bt_create_tag);
         findViewById(R.id.bt_cancel_tag).setOnClickListener(this);
@@ -58,7 +58,7 @@ public class LockTagDialog extends Dialog implements View.OnClickListener{
 
     private void checkPassword() {
         String pwd = mPwd.getText().toString();
-        if(pwd.equals(mTag.getPwd())){
+        if(pwd.equals(mTag.pwd)){
             mListener.OnSuccess(this);
         }else{
             KToast.show("密码错误");

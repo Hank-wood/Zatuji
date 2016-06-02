@@ -11,22 +11,38 @@ import cn.bmob.v3.datatype.BmobRelation;
 public class User extends BaseBmobBean{
     public String nickname;//昵称
     public String avatar;//头像
-    public BmobRelation tag;//该用户拥有的图集
+//    public BmobRelation tag;//该用户拥有的图集
     public String username;
     public String password;
     public String email;
+    public Relation tag;//该用户拥有的图集
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "sessionToken='" + sessionToken + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", tag=" + tag +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", emailVerified=" + emailVerified +
+                '}';
+    }
+
     public Boolean emailVerified;
     public String sessionToken;
     public String mobilePhoneNumber;
     public Boolean mobilePhoneNumberVerified;
 
-    public BmobRelation getTag() {
-        return tag;
-    }
-
-    public void setTag(BmobRelation tag) {
-        this.tag = tag;
-    }
+//    public BmobRelation getTag() {
+//        return tag;
+//    }
+//
+//    public void setTag(BmobRelation tag) {
+//        this.tag = tag;
+//    }
 
     public String getNickname() {
         return nickname;

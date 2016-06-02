@@ -28,6 +28,12 @@ public class UserInfoPresenter extends BasePresenter<UserView,BaseModel> {
                 mView.setLoginStyle();
             }
         });
+        mRxJavaManager.subscribe(Event.USER_UPDATE, new Action1<Object>() {
+            @Override
+            public void call(Object user) {
+                mView.setUserInfo((User) user);
+            }
+        });
     }
     //获取当前用户信息
     public void getUserInfo(){

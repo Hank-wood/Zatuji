@@ -1,4 +1,4 @@
-package com.joe.zatuji.module.picdetailpage.ui;
+package com.joe.zatuji.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 
 import com.joe.zatuji.R;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
 
 import java.util.ArrayList;
 
@@ -119,7 +119,7 @@ public class ChooseTagDialog extends Dialog implements View.OnClickListener{
             FavoriteTag tag = tags.get(position);
             convertView = View.inflate(context,R.layout.item_tag_choose,null);
             RadioButton radioButton = (RadioButton) convertView.findViewById(R.id.rb_tag_item);
-            radioButton.setText(tag.getTag()+"("+tag.getNumber()+")");
+            radioButton.setText(tag.tag+"("+tag.number+")");
             if(position!=currentCheck) {
                 radioButton.setChecked(false);
             }else{

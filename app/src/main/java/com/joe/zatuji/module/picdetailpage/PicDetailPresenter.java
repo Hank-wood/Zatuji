@@ -1,10 +1,13 @@
-package com.joe.zatuji.module.picdetailpage.presenter;
+package com.joe.zatuji.module.picdetailpage;
 
 import android.content.Context;
 
+import com.joe.zatuji.MyApplication;
+import com.joe.zatuji.base.BasePresenter;
 import com.joe.zatuji.base.LoadingView;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.module.picdetailpage.presenter.PicDetailListener;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.PrefUtils;
 import com.joe.zatuji.data.bean.User;
@@ -15,7 +18,7 @@ import cn.bmob.v3.BmobUser;
 /**
  * Created by Joe on 2016/4/18.
  */
-public class PicDetailPresenter implements PicDetailListener{
+public class PicDetailPresenter  implements PicDetailListener {
     private Context context;
     private LoadingView loadingView;
     private final PicKathy mKathy;
@@ -28,7 +31,7 @@ public class PicDetailPresenter implements PicDetailListener{
 
     public void saveToFavorite(String picUrl, String desc, int width, int height, FavoriteTag tag){
         loadingView.showLoading();
-        User user = BmobUser.getCurrentUser(context,User.class);
+        User user = MyApplication.mUser;
         if(user == null ||PrefUtils.getBoolean(context,Constant.IS_EXIT,false)){
             KToast.show("请先登录账号");
             loadingView.doneLoading();

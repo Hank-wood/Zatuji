@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.adapter.BaseStaggeredAdapter;
 import com.joe.zatuji.base.adapter.DataViewHolder;
-import com.joe.zatuji.module.favoritepage.model.MyFavorite;
+import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.module.picdetailpage.PicDetailActivity;

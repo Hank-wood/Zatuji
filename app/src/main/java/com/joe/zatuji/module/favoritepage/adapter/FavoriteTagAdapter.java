@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.adapter.DataViewHolder;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
 
 import org.xutils.x;
 
@@ -49,8 +49,8 @@ public class FavoriteTagAdapter extends RecyclerView.Adapter<DataViewHolder> {
         holder.ivPic.setBackgroundColor(mContext.getResources().getColor(getRandomColor()));
         boolean isCreate=false;
         FavoriteTag tag = mTags.get(position);
-        holder.tvDesc.setText(tag.getTag()+"("+tag.getNumber()+")");
-        x.image().bind(holder.ivPic,tag.getFront());
+        holder.tvDesc.setText(tag.tag+"("+tag.number+")");
+        x.image().bind(holder.ivPic,tag.front);
         //替换为imageloader
         final int pos=position;
         final FavoriteTag finalTag = tag;

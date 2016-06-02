@@ -79,6 +79,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     public void doneLoading(){
         dialog.dismiss();
+        mLoadingDialog.dismiss();
         LogUtils.d("doneLoading");
     }
     @Override

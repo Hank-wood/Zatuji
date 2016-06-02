@@ -11,6 +11,7 @@ import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.BaseListBean;
 import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.helper.BmobSubscriber;
+import com.joe.zatuji.helper.UserHelper;
 import com.joe.zatuji.module.loginpage.LoginAndRegisterModel;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
@@ -77,12 +78,6 @@ public class LoginPresenter extends BasePresenter<LoginView, LoginAndRegisterMod
                     }
 
                     @Override
-                    public void onOtherError(Throwable e) {
-                        super.onOtherError(e);
-                        LogUtils.d(e.getMessage());
-                    }
-
-                    @Override
                     public void onNext(BaseListBean<User> baseListBean) {
                         List<User> list = baseListBean.results;
                         if(list.size()>0){
@@ -96,9 +91,9 @@ public class LoginPresenter extends BasePresenter<LoginView, LoginAndRegisterMod
 
     //本地缓存的用户
     public void getCurrentUser() {
-        String username = PrefUtils.getString(MyApplication.getInstance(), Constant.USER_NAME,"");
+        String username = UserHelper.getCurrentUserName();
         if(TextUtils.isEmpty(username)) return;
-        String pwd = PrefUtils.getString(MyApplication.getInstance(),Constant.PWD,"");
+        String pwd = UserHelper.getCurrentUserPassword();
         User user = new User();
         user.username = username;
         user.password = pwd;

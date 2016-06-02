@@ -1,4 +1,4 @@
-package com.joe.zatuji.module.favoritepage.ui;
+package com.joe.zatuji.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
+import com.joe.zatuji.data.bean.Relation;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.data.bean.User;
 
@@ -59,21 +61,21 @@ public class CreateTagDialog extends Dialog implements View.OnClickListener{
 
     private void createTag() {
         FavoriteTag tag = new FavoriteTag();
-        User user = BmobUser.getCurrentUser(context,User.class);
+        User user = MyApplication.mUser;
         String title = mTitle.getText().toString();
         String pwd = mPwd.getText().toString();
         if(TextUtils.isEmpty(title)){
             KToast.show("图集名称不能为空");
             return;
         }
-        tag.setTag(title);
-        tag.setBelong(user);
-        tag.setNumber(0);
+        tag.tag = title;
+//        tag.belong = new Relation();
+        tag.number = 0;
         if(!TextUtils.isEmpty(pwd)){
-            tag.setIs_lock(true);
-            tag.setPwd(pwd);
+            tag.is_lock = true;
+            tag.pwd = pwd;
         }else{
-            tag.setIs_lock(false);
+            tag.is_lock = false;
         }
         mCallBack.OnCreate(tag);
         dismiss();

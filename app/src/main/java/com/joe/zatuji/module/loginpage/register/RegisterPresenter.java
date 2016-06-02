@@ -62,11 +62,6 @@ public class RegisterPresenter extends BasePresenter<RegisterView, LoginAndRegis
                     }
 
                     @Override
-                    public void onOtherError(Throwable e) {
-                        mView.showToastMsg(e.getMessage());
-                    }
-
-                    @Override
                     public void onNext(BmobFile bmobFile) {
                         LogUtils.d(bmobFile.toString());
                         mView.setUserAvatar(bmobFile.url);

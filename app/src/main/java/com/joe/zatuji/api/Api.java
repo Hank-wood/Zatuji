@@ -4,6 +4,7 @@ package com.joe.zatuji.api;
 
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
+import com.joe.zatuji.helper.UserHelper;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
@@ -33,7 +34,7 @@ public class Api {
 
     public ApiService mApiService;
     public BmobService mBmobService;
-    public static String sToken= PrefUtils.getString(MyApplication.getInstance(),Constant.TOKEN,"");//
+    public static String sToken= UserHelper.getToken();//
 
     Interceptor mInterceptor = new Interceptor() {
         @Override

@@ -10,13 +10,19 @@ import com.joe.zatuji.data.bean.BmobFile;
 import com.joe.zatuji.data.bean.TokenBean;
 import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.helper.GsonHelper;
+import com.joe.zatuji.helper.UserHelper;
 import com.joe.zatuji.utils.FileUtils;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
@@ -37,15 +43,14 @@ public class LoginAndRegisterModel implements BaseModel {
                     @Override
                     public void call(TokenBean tokenBean) {
                         LogUtils.d("token:" + tokenBean.sessionToken);
-                        PrefUtils.putString(MyApplication.getInstance(), Constant.TOKEN, tokenBean.sessionToken);
+                        UserHelper.saveToken(tokenBean.sessionToken);
                         Api.getInstance().updateToke(tokenBean.sessionToken);
                     }
                 });
     }
     /**登录*/
     public Observable<User> login(User user) {
-        PrefUtils.putString(MyApplication.getInstance(), Constant.USER_NAME, user.username);
-        PrefUtils.putString(MyApplication.getInstance(), Constant.PWD, user.password);
+        UserHelper.saveCurrentUser(user);
         return Api.getInstance()
                 .mBmobService
                 .login(user.username, user.password)

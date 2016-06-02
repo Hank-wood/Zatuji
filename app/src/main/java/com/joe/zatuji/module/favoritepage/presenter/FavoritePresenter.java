@@ -2,9 +2,10 @@ package com.joe.zatuji.module.favoritepage.presenter;
 
 import android.content.Context;
 
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.module.favoritepage.model.FavoriteKathy;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.module.favoritepage.view.TagView;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
@@ -38,7 +39,7 @@ public class FavoritePresenter implements FavoriteTagListener {
 
     public void getFavoriteTag(){
         mLoading.showLoading();
-        User user = BmobUser.getCurrentUser(mContext,User.class);
+        User user = MyApplication.mUser;
         if(user == null || PrefUtils.getBoolean(mContext, Constant.IS_EXIT,false)){
             mView.showNotSign();
             mLoading.doneLoading();
@@ -50,7 +51,7 @@ public class FavoritePresenter implements FavoriteTagListener {
 
     public void createTag(FavoriteTag tag){
         mLoading.showLoading();
-        User user = BmobUser.getCurrentUser(mContext,User.class);
+        User user = MyApplication.mUser;
         if(user == null || PrefUtils.getBoolean(mContext, Constant.IS_EXIT,false)){
             onCreateError("请先登录账号");
             return;

@@ -9,6 +9,7 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.helper.ImageHelper;
+import com.joe.zatuji.module.userpage.UserActivity;
 import com.joe.zatuji.utils.DoubleClick;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.module.loginpage.LoginActivity;
@@ -53,6 +54,7 @@ public class UserFragment extends BaseFragment<UserInfoPresenter> implements Use
                 startActivity(new Intent(mActivity, LoginActivity.class));
                 break;
             case R.id.iv_user_avatar:
+                startActivity(new Intent(mActivity, UserActivity.class));
                 break;
         }
     }

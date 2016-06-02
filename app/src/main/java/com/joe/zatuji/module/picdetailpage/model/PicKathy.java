@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
-import com.joe.zatuji.module.favoritepage.model.MyFavorite;
+import com.joe.zatuji.data.bean.FavoriteTag;
+import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.data.bean.User;
@@ -136,9 +136,9 @@ public class PicKathy {
     private void setRelateToTag(MyFavorite favorite, FavoriteTag tag) {
         BmobRelation relation = new BmobRelation();
         relation.add(favorite);
-        if(TextUtils.isEmpty(tag.getFront())) tag.setFront(favorite.getImg_url());
+//        if(TextUtils.isEmpty(tag.getFront())) tag.setFront(favorite.getImg_url());
         tag.increment("number");
-        tag.setImg(relation);
+//        tag.setImg(relation);
         tag.update(context, new UpdateListener() {
             @Override
             public void onSuccess() {
@@ -201,8 +201,8 @@ public class PicKathy {
 
     private void updateFavorite(MyFavorite favorite, final FavoriteTag tag) {
         tag.increment("number");
-        if(TextUtils.isEmpty(tag.getFront())) tag.setFront(favorite.getImg_url());
-        LogUtils.d("number:"+tag.getNumber()+":img:"+tag.getFront());
+//        if(TextUtils.isEmpty(tag.getFront())) tag.setFront(favorite.getImg_url());
+//        LogUtils.d("number:"+tag.getNumber()+":img:"+tag.getFront());
         favorite.save(context, new SaveListener() {
             @Override
             public void onSuccess() {

@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
+import com.joe.zatuji.Constant;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.base.ui.BaseFragment;
@@ -84,6 +85,7 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
         mUser.username =userName;
         mUser.nickname=nickName;
         mUser.password=password;
+        if(TextUtils.isEmpty(mUser.avatar)) mUser.avatar = Constant.DEFAULT_AVATAR;//如果没有上传，设置为默认
 //        if(userName.contains("@")) mUser.email = userName;
         //showLoading();
         //mLoadingView.showLoading();
@@ -99,7 +101,6 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
         //上传头像
         showLoading("上传头像...");
         mPresenter.uploadAvatar(path);
-
     }
 
 

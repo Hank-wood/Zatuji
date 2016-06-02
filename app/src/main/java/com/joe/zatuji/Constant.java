@@ -40,6 +40,7 @@ public class Constant {
 
 
     //Bmob
+    public static final String DEFAULT_AVATAR = "";//默认头像
     public static final String TOKEN = "token";
     public static final String USER_NAME = "user_name";
     public static final String PWD = "pwd";

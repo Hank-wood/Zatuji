@@ -9,8 +9,8 @@ import android.view.MenuItem;
 
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseActivity;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
-import com.joe.zatuji.module.favoritepage.model.MyFavorite;
+import com.joe.zatuji.data.bean.FavoriteTag;
+import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.module.gallerypage.adapter.GalleryAdapter;
 import com.joe.zatuji.module.gallerypage.presenter.GalleryPresenter;
 import com.joe.zatuji.module.gallerypage.view.GalleryView;
@@ -96,7 +96,7 @@ public class GalleryActivity extends BaseActivity implements GalleryView{
 
     private void initTag() {
         mTag = (FavoriteTag) getIntent().getSerializableExtra(Constant.GALLERY_TAG);
-        mActionBar.setTitle(mTag.getTag());
+        mActionBar.setTitle(mTag.tag);
     }
 
     @Override

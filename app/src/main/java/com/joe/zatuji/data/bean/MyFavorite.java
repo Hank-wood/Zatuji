@@ -1,4 +1,4 @@
-package com.joe.zatuji.module.favoritepage.model;
+package com.joe.zatuji.data.bean;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobRelation;

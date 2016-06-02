@@ -27,16 +27,16 @@ public abstract class BmobSubscriber<T> extends Subscriber<T> {
                     if(resultException.getCode()!=0){
                         onError(resultException);
                     }else{
-                        onOtherError(e);
+                        onError(new ResultException("网络异常"));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    onOtherError(e);
+                    onError(new ResultException("网络异常"));
                 }
             }
             //onError(e);
         } else {
-            onOtherError(e);
+            onError(new ResultException("网络异常"));
         }
     }
 

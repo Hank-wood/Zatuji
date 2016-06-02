@@ -16,15 +16,14 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.helper.ImageHelper;
-import com.joe.zatuji.module.favoritepage.model.FavoriteTag;
+import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.module.favoritepage.presenter.FavoritePresenter;
-import com.joe.zatuji.module.favoritepage.ui.CreateTagDialog;
+import com.joe.zatuji.view.CreateTagDialog;
 import com.joe.zatuji.module.favoritepage.view.TagView;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.module.picdetailpage.presenter.PicDetailPresenter;
-import com.joe.zatuji.module.picdetailpage.ui.ChooseTagDialog;
+import com.joe.zatuji.view.ChooseTagDialog;
 
 import java.util.ArrayList;
 
@@ -32,7 +31,7 @@ import java.util.ArrayList;
  * 大图详情页吗面
  * Created by Joe on 2016/4/16.
  */
-public class PicDetailActivity extends BaseActivity implements TagView{
+public class PicDetailActivity extends BaseActivity implements TagView,PicDetailView{
     private ImageView ivPic;
     private TextView tvDesc;
     private Toolbar toolbar;
@@ -194,5 +193,10 @@ public class PicDetailActivity extends BaseActivity implements TagView{
     protected void onDestroy() {
         super.onDestroy();
         mPresenter=null;
+    }
+
+    @Override
+    public void showToastMsg(String msg) {
+
     }
 }

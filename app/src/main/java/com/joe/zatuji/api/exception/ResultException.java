@@ -6,7 +6,13 @@ package com.joe.zatuji.api.exception;
 public class ResultException  {
     private int code;
     private String error;
-
+    public ResultException(String error){
+        this.error = error;
+    };
+    public ResultException(int code,String error){
+        this.code = code;
+        this.error = error;
+    };
     public int getCode() {
         return code;
     }
