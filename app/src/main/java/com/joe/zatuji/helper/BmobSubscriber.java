@@ -1,6 +1,7 @@
 package com.joe.zatuji.helper;
 
 import com.joe.zatuji.api.exception.ResultException;
+import com.joe.zatuji.utils.LogUtils;
 
 import okhttp3.ResponseBody;
 import retrofit2.adapter.rxjava.HttpException;
@@ -17,6 +18,7 @@ public abstract class BmobSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
+        LogUtils.d(e.getMessage());
         if (e instanceof HttpException) {
             ResponseBody body = ((HttpException) e).response().errorBody();
             int code = ((HttpException) e).response().code();

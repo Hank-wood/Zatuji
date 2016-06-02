@@ -44,6 +44,7 @@ public class UserPresenter extends BasePresenter<UserView, UserModel> {
                     public void onNext(BaseBmobBean baseBmobBean) {
                         mRxJavaManager.post(Event.USER_UPDATE, user);
                         mView.updateAvatar(user.avatar);
+                        mView.showToastMsg("上传成功");
                     }
                 }));
     }
@@ -63,6 +64,7 @@ public class UserPresenter extends BasePresenter<UserView, UserModel> {
                     public void onNext(BaseBmobBean baseBmobBean) {
                         mRxJavaManager.post(Event.USER_UPDATE, user);
                         mView.updateNickName(user.nickname);
+                        mView.showToastMsg("昵称修改成功");
                     }
                 }));
     }
@@ -82,6 +84,7 @@ public class UserPresenter extends BasePresenter<UserView, UserModel> {
                     public void onNext(BaseBmobBean baseBmobBean) {
                         mRxJavaManager.post(Event.USER_UPDATE,user);
                         mView.updateEmail(user.email);
+                        mView.showToastMsg("邮箱绑定成功！");
                     }
                 }));
     }

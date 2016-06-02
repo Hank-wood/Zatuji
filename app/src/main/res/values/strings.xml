@@ -8,4 +8,10 @@
 
     <!--error-->
     <string name="net_disable">网络不给力～</string>
+
+    <!--user info-->
+    <string name="change_avatar">上传头像</string>
+    <string name="change_nickname">修改昵称</string>
+    <string name="change_email">绑定邮箱</string>
+    <string name="change_pwd">修改密码</string>
 </resources>
