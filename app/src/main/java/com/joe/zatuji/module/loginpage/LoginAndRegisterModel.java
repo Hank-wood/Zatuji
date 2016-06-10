@@ -10,6 +10,7 @@ import com.joe.zatuji.data.bean.BmobFile;
 import com.joe.zatuji.data.bean.TokenBean;
 import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.helper.GsonHelper;
+import com.joe.zatuji.helper.SettingHelper;
 import com.joe.zatuji.helper.UserHelper;
 import com.joe.zatuji.utils.FileUtils;
 import com.joe.zatuji.utils.LogUtils;
@@ -57,7 +58,8 @@ public class LoginAndRegisterModel implements BaseModel {
                 .doOnNext(new Action1<User>() {
                     @Override
                     public void call(User user) {
-
+                        UserHelper.saveToken(user.sessionToken);
+                        Api.getInstance().updateToke(user.sessionToken);
                     }
                 });
     }

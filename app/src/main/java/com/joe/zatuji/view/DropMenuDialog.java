@@ -1,6 +1,7 @@
 package com.joe.zatuji.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -24,19 +25,18 @@ import cc.solart.turbo.TurboRecyclerView;
 /**
  * Created by joe on 16/5/28.
  */
-public class DropMenuDialog extends BaseDialog {
+public class DropMenuDialog extends BaseDialog implements View.OnClickListener{
     private TurboRecyclerView mRecyclerView;
     private SimpleAdapter mAdapter;
     private Window window;
 
     public DropMenuDialog(Context context) {
         super(context,R.style.dialog_fullscreen);
-    }
+    }//
 
     protected int getLayout() {
         window = this.getWindow();
         window.requestFeature(Window.FEATURE_NO_TITLE);
-
         return R.layout.dialog_drop_menu;
     }
     @Override
@@ -50,11 +50,12 @@ public class DropMenuDialog extends BaseDialog {
 
         //设置dialog的位置在底部
         lp.gravity = Gravity.BOTTOM;
-
         window.setAttributes(lp);
         LogUtils.d("convert dialog");
+
         mRecyclerView = (TurboRecyclerView)findViewById(R.id.recycler_drop_menu);
         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
+        findViewById(R.id.ll_container_drop).setOnClickListener(this);
         mAdapter = new SimpleAdapter(mContext);
         mAdapter.setNewData(new TagBean().tagList);
         mRecyclerView.setAdapter(mAdapter);
@@ -74,6 +75,14 @@ public class DropMenuDialog extends BaseDialog {
     public void setOnMenuClickListener(OnMenuClickListener mListener){
         this.mListener = mListener;
     }
+
+    @Override
+    public void onClick(View v) {
+        LogUtils.d("click-drop menu");
+        if(v.getId()!=R.id.recycler_drop_menu)dismiss();
+    }
+
+
     public interface OnMenuClickListener{
         void onMenuClick(TagBean.Tag tag);
     }

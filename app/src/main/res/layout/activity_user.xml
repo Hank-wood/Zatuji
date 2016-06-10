@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/aciton_bar"/>
+    <LinearLayout
+        android:id="@+id/ll_avatar_user"
+        style="@style/linearlayout_user_info"
+        >
+        <TextView
+            style="@style/text_user_info"
+            android:text="@string/change_avatar"
+            />
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/iv_avatar_user"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
+    <View style="@style/not_full_divider"/>
+
+    <LinearLayout
+        android:id="@+id/ll_nick_user"
+        style="@style/linearlayout_user_info"
+        >
+        <TextView
+            style="@style/text_user_info"
+            android:text="@string/change_nickname"
+            />
+        <TextView
+            android:id="@+id/tv_nick_user"
+            android:text="乔消息"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+    </LinearLayout>
+    <View style="@style/not_full_divider"/>
+
+    <LinearLayout
+        android:id="@+id/ll_email_user"
+        style="@style/linearlayout_user_info"
+        >
+        <TextView
+            style="@style/text_user_info"
+            android:text="@string/change_email"
+            />
+        <TextView
+            android:id="@+id/tv_email_user"
+            android:text="qiaoxiaoxi621@163.com"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+    </LinearLayout>
+    <View style="@style/not_full_divider"/>
+
+    <LinearLayout
+        android:id="@+id/ll_pwd_user"
+        style="@style/linearlayout_user_info"
+        >
+        <TextView
+            style="@style/text_user_info"
+            android:text="@string/change_pwd"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:drawableRight="@drawable/icon_arrow_right"
+            />
+
+    </LinearLayout>
+    <View style="@style/not_full_divider"/>
+</LinearLayout>
