@@ -47,10 +47,8 @@
             android:name=".module.searchingpage.SearchingActivity"/>
         <activity
             android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
             android:name=".module.userpage.UserActivity"/>
-        <activity
-            android:theme="@style/AppTheme.NoActionBar"
-            android:name=".module.userpage.ChangePasswordActivity"/>
         <activity
             android:name=".module.loginpage.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"

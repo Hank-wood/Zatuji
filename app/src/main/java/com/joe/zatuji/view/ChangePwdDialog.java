@@ -11,30 +11,27 @@ import com.joe.zatuji.view.base.BaseDialog;
 /**
  * Created by joe on 16/6/3.
  */
-public class InputDialog extends BaseDialog{
+public class ChangePwdDialog extends BaseDialog{
 
-    private TextView mTitle;
-    private EditText mInput;
+    private EditText mOld;
     private TextView mCancel;
     private TextView mComplete;
+    private EditText mNew;
+    private EditText mConfirm;
 
-    public InputDialog(Context context){
+    public ChangePwdDialog(Context context){
         super(context);
-    }
-    public InputDialog(Context context,String title,String hint) {
-        super(context);
-        mTitle.setText(title);
-        mInput.setHint(hint);
     }
     @Override
     protected int getLayout() {
-        return R.layout.dialog_input;
+        return R.layout.dialog_change_pwd;
     }
 
     @Override
     protected void initView() {
-        mTitle = (TextView) findViewById(R.id.tv_title_input_dialog);
-        mInput = (EditText) findViewById(R.id.et_input_dialog);
+        mOld = (EditText) findViewById(R.id.et_old_pwd_dialog);
+        mNew = (EditText) findViewById(R.id.et_new_pwd_dialog);
+        mConfirm = (EditText) findViewById(R.id.et_confirm_dialog);
         mCancel = (TextView) findViewById(R.id.tv_cancel_input_dialog);
         mComplete = (TextView) findViewById(R.id.tv_complete_input_dialog);
     }
@@ -52,21 +49,24 @@ public class InputDialog extends BaseDialog{
             @Override
             public void onClick(View v) {
                 if(mListener!=null){
-                    String input = mInput.getText().toString();
-                    mListener.OnComplete(input,InputDialog.this);
+                    String input = mOld.getText().toString();
+                    String newPwd = mNew.getText().toString();
+                    String confirm = mConfirm.getText().toString();
+                    mListener.OnComplete(input,newPwd,confirm,ChangePwdDialog.this);
                 }
             }
         });
     }
 
     public void setTitleAndHint(String title,String hint){
-        mTitle.setText(title);
-        mInput.setHint(hint);
+        mOld.setHint(hint);
     }
 
 
     public void clearInput(){
-        mInput.setText("");
+        mOld.setText("");
+        mNew.setText("");
+        mConfirm.setText("");
     }
 
     private OnCompleteListener mListener;
@@ -74,7 +74,7 @@ public class InputDialog extends BaseDialog{
         this.mListener = listener;
     }
     public interface OnCompleteListener{
-        void OnComplete(String input,InputDialog dialog);
+        void OnComplete(String old,String newPwd,String confirm, ChangePwdDialog dialog);
     }
 
     private int mType = -1;

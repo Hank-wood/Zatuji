@@ -64,7 +64,10 @@ public class RegisterPresenter extends BasePresenter<RegisterView, LoginAndRegis
                     @Override
                     public void onNext(BmobFile bmobFile) {
                         LogUtils.d(bmobFile.toString());
-                        mView.setUserAvatar(bmobFile.url);
+                        String url = bmobFile.url;
+                        int start = url.indexOf(".com/")+(".com/").length();
+                        String cdn =  bmobFile.cdn+"/"+url.substring(start);
+                        mView.setUserAvatar(bmobFile.url,cdn);
                     }
                 }));
     }

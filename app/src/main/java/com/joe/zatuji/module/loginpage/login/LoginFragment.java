@@ -18,6 +18,7 @@ import com.joe.zatuji.utils.DoubleClick;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.data.bean.User;
+import com.joe.zatuji.view.MessageDialog;
 
 
 /**
@@ -140,16 +141,9 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     @Override
     public void resetPwdDone() {
         doneLoading();
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle("重置密码成功");
-        builder.setMessage("重设密码邮件发送成功，请尽快修改密码");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+        MessageDialog dialog =new MessageDialog(mActivity,"重置密码成功","重设密码邮件发送成功，请尽快修改密码");
+        dialog.disableCancel();
+        dialog.show();
     }
 
 

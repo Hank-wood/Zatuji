@@ -111,10 +111,11 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
     }
 
     @Override
-    public void setUserAvatar(String url) {
+    public void setUserAvatar(String url,String cdn) {
         doneLoading();
         showToastMsg("上传成功");
         if(mUser==null) mUser = new User();
-        mUser.setAvatar(url);
+        mUser.avatar = url;
+        mUser.cdn = cdn;
     }
 }

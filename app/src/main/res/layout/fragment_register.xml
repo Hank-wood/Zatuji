@@ -53,6 +53,7 @@
         android:inputType="textPassword"
         style="@style/login_edit_line"
         android:drawableLeft="@drawable/icon_login_password"
+        android:imeOptions="actionDone"
         />
     <Button
         android:id="@+id/bt_register_register"

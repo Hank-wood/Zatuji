@@ -16,7 +16,7 @@ public class User extends BaseBmobBean{
     public String password;
     public String email;
     public Relation tag;//该用户拥有的图集
-
+    public String cdn;//头像删除时有用
     @Override
     public String toString() {
         return "User{" +

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by joe on 16/6/1.
@@ -36,7 +37,9 @@ public class UserModel implements BaseModel {
     public Observable<BaseBmobBean> changeAvatar(String avatar,String userId){
         return updateUser("avatar",avatar,userId);
     }
-
+    public Observable<BaseBmobBean> changeCdn(String cdn,String userId){
+        return updateUser("cdn",cdn,userId);
+    }
     /**修改昵称*/
     public Observable<BaseBmobBean> changeNick(String nick,String userId){
         return updateUser("nickname",nick,userId);
@@ -45,5 +48,9 @@ public class UserModel implements BaseModel {
     /**修改邮箱*/
     public Observable<BaseBmobBean> changeEmail(String email,String userId){
         return updateUser("email",email,userId);
+    }
+
+    public void deleteOldAvatar(String cdn){
+        Api.getInstance().mBmobService.deleteAvatar(cdn).subscribeOn(Schedulers.io()).subscribe();
     }
 }

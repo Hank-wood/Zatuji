@@ -15,7 +15,6 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_title_input_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/font_color_normal_black_87"
@@ -23,16 +22,40 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="24dp"
         android:gravity="center_vertical"
-        android:text="标题" />
+        android:text="修改密码" />
     <EditText
-        android:id="@+id/et_input_dialog"
+        android:imeOptions="actionNext"
+        android:id="@+id/et_old_pwd_dialog"
+        android:background="@null"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:inputType="textPassword"
+        style="@style/edit_input_dialog"
+        android:drawableBottom="@drawable/selector_line_edit_black"
+        android:textColor="@color/font_color_light_black_54"
+        android:hint="输入旧密码" />
+    <EditText
+        android:inputType="textPassword"
+        android:imeOptions="actionNext"
+        android:id="@+id/et_new_pwd_dialog"
         android:background="@null"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         style="@style/edit_input_dialog"
         android:drawableBottom="@drawable/selector_line_edit_black"
         android:textColor="@color/font_color_light_black_54"
-        android:hint="输入" />
+        android:hint="输入新密码" />
+    <EditText
+        android:inputType="textPassword"
+        android:imeOptions="actionDone"
+        android:id="@+id/et_confirm_dialog"
+        android:background="@null"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        style="@style/edit_input_dialog"
+        android:drawableBottom="@drawable/selector_line_edit_black"
+        android:textColor="@color/font_color_light_black_54"
+        android:hint="确认新密码" />
 
     <LinearLayout
         android:layout_gravity="right"

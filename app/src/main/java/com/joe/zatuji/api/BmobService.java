@@ -79,7 +79,8 @@ public interface BmobService {
     @POST("2/files/{fileName}")
     Observable<BmobFile> uploadAvatar(@Path("fileName")String fileName, @Body RequestBody file);
 //以上为用户相关接口
-
+    @DELETE("2/files/{cdn}")
+    Observable<BaseBmobBean> deleteAvatar(@Path("cdn") String cdn);
 
 //意见反馈接口
     /**意见反馈*/

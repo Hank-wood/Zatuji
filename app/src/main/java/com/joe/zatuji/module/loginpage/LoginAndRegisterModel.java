@@ -86,6 +86,7 @@ public class LoginAndRegisterModel implements BaseModel {
         });
     }
 
+
     /**重置密码*/
     public Observable<BaseBean> resetPassword(String email){
         User user = new User();
