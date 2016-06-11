@@ -4,45 +4,42 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
+import com.joe.zatuji.api.Api;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.data.bean.DataBean;
-import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.data.bean.FavoriteTag;
-import com.joe.zatuji.module.favoritepage.presenter.FavoritePresenter;
-import com.joe.zatuji.view.CreateTagDialog;
-import com.joe.zatuji.module.favoritepage.view.TagView;
+import com.joe.zatuji.data.bean.MyFavorite;
+import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.ChooseTagDialog;
+import com.joe.zatuji.view.CreateTagDialog;
 
 import java.util.ArrayList;
+
 
 /**
  * 大图详情页吗面
  * Created by Joe on 2016/4/16.
  */
-public class PicDetailActivity extends BaseActivity implements TagView,PicDetailView{
+public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implements PicDetailView{
     private ImageView ivPic;
     private TextView tvDesc;
     private Toolbar toolbar;
     private AppBarLayout appBarLayout;
     private ActionBar mActionBar;
     private boolean dontShowTv=false;
-    private PicDetailPresenter mPresenter;
     private String desc;
-    private int width;
-    private int height;
-    private FavoritePresenter mFavoritePresenter;
+    private DataBean.PicBean img;
+    private MyFavorite mMyFavoriteImg;
 
     @Override
     protected int getLayout() {
@@ -51,8 +48,7 @@ public class PicDetailActivity extends BaseActivity implements TagView,PicDetail
 
     @Override
     protected void initPresenter() {
-        mPresenter = new PicDetailPresenter(mApplication,this);
-        mFavoritePresenter = new FavoritePresenter(this,this,mActivity);
+        mPresenter.setView(this);
     }
 
     @Override
@@ -70,14 +66,19 @@ public class PicDetailActivity extends BaseActivity implements TagView,PicDetail
         initData();
     }
     private void initData() {
-        DataBean.PicBean img = (DataBean.PicBean) getIntent().getSerializableExtra(Constant.PIC_DATA);
+        img = (DataBean.PicBean) getIntent().getSerializableExtra(Constant.PIC_DATA);
         desc = img.raw_text;
         if(!TextUtils.isEmpty(desc)){
             tvDesc.setText(desc);
         }else{
             dontShowTv=true;
         }
-        ImageHelper.showBig(ivPic,img);
+        ImageHelper.showBig(ivPic, img);
+        mMyFavoriteImg = new MyFavorite();
+        mMyFavoriteImg.desc = desc;
+        mMyFavoriteImg.img_url = Api.HOST_PIC+img.file.key;
+        mMyFavoriteImg.width = img.file.width;
+        mMyFavoriteImg.height = img.file.height;
     }
 
     @Override
@@ -93,10 +94,16 @@ public class PicDetailActivity extends BaseActivity implements TagView,PicDetail
                 finish();
                 break;
             case R.id.action_save://收藏
-                mFavoritePresenter.getFavoriteTag();
+                if(!MyApplication.isLogin()){
+                    showToastMsg("请先登录帐号～");
+                }else{
+                    showLoading("获取图集...");
+                    mPresenter.showTags();
+                }
                 break;
             case R.id.action_download://保存
-//                mPresenter.saveToPhone(img);
+                showLoading("保存图片...");
+                mPresenter.saveToPhone(img.file.key);
                 break;
             case R.id.action_share://分享
                 break;
@@ -125,12 +132,14 @@ public class PicDetailActivity extends BaseActivity implements TagView,PicDetail
     //让用户选择图集
     @Override
     public void showTag(ArrayList<FavoriteTag> tags) {
+        doneLoading();
         if(tags.size()==0){
             CreateTagDialog dialog = new CreateTagDialog(this);
             dialog.setOnCreateCallBack(new CreateTagDialog.OnCreateCallBack() {
                 @Override
                 public void OnCreate(FavoriteTag tag) {
-                    mFavoritePresenter.createTag(tag);
+                    mPresenter.createTags(tag,mMyFavoriteImg);
+                    showLoading("收集到:"+tag.tag);
                 }
             });
             dialog.show();
@@ -142,52 +151,35 @@ public class PicDetailActivity extends BaseActivity implements TagView,PicDetail
                 public void onCreateTag(ChooseTagDialog dialog) {
                     dialog.dismiss();
                     showTag(new ArrayList<FavoriteTag>());
+
                 }
             });
             dialog.setOnChooseTag(new ChooseTagDialog.OnChooseTag() {
                 @Override
                 public void onChooseTag(FavoriteTag tag, ChooseTagDialog dialog) {
+                    mPresenter.chooseTagToSave(tag,mMyFavoriteImg);
                     dialog.dismiss();
-//                    mPresenter.saveToFavorite(img,desc,width,height,tag);
+                    showLoading("收集到:"+tag.tag);
                 }
             });
             dialog.show();
         }
     }
 
-    @Override
-    public void showErrorMsg(String msg) {
-        KToast.show(msg);
-    }
-
-    @Override
-    public void showNotSign() {
-        KToast.show("请先登录账号");
-    }
-
-    @Override
-    public void addTag(ArrayList<FavoriteTag> tags) {
-//        mPresenter.saveToFavorite(img,desc,width,height,tags.get(0));
-    }
-
-    private void countPicSize(ImageView mIv) {
-        width = getIntent().getIntExtra(Constant.PIC_WIDTH,-1);
-        height = getIntent().getIntExtra(Constant.PIC_HEIGHT,-1);
-        //获取屏幕宽高
-        DisplayMetrics dm =getResources().getDisplayMetrics();
-        int w_screen = dm.widthPixels;
-        int h_screen = dm.heightPixels;
-        LogUtils.d("before:W="+ width +" H="+ height +" Screen:W="+w_screen+"H="+h_screen);
-        AbsListView.LayoutParams params= (AbsListView.LayoutParams) mIv.getLayoutParams();
-        double times= (w_screen+0.0)/(width +0.0);
-        //宽与屏幕对齐
-        params.width=w_screen;
-        LogUtils.d("times="+times);
-        params.height= (int) (height *times);
-        LogUtils.d("after:W="+ width +" H="+params.height);
-        mIv.setLayoutParams(params);
-        mIv.setScaleType(ImageView.ScaleType.FIT_START);
-    }
+//    @Override
+//    public void showErrorMsg(String msg) {
+//        KToast.show(msg);
+//    }
+//
+//    @Override
+//    public void showNotSign() {
+//        KToast.show("请先登录账号");
+//    }
+//
+//    @Override
+//    public void addTag(ArrayList<FavoriteTag> tags) {
+////        mPresenter.saveToFavorite(img,desc,width,height,tags.get(0));
+//    }
 
     @Override
     protected void onDestroy() {
@@ -197,6 +189,7 @@ public class PicDetailActivity extends BaseActivity implements TagView,PicDetail
 
     @Override
     public void showToastMsg(String msg) {
-
+        KToast.show(msg);
+        doneLoading();
     }
 }

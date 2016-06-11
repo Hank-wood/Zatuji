@@ -3,7 +3,7 @@ package com.joe.zatuji.api.exception;
 /**
  * Created by joe on 16/5/29.
  */
-public class ResultException  {
+public class ResultException  extends Throwable{
     private int code;
     private String error;
     public ResultException(String error){

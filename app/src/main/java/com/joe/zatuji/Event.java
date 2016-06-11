@@ -8,4 +8,6 @@ public class Event {
     public static final String LOGIN_SUCCESS="login_success";//登录成功事件
     public static final String LOGIN_OUT="login_out";//退出
     public static final String USER_UPDATE="user_update";//用户资料更新
+    public static final String ADD_TAG = "add_tag";//添加图集
+
 }

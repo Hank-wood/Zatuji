@@ -34,7 +34,6 @@ public class FavoriteTagAdapter extends RecyclerView.Adapter<DataViewHolder> {
     }
 
 
-
     public void refreshData(ArrayList<FavoriteTag> tags, boolean isMore){
         if(isMore){
             this.mTags.addAll(tags);

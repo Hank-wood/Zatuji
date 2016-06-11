@@ -1,7 +1,6 @@
 package com.joe.zatuji.api;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.BaseListBean;
@@ -12,12 +11,10 @@ import com.joe.zatuji.data.bean.UpdateBean;
 import com.joe.zatuji.data.bean.User;
 
 
-import java.util.List;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -96,15 +93,17 @@ public interface BmobService {
     /**查询*/
     @GET("1/classes/{TableName}")
     Call<ResponseBody> query(@Path("TableName") String table,@Query("where") JsonElement query,@Query("order") String order,@Query("limit") int limit,@Query("skip")int skip);
+    @GET("1/classes/{TableName}")
+    Call<ResponseBody> query(@Path("TableName") String table,@Query("where") JsonElement query,@Query("order") String order);
 
     @POST("1/classes/{TableName}")
-    Call<ResponseBody> add(@Path("TableName") String table,@Body JsonElement body);
+    Observable<BaseBmobBean> add(@Path("TableName") String table,@Body JsonElement body);
 
     @PUT("1/classes/{TableName}/{objectId}")
-    Call<ResponseBody> update(@Path("TableName") String table,@Path("objectId") String objectId,@Body JsonElement body);
+    Observable<BaseBmobBean> update(@Path("TableName") String table,@Path("objectId") String objectId,@Body JsonElement body);
 
     @DELETE("1/classes/{TableName}/{objectId}")
-    Call<ResponseBody> delete(@Path("TableName") String table,@Path("objectId") String objectId);
+    Observable<BmobResponseBean> delete(@Path("TableName") String table, @Path("objectId") String objectId);
 
     @POST("1/batch")
     Call<ResponseBody> multi(@Body JsonElement jsonElement);

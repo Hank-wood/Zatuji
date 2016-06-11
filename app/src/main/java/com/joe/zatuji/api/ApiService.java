@@ -3,9 +3,12 @@ package com.joe.zatuji.api;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.PicData;
 
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -39,4 +42,8 @@ public interface ApiService {
     @GET("search/")
     Observable<DataBean> search(@Query("page") int page,@Query("per_page") String per,@Query("q") String query);
 
+    /**下载*/
+    @Streaming
+    @GET
+    Observable<ResponseBody> download(@Url String url);
 }

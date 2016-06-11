@@ -118,18 +118,18 @@ public class PicKathy {
     }
 
     private void saveMyFavoriteToCloud(final MyFavorite favorite, final FavoriteTag tag) {
-        favorite.save(context, new SaveListener() {
-            @Override
-            public void onSuccess() {
-                LogUtils.d("创建成功 开始关联");
-                setRelateToTag(favorite,tag);
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                listener.onFavoriteError("收藏失败");
-            }
-        });
+//        favorite.save(context, new SaveListener() {
+//            @Override
+//            public void onSuccess() {
+//                LogUtils.d("创建成功 开始关联");
+//                setRelateToTag(favorite,tag);
+//            }
+//
+//            @Override
+//            public void onFailure(int i, String s) {
+//                listener.onFavoriteError("收藏失败");
+//            }
+//        });
     }
 
     //关联数据
@@ -137,20 +137,20 @@ public class PicKathy {
         BmobRelation relation = new BmobRelation();
         relation.add(favorite);
 //        if(TextUtils.isEmpty(tag.getFront())) tag.setFront(favorite.getImg_url());
-        tag.increment("number");
+//        tag.increment("number");
 //        tag.setImg(relation);
-        tag.update(context, new UpdateListener() {
-            @Override
-            public void onSuccess() {
-                LogUtils.d("关联成功");
-                listener.onFavoriteSuccess();
-            }
+//        tag.update(context, new UpdateListener() {
+//            @Override
+//            public void onSuccess() {
+//                LogUtils.d("关联成功");
+//                listener.onFavoriteSuccess();
+//            }
 
-            @Override
-            public void onFailure(int i, String s) {
-                listener.onFavoriteError("收藏失败");
-            }
-        });
+//            @Override
+//            public void onFailure(int i, String s) {
+//                listener.onFavoriteError("收藏失败");
+//            }
+//        });
     }
 
     //保存至数据库
@@ -200,21 +200,21 @@ public class PicKathy {
     }
 
     private void updateFavorite(MyFavorite favorite, final FavoriteTag tag) {
-        tag.increment("number");
-//        if(TextUtils.isEmpty(tag.getFront())) tag.setFront(favorite.getImg_url());
-//        LogUtils.d("number:"+tag.getNumber()+":img:"+tag.getFront());
-        favorite.save(context, new SaveListener() {
-            @Override
-            public void onSuccess() {
-                listener.onFavoriteSuccess();
-                tag.update(context);
-            }
+//        tag.increment("number");
+////        if(TextUtils.isEmpty(tag.getFront())) tag.setFront(favorite.getImg_url());
+////        LogUtils.d("number:"+tag.getNumber()+":img:"+tag.getFront());
+//        favorite.save(context, new SaveListener() {
+//            @Override
+//            public void onSuccess() {
+//                listener.onFavoriteSuccess();
+//                tag.update(context);
+//            }
 
-            @Override
-            public void onFailure(int i, String s) {
-                listener.onFavoriteError("收藏失败");
-            }
-        });
+//            @Override
+//            public void onFailure(int i, String s) {
+//                listener.onFavoriteError("收藏失败");
+//            }
+//        });
     }
 
     private boolean alreadyLiked(String img) {

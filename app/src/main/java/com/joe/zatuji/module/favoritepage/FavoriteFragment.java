@@ -4,13 +4,15 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.View;
+import android.widget.TextView;
 
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.module.favoritepage.adapter.FavoriteTagAdapter;
 import com.joe.zatuji.data.bean.FavoriteTag;
-import com.joe.zatuji.module.favoritepage.presenter.FavoritePresenter;
 import com.joe.zatuji.view.CreateTagDialog;
 import com.joe.zatuji.module.gallerypage.GalleryActivity;
 import com.joe.zatuji.view.LockTagDialog;
@@ -23,15 +25,16 @@ import java.util.ArrayList;
 /**
  * Created by Joe on 2016/4/18.
  */
-public class FavoriteFragment extends BaseFragment implements TagView{
+public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements TagView{
     private SwipeRefreshLayout mRefreshLayout;
 
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
-//    private FavoritePresenter mPresenter;
     private HomeActivity activity;
     private FavoriteTagAdapter mAdapter;
     private static FavoriteFragment mInstance;
+    private TextView mEmptyView;
+
     public static synchronized FavoriteFragment getInstance(){
         if(mInstance==null){
             mInstance = new FavoriteFragment();
@@ -46,12 +49,14 @@ public class FavoriteFragment extends BaseFragment implements TagView{
     @Override
     protected void initPresenter() {
         activity = (HomeActivity) mActivity;
-//        mPresenter = new FavoritePresenter(this, activity,myApplication);
-//        mPresenter.getFavoriteTag();
+        mPresenter.setView(this);
+        showLoading("获取图集...");
+        mPresenter.getFavoriteTag();
     }
 
     @Override
     protected void initView() {
+        mEmptyView = (TextView) findView(R.id.tv_empty);
         mRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swipe_fragment_base);
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.recycler_fragment_base);
         mAdapter = new FavoriteTagAdapter(mActivity);
@@ -64,7 +69,7 @@ public class FavoriteFragment extends BaseFragment implements TagView{
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                mPresenter.getFavoriteTag();
+                mPresenter.getFavoriteTag();
             }
         });
         //点击item
@@ -104,7 +109,7 @@ public class FavoriteFragment extends BaseFragment implements TagView{
     //调到图集详情页
     private void jumpFavoriteDetail(FavoriteTag tag) {
         Intent i = new Intent(mActivity, GalleryActivity.class);
-        i.putExtra(Constant.GALLERY_TAG,tag);
+//        i.putExtra(Constant.GALLERY_TAG,tag);
         mActivity.startActivity(i);
     }
 
@@ -123,11 +128,15 @@ public class FavoriteFragment extends BaseFragment implements TagView{
     }
 
     public void showCreateTag() {
+        if(!MyApplication.isLogin()){
+            showToastMsg("请先登录噢～");
+            return;
+        }
         CreateTagDialog dialog = new CreateTagDialog(mActivity);
         dialog.setOnCreateCallBack(new CreateTagDialog.OnCreateCallBack() {
             @Override
             public void OnCreate(FavoriteTag tag) {
-//                mPresenter.createTag(tag);
+                mPresenter.createTag(tag);
             }
         });
         dialog.show();
@@ -136,24 +145,46 @@ public class FavoriteFragment extends BaseFragment implements TagView{
 
     @Override
     public void showTag(ArrayList<FavoriteTag> tags) {
+        doneLoading();
+        showEmpty(false);
         mRefreshLayout.setRefreshing(false);
         mAdapter.refreshData(tags,false);
     }
 
     @Override
-    public void showErrorMsg(String msg) {
+    public void showNotLogin() {
+        doneLoading();
         mRefreshLayout.setRefreshing(false);
-        KToast.show(msg);
+        mAdapter.refreshData(new ArrayList<FavoriteTag>(),false);
+        mEmptyView.setText("登录后可查看图集噢～");
+        showEmpty(true);
     }
 
     @Override
-    public void showNotSign() {
+    public void showNoTag() {
+        doneLoading();
         mRefreshLayout.setRefreshing(false);
         mAdapter.refreshData(new ArrayList<FavoriteTag>(),false);
+        mEmptyView.setText("还没有图集噢～赶快收藏吧！");
+        showEmpty(true);
     }
+
+    private void showEmpty(boolean b) {
+        mEmptyView.setVisibility(b? View.VISIBLE:View.GONE);
+    }
+
+
 
     @Override
     public void addTag(ArrayList<FavoriteTag> tags) {
+        showEmpty(false);
         mAdapter.refreshData(tags,true);
+    }
+
+    @Override
+    public void showToastMsg(String msg) {
+        mRefreshLayout.setRefreshing(false);
+        doneLoading();
+        KToast.show(msg);
     }
 }

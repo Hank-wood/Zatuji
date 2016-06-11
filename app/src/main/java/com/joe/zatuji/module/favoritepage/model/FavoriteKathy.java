@@ -50,19 +50,19 @@ public class FavoriteKathy {
     }
 
     public void createTag(final FavoriteTag tag, final User user){
-        tag.save(context, new SaveListener() {
-            @Override
-            public void onSuccess() {
-
-                relateToUser(tag,user);
-
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                listener.onCreateError(s);
-            }
-        });
+//        tag.save(context, new SaveListener() {
+//            @Override
+//            public void onSuccess() {
+//
+//                relateToUser(tag,user);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int i, String s) {
+//                listener.onCreateError(s);
+//            }
+//        });
     }
 
     //将该tag与用户绑定

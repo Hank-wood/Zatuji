@@ -1,5 +1,6 @@
 package com.joe.zatuji.module.favoritepage.view;
 
+import com.joe.zatuji.base.view.BaseView;
 import com.joe.zatuji.data.bean.FavoriteTag;
 
 import java.util.ArrayList;
@@ -7,9 +8,10 @@ import java.util.ArrayList;
 /**
  * Created by Joe on 2016/5/1.
  */
-public interface TagView {
+public interface TagView extends BaseView {
     void showTag(ArrayList<FavoriteTag> tags);
-    void showErrorMsg(String msg);
-    void showNotSign();
+    void showNotLogin();
+    void showNoTag();
     void addTag(ArrayList<FavoriteTag> tags);
+
 }

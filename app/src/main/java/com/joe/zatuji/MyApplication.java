@@ -39,6 +39,7 @@ public class MyApplication extends Application {
         mDefaultTag = new TagBean().tagList.get(SettingHelper.getDefaultTag());
     }
 
+
     private void registerEvent() {
         mRxManager = new RxJavaManager();
         mRxManager.subscribe(Event.LOGIN_SUCCESS, new Action1<Object>() {

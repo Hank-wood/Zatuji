@@ -37,7 +37,10 @@ public abstract class BmobSubscriber<T> extends Subscriber<T> {
                 }
             }
             //onError(e);
-        } else {
+        } else if(e instanceof ResultException){
+            onError(e);
+        }
+        else {
             onError(new ResultException("网络异常"));
         }
     }
