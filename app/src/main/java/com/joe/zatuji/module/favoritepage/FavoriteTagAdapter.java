@@ -1,7 +1,8 @@
-package com.joe.zatuji.module.favoritepage.adapter;
+package com.joe.zatuji.module.favoritepage;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.adapter.DataViewHolder;
 import com.joe.zatuji.data.bean.FavoriteTag;
+import com.joe.zatuji.helper.ImageHelper;
 
 import org.xutils.x;
 
@@ -49,7 +51,12 @@ public class FavoriteTagAdapter extends RecyclerView.Adapter<DataViewHolder> {
         boolean isCreate=false;
         FavoriteTag tag = mTags.get(position);
         holder.tvDesc.setText(tag.tag+"("+tag.number+")");
-        x.image().bind(holder.ivPic,tag.front);
+        if(!TextUtils.isEmpty(tag.front)){
+            ImageHelper.showSmall(holder.ivPic,tag.front);
+        }else{
+            holder.ivPic.setImageResource(R.mipmap.ic_launcher);
+        }
+
         //替换为imageloader
         final int pos=position;
         final FavoriteTag finalTag = tag;

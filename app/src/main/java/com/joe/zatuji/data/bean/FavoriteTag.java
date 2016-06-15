@@ -19,5 +19,6 @@ public class FavoriteTag extends BaseBmobBean{
     public Pointer belong;//属于哪个用户
     public Relation img;//该标签拥有的img
     public String front;//封面
+    public String user_id;
 
 }

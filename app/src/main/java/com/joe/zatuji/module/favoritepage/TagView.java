@@ -1,4 +1,4 @@
-package com.joe.zatuji.module.favoritepage.view;
+package com.joe.zatuji.module.favoritepage;
 
 import com.joe.zatuji.base.view.BaseView;
 import com.joe.zatuji.data.bean.FavoriteTag;
@@ -13,5 +13,5 @@ public interface TagView extends BaseView {
     void showNotLogin();
     void showNoTag();
     void addTag(ArrayList<FavoriteTag> tags);
-
+    void setAddedNew(boolean isAdded);
 }

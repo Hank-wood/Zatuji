@@ -88,7 +88,7 @@ public class HomePresenter extends BaseStaggeredPresenter<BaseStaggeredView, Hom
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        LogUtils.d("error in api request:" + Thread.currentThread().getName());
+                        LogUtils.d("error in api request:" + throwable.getMessage());
                         mView.showToastMsg(SConstant.NET_NO_GOOD);
                     }
                 }).onErrorReturn(new Func1<Throwable, DataBean>() {

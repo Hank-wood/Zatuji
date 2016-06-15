@@ -31,7 +31,6 @@ public class HomeModel extends BaseStaggeredModel {
     }
 
     public Observable<DataBean> getCacheData(final String limit, final int offset){
-
         return Observable.create(new Observable.OnSubscribe<DataBean>() {
             @Override
             public void call(Subscriber<? super DataBean> subscriber) {

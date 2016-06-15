@@ -7,6 +7,5 @@ import java.io.Serializable;
  * Created by Joe on 2016/4/14.
  */
 public class BaseBean implements Serializable{
-    public int err;
     public String msg;
 }

@@ -6,6 +6,7 @@
     android:layout_width="320dp"
     android:layout_height="wrap_content">
     <TextView
+        android:id="@+id/tv_dialog_create_title"
         android:layout_marginTop="20dp"
         android:text="创建图集"
         android:textSize="20sp"

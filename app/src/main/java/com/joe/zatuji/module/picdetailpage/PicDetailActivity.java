@@ -141,6 +141,9 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                     mPresenter.createTags(tag,mMyFavoriteImg);
                     showLoading("收集到:"+tag.tag);
                 }
+
+                @Override
+                public void onUpdate(FavoriteTag tag) {}
             });
             dialog.show();
         }else{

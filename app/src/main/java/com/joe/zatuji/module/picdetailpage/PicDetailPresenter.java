@@ -108,19 +108,11 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
                     mView.showToastMsg("已经收藏过啦！");
                 }else{
                     mView.showToastMsg("收藏成功！");
+                    mRxJavaManager.post(Event.ADD_FAVORITE,baseBmobBean);
                 }
             }
         }));
     }
-//    public void saveToFavorite(String picUrl, String desc, int width, int height, FavoriteTag tag){
-//        loadingView.showLoading();
-//        User user = MyApplication.mUser;
-//        if(user == null ||PrefUtils.getBoolean(context,Constant.IS_EXIT,false)){
-//            KToast.show("请先登录账号");
-//            loadingView.doneLoading();
-//            return;
-//        }
-//    }
     public void saveToPhone(String picUrl){
         if(mModel.alreadySaved(picUrl)){
             mView.showToastMsg("已经保存过咯～");
@@ -140,8 +132,6 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
                 mView.showToastMsg(s);
             }
         }));
-//        loadingView.showLoading();
-//        mKathy.saveToPhone(picUrl);
     }
     public void share(String picUrl){
 

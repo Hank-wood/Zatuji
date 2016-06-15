@@ -202,6 +202,7 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
 
     @Override
     public void showToastMsg(String msg) {
+        doneLoading();
         KToast.show(msg);
     }
 

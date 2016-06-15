@@ -1,12 +1,13 @@
 package com.joe.zatuji.data;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by joe on 16/5/29.
  */
-public  class BaseBmobBean {
+public  class BaseBmobBean extends BaseBean implements Serializable{
     public String objectId;
     public String updatedAt;
     public String createdAt;

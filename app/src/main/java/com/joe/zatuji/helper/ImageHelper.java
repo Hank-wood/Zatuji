@@ -61,6 +61,11 @@ public class ImageHelper {
         }
 
     }
+
+    public static void showSmall(ImageView iv , String fullKey){
+//        LogUtils.d("type:"+type);
+            baseGlide(iv,fullKey).centerCrop().into(iv);
+    }
     /**
      * 展示全屏大图
      */

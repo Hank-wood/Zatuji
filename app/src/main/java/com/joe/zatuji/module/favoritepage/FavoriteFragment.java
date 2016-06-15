@@ -7,17 +7,17 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.TextView;
 
+import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
-import com.joe.zatuji.module.favoritepage.adapter.FavoriteTagAdapter;
 import com.joe.zatuji.data.bean.FavoriteTag;
+import com.joe.zatuji.utils.LogUtils;
+import com.joe.zatuji.view.BottomMenuDialog;
 import com.joe.zatuji.view.CreateTagDialog;
 import com.joe.zatuji.module.gallerypage.GalleryActivity;
 import com.joe.zatuji.view.LockTagDialog;
-import com.joe.zatuji.module.favoritepage.view.TagView;
-import com.joe.zatuji.Constant;
 import com.joe.zatuji.utils.KToast;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
     private FavoriteTagAdapter mAdapter;
     private static FavoriteFragment mInstance;
     private TextView mEmptyView;
-
+    private BottomMenuDialog mEditDialog;
     public static synchronized FavoriteFragment getInstance(){
         if(mInstance==null){
             mInstance = new FavoriteFragment();
@@ -88,7 +88,7 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
         mAdapter.setOnItemLongClickListener(new FavoriteTagAdapter.ItemLongClickListener() {
             @Override
             public void onItemLongClickListener(int position, FavoriteTag tag) {
-
+                setEditDialog(tag);
             }
         });
 
@@ -106,10 +106,11 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
 
 
     }
+
     //调到图集详情页
     private void jumpFavoriteDetail(FavoriteTag tag) {
         Intent i = new Intent(mActivity, GalleryActivity.class);
-//        i.putExtra(Constant.GALLERY_TAG,tag);
+        i.putExtra(Constant.GALLERY_TAG,tag);
         mActivity.startActivity(i);
     }
 
@@ -126,17 +127,39 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
         });
         dialog.show();
     }
+    /**显示编辑的对话框*/
+    private void setEditDialog(FavoriteTag tag){
+        if(mEditDialog==null)mEditDialog = new BottomMenuDialog(mActivity);
+        mEditDialog.setTag(tag);
+        mEditDialog.show();
+        mEditDialog.setOnMenuClickListener(new BottomMenuDialog.OnMenuClickListener() {
+            @Override
+            public void onEdit(FavoriteTag tag) {
+                LogUtils.d("tag:"+tag.tag);
+                showCreateTag(tag);
+            }
 
-    public void showCreateTag() {
+            @Override
+            public void onDelete(FavoriteTag tag) {
+            }
+        });
+    }
+    public void showCreateTag(FavoriteTag tag) {
         if(!MyApplication.isLogin()){
             showToastMsg("请先登录噢～");
             return;
         }
         CreateTagDialog dialog = new CreateTagDialog(mActivity);
+        if(tag!=null) dialog.showInfo(tag);
         dialog.setOnCreateCallBack(new CreateTagDialog.OnCreateCallBack() {
             @Override
             public void OnCreate(FavoriteTag tag) {
                 mPresenter.createTag(tag);
+            }
+
+            @Override
+            public void onUpdate(FavoriteTag tag) {
+                LogUtils.d("update:"+tag.objectId);
             }
         });
         dialog.show();
@@ -173,8 +196,16 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
         mEmptyView.setVisibility(b? View.VISIBLE:View.GONE);
     }
 
+    private boolean isAddedNew = false;//是否有变动
+    public void update(){
+        if(isAddedNew) mPresenter.getFavoriteTag();
+        isAddedNew = false;
+    }
 
-
+    @Override
+    public void setAddedNew(boolean isAdded) {
+        isAddedNew = isAdded;
+    }
     @Override
     public void addTag(ArrayList<FavoriteTag> tags) {
         showEmpty(false);

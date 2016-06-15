@@ -133,7 +133,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add://新建图集
-                favoriteFragment.showCreateTag();
+                favoriteFragment.showCreateTag(null);
                 break;
             case R.id.action_change_tag://选择不同标签
                 if(mTagMenu==null) mTagMenu = new DropMenuDialog(mActivity);
@@ -195,6 +195,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
                 changeFragment(favoriteFragment,TAG_FAVORITE_FRAG);
                 setCurrentTitle(2);
                 currentPos=2;
+                favoriteFragment.update();
                 break;
             case R.id.action_setting:
                 changeFragment(homeSettingFragment,TAG_SETTING_FRAG);

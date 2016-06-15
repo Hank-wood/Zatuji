@@ -4,13 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.data.bean.DataBean;
-import com.joe.zatuji.data.bean.PicData;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -22,7 +18,7 @@ import java.util.List;
  * 缓存一次浏览数据，第二次缓存时清空上一次缓存数据
  * Created by joe on 16/5/21.
  */
-public class CacheDao extends BaseDao{
+public class FavoriteImgDao extends BaseDao{
     //表字段
     public static final String PIN_ID = "pin_id";
     public static final String KEY = "key";//the url of pics
@@ -33,10 +29,10 @@ public class CacheDao extends BaseDao{
     public static final String CREATE = "create_date";
     public static final String TYPE ="type";
 
-    public CacheDao(Context context) {
+    public FavoriteImgDao(Context context) {
         super(context);
     }
-    public CacheDao(){
+    public FavoriteImgDao(){
         super(MyApplication.getInstance());
     }
     @Override

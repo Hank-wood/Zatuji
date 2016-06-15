@@ -77,9 +77,7 @@ public class WelcomeActivity extends BaseActivity {
     private void toHome(){
         end = System.currentTimeMillis();
         duration = end - start;
-        LogUtils.d("间隔："+duration);
         if(duration<2000 ) duration=2000-duration;
-        LogUtils.d("计算后间隔："+duration);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

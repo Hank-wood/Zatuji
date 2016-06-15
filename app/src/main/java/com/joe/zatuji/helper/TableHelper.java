@@ -51,7 +51,7 @@ public class TableHelper<T> {
                 T t = null;
                 try {
                     ResponseBody body = call.execute().body();
-                    t= (T) GsonHelper.fromJson(body.string(),t.getClass());
+                    t= (T) GsonHelper.fromJson(body.string(),clazz);
                 } catch (Exception e) {
                     LogUtils.d(e.getMessage());
                     e.printStackTrace();
@@ -67,7 +67,7 @@ public class TableHelper<T> {
         });
     }
 
-    public Observable<T> query(final String table, final JsonElement where, final Class clazz){
+    public Observable<T> query(final String table, final JsonElement where, final Type clazz){
         return query(table,where,clazz,"",0,0);
     }
 
