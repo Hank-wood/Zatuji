@@ -12,6 +12,7 @@ import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.data.BaseListBean;
 import com.joe.zatuji.data.bean.UpdateBean;
 import com.joe.zatuji.utils.KToast;
+import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.NetWorkUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
@@ -30,37 +31,21 @@ public class UpdateHelper {
         this.mActivity = activity;
         mRxJavaManger = new RxJavaManager();
     }
-    public void autoCheckUpdate(){
-        if(!SettingHelper.isCheckUpdate()) return;
+    /**是否允许自动更新*/
+    public boolean autoCheckUpdate(){
+        if(!SettingHelper.isCheckUpdate()) return false;
         boolean isWifi = NetWorkUtils.getNetType(MyApplication.getInstance()) == NetWorkUtils.TYPE_WIFI;
-        if(!SettingHelper.isCheckUpdateWithNoWifi()&&!isWifi) return;//如果不允许无wifi更新且当前不是wifi
-        checkUpdate(false);
+        if(!SettingHelper.isCheckUpdateWithNoWifi()&&!isWifi) return false;//如果不允许无wifi更新且当前不是wifi
+        return true;
     }
-
-    private void checkUpdate(boolean auto) {
+    /**检查是否有更新*/
+    private void checkUpdate(BmobSubscriber<BaseListBean<UpdateBean>> subscriber) {
         Api.getInstance()
                 .mBmobService
                 .checkUpdate()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BmobSubscriber<BaseListBean<UpdateBean>>() {
-                    @Override
-                    public void onError(ResultException e) {
-                        KToast.show("检查更新出错啦");
-                    }
-                    @Override
-                    public void onNext(BaseListBean<UpdateBean>results) {
-                        if(results.results.size()>0){
-                            UpdateBean updateBean = results.results.get(0);
-                            if(updateBean.isforce){
-                                startUpdate(updateBean.path);
-                            }else if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
-                                showUpdate(updateBean);
-                            }
-
-                        }
-                    }
-                });
+                .subscribe(subscriber);
     }
 
     private void startUpdate(UpdateBean.PathBean file) {
@@ -72,5 +57,29 @@ public class UpdateHelper {
     }
     public void remove(){
         if(mRxJavaManger!=null)mRxJavaManger.remove();
+    }
+
+    public abstract static class  UpdateSubscribe extends BmobSubscriber<BaseListBean<UpdateBean>>{
+        @Override
+        public void onError(ResultException e){
+            LogUtils.e("update:"+e.getMessage());
+            KToast.show("检查更新失败");
+        };
+
+        @Override
+        public void onNext(BaseListBean<UpdateBean> results) {
+            if(results.results.size()>0){
+                UpdateBean updateBean = results.results.get(0);
+                if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
+                    onUpdate(updateBean);//回调更新
+                }else{
+                    KToast.show("已是最新版本哦");
+                }
+
+            }
+        }
+
+        public abstract void onUpdate(UpdateBean updateBean);
+
     }
 }
