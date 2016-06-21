@@ -1,9 +1,15 @@
 package com.joe.zatuji.utils;
 
 
+import android.os.Environment;
+
+import com.joe.zatuji.Constant;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import okhttp3.MediaType;
@@ -35,5 +41,22 @@ public class FileUtils {
     public static RequestBody toRequestBody(File value) {
         RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), value);
         return body;
+    }
+
+    public static void writeFile(byte[] buffer,String filePath){
+        FileOutputStream fileOutputStream=null;
+        try {
+            fileOutputStream = new FileOutputStream(new File(filePath));
+            fileOutputStream.write(buffer);
+            fileOutputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

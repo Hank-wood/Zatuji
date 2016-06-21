@@ -5,6 +5,8 @@ package com.joe.zatuji.api;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.helper.UserHelper;
+import com.joe.zatuji.helper.download.HttpClientHelper;
+import com.joe.zatuji.helper.download.ProgressCallback;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
@@ -132,5 +134,36 @@ public class Api {
             }
         };
         mBmobService = getRetrofit(mBmobInterceptor).create(BmobService.class);
+    }
+
+/**download*/
+    private static Retrofit.Builder builder = new Retrofit.Builder()
+            .baseUrl("https://api.bmob.cn/")
+            .addConverterFactory(GsonConverterFactory.create());
+
+    public static <T> T createService(Class<T> tClass){
+        return builder.build().create(tClass);
+    }
+
+
+    /**
+     * 创建带响应进度(下载进度)回调的service
+     */
+    public static <T> T createDownloadService(Class<T> tClass, ProgressCallback.ProgressDownloadListener listener){
+        return builder
+                .client(HttpClientHelper.addProgressResponseListener(listener))
+                .build()
+                .create(tClass);
+    }
+
+
+    /**
+     * 创建带请求体进度(上传进度)回调的service
+     */
+    public static <T> T createUploadService(Class<T> tClass, ProgressCallback.ProgressUploadListener listener){
+        return builder
+                .client(HttpClientHelper.addProgressRequestListener(listener))
+                .build()
+                .create(tClass);
     }
 }

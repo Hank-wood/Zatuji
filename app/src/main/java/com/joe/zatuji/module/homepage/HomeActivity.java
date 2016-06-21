@@ -19,6 +19,7 @@ import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.bean.TagBean;
+import com.joe.zatuji.helper.UpdateHelper;
 import com.joe.zatuji.module.discoverpage.DiscoverFragment;
 import com.joe.zatuji.module.favoritepage.FavoriteFragment;
 import com.joe.zatuji.utils.KToast;
@@ -56,6 +57,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         super.onCreate(savedInstanceState);
         Bmob.initialize(this, Constant.BMOB_KEY);
         BmobUpdateAgent.update(mActivity);
+        new UpdateHelper(mActivity).checkUpdate();
     }
 
 
