@@ -25,7 +25,6 @@ public abstract class BaseDao {
         this.context = context;
         mHelper = new BaseOpenHelper(context);
         createSql();
-        LogUtils.d(createSql);
     }
     protected void createTable(){
         mHelper.getWritableDatabase().execSQL(createSql);

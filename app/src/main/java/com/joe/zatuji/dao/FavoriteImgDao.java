@@ -64,7 +64,6 @@ public class FavoriteImgDao extends BaseDao{
         if(cursor!=null) {
             while (cursor.moveToNext()) {
                 DataBean.PicBean picBean = new DataBean.PicBean();
-                LogUtils.d("cache tag:"+cursor.getString(cursor.getColumnIndex(TAG)));
                 picBean.file = new DataBean.PicBean.FileBean();
                 picBean.pin_id = cursor.getString(cursor.getColumnIndex(PIN_ID));
                 picBean.file.key = cursor.getString(cursor.getColumnIndex(KEY));
