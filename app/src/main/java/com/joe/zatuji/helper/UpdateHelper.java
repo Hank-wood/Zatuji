@@ -32,12 +32,16 @@ public class UpdateHelper {
         this.mActivity = activity;
         mRxJavaManger = new RxJavaManager();
     }
-    /**是否允许自动更新*/
-    public boolean autoCheckUpdate(){
-        if(!SettingHelper.isCheckUpdate()) return false;
+    /**自动更新*/
+    public void autoCheckUpdate(){
+        if(!SettingHelper.isCheckUpdate()) return;
         boolean isWifi = NetWorkUtils.getNetType(MyApplication.getInstance()) == NetWorkUtils.TYPE_WIFI;
-        if(!SettingHelper.isCheckUpdateWithNoWifi()&&!isWifi) return false;//如果不允许无wifi更新且当前不是wifi
-        return true;
+        if(!SettingHelper.isCheckUpdateWithNoWifi()&&!isWifi) return;//如果不允许无wifi更新且当前不是wifi
+        checkUpdate(new UpdateSubscribe() {
+            @Override
+            public void onUpdate(UpdateBean updateBean) {
+            }
+        });
     }
     /**检查是否有更新*/
     public void checkUpdate(BmobSubscriber<BaseListBean<UpdateBean>> subscriber) {
