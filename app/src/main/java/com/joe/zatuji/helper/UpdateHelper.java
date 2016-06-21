@@ -4,34 +4,19 @@ import android.app.Activity;
 import android.app.IntentService;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.Environment;
-import android.util.Log;
 
-import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.api.Api;
-import com.joe.zatuji.api.DownloadService;
 import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.data.BaseListBean;
 import com.joe.zatuji.data.bean.UpdateBean;
-import com.joe.zatuji.helper.download.ProgressCallback;
-import com.joe.zatuji.utils.FileUtils;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.NetWorkUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -45,45 +30,25 @@ public class UpdateHelper {
         this.mActivity = activity;
         mRxJavaManger = new RxJavaManager();
     }
-    public void autoCheckUpdate(){
-        if(!SettingHelper.isCheckUpdate()) return;
+    /**是否允许自动更新*/
+    public boolean autoCheckUpdate(){
+        if(!SettingHelper.isCheckUpdate()) return false;
         boolean isWifi = NetWorkUtils.getNetType(MyApplication.getInstance()) == NetWorkUtils.TYPE_WIFI;
-        if(!SettingHelper.isCheckUpdateWithNoWifi()&&!isWifi) return;//如果不允许无wifi更新且当前不是wifi
-        checkUpdate();
+        if(!SettingHelper.isCheckUpdateWithNoWifi()&&!isWifi) return false;//如果不允许无wifi更新且当前不是wifi
+        return true;
     }
-
-    public void checkUpdate() {
+    /**检查是否有更新*/
+    private void checkUpdate(BmobSubscriber<BaseListBean<UpdateBean>> subscriber) {
         Api.getInstance()
                 .mBmobService
                 .checkUpdate()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BmobSubscriber<BaseListBean<UpdateBean>>() {
-                    @Override
-                    public void onError(ResultException e) {
-                        KToast.show("检查更新出错啦");
-                    }
-                    @Override
-                    public void onNext(BaseListBean<UpdateBean>results) {
-                        if(results.results.size()>0){
-                            UpdateBean updateBean = results.results.get(0);
-                            startUpdate(updateBean.path);
-//                            if(updateBean.isforce){
-//                                startUpdate(updateBean.path);
-//                            }else if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
-//                                showUpdate(updateBean);
-//                            }
-
-                        }
-                    }
-                });
+                .subscribe(subscriber);
     }
 
     private void startUpdate(UpdateBean.PathBean file) {
-        com.joe.zatuji.helper.download.DownloadService downloadService = new com.joe.zatuji.helper.download.DownloadService("update");
-////        Intent intent = new Intent(this,DownloadService.class);
-//        intent.putExtra("url",file.url);
-//        mActivity.startService(intent);
+
     }
 
     public void showUpdate(UpdateBean updateBean){
@@ -93,5 +58,27 @@ public class UpdateHelper {
         if(mRxJavaManger!=null)mRxJavaManger.remove();
     }
 
+    public abstract static class  UpdateSubscribe extends BmobSubscriber<BaseListBean<UpdateBean>>{
+        @Override
+        public void onError(ResultException e){
+            LogUtils.e("update:"+e.getMessage());
+            KToast.show("检查更新失败");
+        };
 
+        @Override
+        public void onNext(BaseListBean<UpdateBean> results) {
+            if(results.results.size()>0){
+                UpdateBean updateBean = results.results.get(0);
+                if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
+                    onUpdate(updateBean);//回调更新
+                }else{
+                    KToast.show("已是最新版本哦");
+                }
+
+            }
+        }
+
+        public abstract void onUpdate(UpdateBean updateBean);
+
+    }
 }
