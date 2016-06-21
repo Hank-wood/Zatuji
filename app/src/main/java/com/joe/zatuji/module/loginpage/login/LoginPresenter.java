@@ -15,7 +15,6 @@ import com.joe.zatuji.helper.UserHelper;
 import com.joe.zatuji.module.loginpage.LoginAndRegisterModel;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
-import com.nostra13.universalimageloader.utils.L;
 
 import java.util.List;
 

@@ -38,6 +38,7 @@ public class CacheDao extends BaseDao{
     }
     public CacheDao(){
         super(MyApplication.getInstance());
+        if(!tabbleIsExist(TABLE_PIC_CACHES)) createTable();
     }
     @Override
     protected String createSql() {
@@ -53,7 +54,6 @@ public class CacheDao extends BaseDao{
                 TYPE+" text,"+
                 CREATE+" datetime"+
                 ")";
-        createTable();
         return createSql;
     }
 
@@ -89,7 +89,9 @@ public class CacheDao extends BaseDao{
      * params picBeanList
      */
     public void intoCache(List<DataBean.PicBean> picDataList,String tag){
+        LogUtils.d("intoCache");
         SQLiteDatabase db = mHelper.getWritableDatabase();
+        LogUtils.d("getDatabase");
         Date date = new Date(System.currentTimeMillis());
         ContentValues values = new ContentValues();
         for (DataBean.PicBean pic:picDataList) {

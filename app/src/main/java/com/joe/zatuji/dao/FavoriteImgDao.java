@@ -34,6 +34,7 @@ public class FavoriteImgDao extends BaseDao{
     }
     public FavoriteImgDao(){
         super(MyApplication.getInstance());
+        if(!tabbleIsExist(TABLE_PIC_CACHES)) createTable();
     }
     @Override
     protected String createSql() {
@@ -49,7 +50,6 @@ public class FavoriteImgDao extends BaseDao{
                 TYPE+" text,"+
                 CREATE+" datetime"+
                 ")";
-        createTable();
         return createSql;
     }
 

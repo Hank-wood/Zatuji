@@ -18,6 +18,9 @@ import retrofit2.Response;
  * Created by joe on 16/6/21.
  */
 public class DownloadService extends IntentService {
+    public DownloadService() {
+        super("download");
+    }
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *

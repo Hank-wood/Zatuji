@@ -74,6 +74,9 @@
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
+
+        <service android:name=".helper.download.DownloadService"
+            android:exported="false"/>
     </application>
 
 </manifest>

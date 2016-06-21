@@ -11,7 +11,9 @@ import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.data.BaseListBean;
 import com.joe.zatuji.data.bean.UpdateBean;
+import com.joe.zatuji.helper.download.DownloadService;
 import com.joe.zatuji.utils.KToast;
+import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.NetWorkUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
@@ -38,7 +40,7 @@ public class UpdateHelper {
         return true;
     }
     /**检查是否有更新*/
-    private void checkUpdate(BmobSubscriber<BaseListBean<UpdateBean>> subscriber) {
+    public void checkUpdate(BmobSubscriber<BaseListBean<UpdateBean>> subscriber) {
         Api.getInstance()
                 .mBmobService
                 .checkUpdate()
@@ -47,8 +49,10 @@ public class UpdateHelper {
                 .subscribe(subscriber);
     }
 
-    private void startUpdate(UpdateBean.PathBean file) {
-
+    public void startUpdate(UpdateBean.PathBean file) {
+        Intent intent = new Intent(mActivity, DownloadService.class);
+        intent.putExtra("url",file.url);
+        mActivity.startService(intent);
     }
 
     public void showUpdate(UpdateBean updateBean){
@@ -69,11 +73,12 @@ public class UpdateHelper {
         public void onNext(BaseListBean<UpdateBean> results) {
             if(results.results.size()>0){
                 UpdateBean updateBean = results.results.get(0);
-                if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
-                    onUpdate(updateBean);//回调更新
-                }else{
-                    KToast.show("已是最新版本哦");
-                }
+                onUpdate(updateBean);
+//                if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
+//                    onUpdate(updateBean);//回调更新
+//                }else{
+//                    KToast.show("已是最新版本哦");
+//                }
 
             }
         }
