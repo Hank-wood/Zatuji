@@ -3,8 +3,6 @@ package com.joe.zatuji.data.bean;
 import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.bean.User;
 
-import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * 用户自定义的标签model

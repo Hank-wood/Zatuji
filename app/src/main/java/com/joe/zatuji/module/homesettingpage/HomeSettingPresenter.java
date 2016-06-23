@@ -1,27 +1,22 @@
 package com.joe.zatuji.module.homesettingpage;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.SystemClock;
 import android.text.format.Formatter;
 
 import com.bumptech.glide.Glide;
-import com.joe.zatuji.Constant;
 import com.joe.zatuji.Event;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.base.BasePresenter;
-import com.joe.zatuji.base.model.BaseModel;
+import com.joe.zatuji.data.bean.UpdateBean;
 import com.joe.zatuji.helper.ImageHelper;
-import com.joe.zatuji.utils.KToast;
+import com.joe.zatuji.helper.UpdateHelper;
 import com.joe.zatuji.utils.LogUtils;
-import com.joe.zatuji.utils.PrefUtils;
 
-import org.xutils.x;
 
 import java.io.File;
 
-import cn.bmob.v3.listener.BmobUpdateListener;
-import cn.bmob.v3.update.BmobUpdateAgent;
-import cn.bmob.v3.update.UpdateResponse;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -47,25 +42,22 @@ public class HomeSettingPresenter extends BasePresenter<HomeSettingView, HomeSet
             }
         });//注册退出事件
     }
-//    private Context context;
-//
-//    public HomeSettingPresenter(Context context) {
-//        this.context = context;
-//    }
-
+    private Context mContext;
+    public void setContext(Context context){
+        this.mContext = context;
+    }
     /**
      * 检查更新
      */
     public void checkUpdate() {
-        BmobUpdateAgent.setUpdateOnlyWifi(false);
-        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
+        final UpdateHelper helper = new UpdateHelper(MyApplication.getInstance());
+        helper.checkUpdate(new UpdateHelper.UpdateSubscribe() {
             @Override
-            public void onUpdateReturned(int i, UpdateResponse updateResponse) {
-                LogUtils.d("status:" + i);
-                if (i != 0) KToast.show("没有更新哦");
+            public void onUpdate(UpdateBean updateBean) {
+                helper.showUpdate(updateBean,mContext);
+                mView.showToastMsg("发现新版本");
             }
         });
-//        BmobUpdateAgent.update(context);
     }
 
     /**

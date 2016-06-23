@@ -11,12 +11,8 @@ import android.widget.TextView;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.data.bean.FavoriteTag;
-import com.joe.zatuji.data.bean.Relation;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.data.bean.User;
 
-import cn.bmob.v3.BmobUser;
-import retrofit2.http.Path;
 
 /**
  * Created by Joe on 2016/5/1.

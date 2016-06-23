@@ -37,6 +37,7 @@ public class HomeHomeSettingFragment extends BaseFragment<HomeSettingPresenter> 
     @Override
     protected void initPresenter() {
         mPresenter.setView(this);
+        mPresenter.setContext(mActivity);
         mPresenter.getCache(mActivity);
     }
 

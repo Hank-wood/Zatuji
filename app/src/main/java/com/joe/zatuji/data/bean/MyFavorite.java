@@ -2,8 +2,6 @@ package com.joe.zatuji.data.bean;
 
 import com.joe.zatuji.data.BaseBmobBean;
 
-import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * 收藏表
@@ -14,8 +12,8 @@ public class MyFavorite extends BaseBmobBean{
     public String desc;//图片描述
     public int width;//
     public int height;//
-    public BmobRelation tag;//用户自己添加的标签，多对关系
-    public BmobRelation user;//收藏该图片的用户
+//    public BmobRelation tag;//用户自己添加的标签，多对关系
+//    public BmobRelation user;//收藏该图片的用户
 
     public String getImg_url() {
         return img_url;
@@ -49,19 +47,19 @@ public class MyFavorite extends BaseBmobBean{
         this.height = height;
     }
 
-    public BmobRelation getTag() {
-        return tag;
-    }
-
-    public void setTag(BmobRelation tag) {
-        this.tag = tag;
-    }
-
-    public BmobRelation getUser() {
-        return user;
-    }
-
-    public void setUser(BmobRelation user) {
-        this.user = user;
-    }
+//    public BmobRelation getTag() {
+//        return tag;
+//    }
+//
+//    public void setTag(BmobRelation tag) {
+//        this.tag = tag;
+//    }
+//
+//    public BmobRelation getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(BmobRelation user) {
+//        this.user = user;
+//    }
 }

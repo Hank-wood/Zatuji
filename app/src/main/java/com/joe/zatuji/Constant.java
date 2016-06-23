@@ -49,6 +49,7 @@ public class Constant {
     public static final String CHECK_UPDATE = "check_update";
     public static final String UPDATE_NO_WIFI = "update_no_wifi";//boolean 无wifi也检查更新
     public static final String NOTIFY_NO_WIFI = "notify_no_wifi";//boolean 无wifi时提醒用户是否加载图片
+    public static final String UPDATE_IGNORE = "update_ignore";//被用户忽略的版本
 
 }
 

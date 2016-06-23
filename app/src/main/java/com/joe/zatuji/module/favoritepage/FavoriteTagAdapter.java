@@ -12,7 +12,6 @@ import com.joe.zatuji.base.adapter.DataViewHolder;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.helper.ImageHelper;
 
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.Random;

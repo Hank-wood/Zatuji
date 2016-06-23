@@ -2,8 +2,6 @@ package com.joe.zatuji.data.bean;
 
 import com.joe.zatuji.data.BaseBmobBean;
 
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * Created by Joe on 2016/4/30.

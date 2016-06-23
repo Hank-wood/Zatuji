@@ -1,8 +1,7 @@
 package com.joe.zatuji.helper;
 
 import android.app.Activity;
-import android.app.IntentService;
-import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.joe.zatuji.MyApplication;
@@ -15,9 +14,7 @@ import com.joe.zatuji.helper.download.DownloadService;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.NetWorkUtils;
-import com.joe.zatuji.utils.PrefUtils;
-
-import java.util.List;
+import com.joe.zatuji.view.UpdateDialog;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -27,9 +24,9 @@ import rx.schedulers.Schedulers;
  */
 public class UpdateHelper {
     private RxJavaManager mRxJavaManger;
-    private Activity mActivity;
-    public UpdateHelper(Activity activity){
-        this.mActivity = activity;
+    private Context mContext;
+    public UpdateHelper(Context context){
+        this.mContext = context;
         mRxJavaManger = new RxJavaManager();
     }
     /**自动更新*/
@@ -40,6 +37,15 @@ public class UpdateHelper {
         checkUpdate(new UpdateSubscribe() {
             @Override
             public void onUpdate(UpdateBean updateBean) {
+                if(updateBean==null){
+                    KToast.show("当前已是最新版～");
+                }else if (updateBean.isforce){
+                    startUpdate(updateBean.path);
+                }else if(updateBean.version_i==SettingHelper.getIgnoreVersion()){
+                    return;
+                }else {
+                    showUpdate(updateBean);
+                }
             }
         });
     }
@@ -54,13 +60,26 @@ public class UpdateHelper {
     }
 
     public void startUpdate(UpdateBean.PathBean file) {
-        Intent intent = new Intent(mActivity, DownloadService.class);
+        Intent intent = new Intent(mContext, DownloadService.class);
         intent.putExtra("url",file.url);
-        mActivity.startService(intent);
+        mContext.startService(intent);
+    }
+    /**显示更新的dialog*/
+    public void showUpdate(UpdateBean updateBean){
+        showUpdate(updateBean,mContext);
     }
 
-    public void showUpdate(UpdateBean updateBean){
-
+    public void showUpdate(UpdateBean updateBean,Context Context){
+        UpdateDialog dialog = new UpdateDialog(Context);
+        dialog.setmUpdateBean(updateBean);
+        dialog.setmOnUpdateListener(new UpdateDialog.onUpdateListener() {
+            @Override
+            public void onUpdate(UpdateBean updateBean) {
+                startUpdate(updateBean.path);
+                KToast.show("开始更新");
+            }
+        });
+        dialog.show();
     }
     public void remove(){
         if(mRxJavaManger!=null)mRxJavaManger.remove();
@@ -81,7 +100,7 @@ public class UpdateHelper {
 //                if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
 //                    onUpdate(updateBean);//回调更新
 //                }else{
-//                    KToast.show("已是最新版本哦");
+//                    onUpdate(null);
 //                }
 
             }

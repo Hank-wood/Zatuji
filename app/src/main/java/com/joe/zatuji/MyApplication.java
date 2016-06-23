@@ -12,9 +12,7 @@ import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 import com.squareup.leakcanary.RefWatcher;
 
-import org.xutils.x;
 
-import cn.bmob.v3.Bmob;
 import rx.functions.Action1;
 
 /**
@@ -31,9 +29,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         myApplication = this;
-        Bmob.initialize(this, Constant.BMOB_KEY);
-        x.Ext.init(this);
-        x.Ext.setDebug(true);
         registerEvent();
         //refWatcher = LeakCanary.install(this);
         mDefaultTag = new TagBean().tagList.get(SettingHelper.getDefaultTag());

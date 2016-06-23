@@ -17,6 +17,12 @@ public class SettingHelper {
         PrefUtils.putBoolean(Constant.CHECK_UPDATE,true);
     }
 
+    public static int getIgnoreVersion(){
+        return PrefUtils.getInt(Constant.UPDATE_IGNORE,-1);
+    }
+    public static void setIgnoreVersion(int version){
+        PrefUtils.putInt(Constant.UPDATE_IGNORE,version);
+    }
     /**是否允许流量更新*/
     public static boolean isCheckUpdateWithNoWifi(){
         return PrefUtils.getBoolean(Constant.UPDATE_NO_WIFI,true);
@@ -32,6 +38,7 @@ public class SettingHelper {
     public static void setNotifyNoWifi(boolean isNotify){
         PrefUtils.putBoolean(Constant.NOTIFY_NO_WIFI,true);
     }
+
 
     /**设置默认标签*/
     public static int getDefaultTag(){

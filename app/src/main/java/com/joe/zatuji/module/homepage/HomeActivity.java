@@ -30,8 +30,6 @@ import com.joe.zatuji.module.homesettingpage.HomeHomeSettingFragment;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.DropMenuDialog;
 
-import cn.bmob.v3.Bmob;
-import cn.bmob.v3.update.BmobUpdateAgent;
 
 public class HomeActivity extends BaseActivity implements HideFabView, FloatingToolbar.ItemClickListener, DropMenuDialog.OnMenuClickListener {
 
@@ -52,19 +50,13 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     private AppBarLayout mAppBar;
     private FloatingToolbar mBottomBar;
     private DropMenuDialog mTagMenu;
+    private UpdateHelper mUpdateHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bmob.initialize(this, Constant.BMOB_KEY);
-        BmobUpdateAgent.update(mActivity);
-//        final UpdateHelper helper = new UpdateHelper(mActivity);
-//        helper.checkUpdate(new UpdateHelper.UpdateSubscribe() {
-//            @Override
-//            public void onUpdate(UpdateBean updateBean) {
-//                helper.startUpdate(updateBean.path);
-//            }
-//        });
+        mUpdateHelper = new UpdateHelper(mActivity);
+        mUpdateHelper.autoCheckUpdate();
     }
 
 
@@ -245,6 +237,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mUpdateHelper.remove();
         homeFragment = null;
         discoverFragment = null;
         favoriteFragment = null;
