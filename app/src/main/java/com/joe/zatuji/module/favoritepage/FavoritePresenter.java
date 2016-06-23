@@ -1,6 +1,9 @@
 package com.joe.zatuji.module.favoritepage;
 
 
+import android.text.TextUtils;
+
+import com.joe.zatuji.Constant;
 import com.joe.zatuji.Event;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.api.exception.ResultException;
@@ -12,6 +15,7 @@ import com.joe.zatuji.helper.BmobSubscriber;
 import com.joe.zatuji.helper.RxSubscriber;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.utils.LogUtils;
+import com.joe.zatuji.utils.PrefUtils;
 
 import java.util.ArrayList;
 
@@ -88,6 +92,7 @@ public class FavoritePresenter extends BasePresenter<TagView, FavoriteModel> {
                     public void onNext(BaseListBean<FavoriteTag> favoriteTagBaseListBean) {
                         if (favoriteTagBaseListBean.results != null && favoriteTagBaseListBean.results.size() > 0) {
                             mView.showTag(favoriteTagBaseListBean.results);
+                            if(PrefUtils.getBoolean(Constant.IS_OLD_TAG,true)) updateOldTag(favoriteTagBaseListBean.results);
                         } else {
                             mView.showNoTag();
                             mView.showToastMsg("还没有图集噢～");
@@ -95,6 +100,19 @@ public class FavoritePresenter extends BasePresenter<TagView, FavoriteModel> {
                     }
                 }));
 
+    }
+
+    private void updateOldTag(ArrayList<FavoriteTag> results) {
+        for (FavoriteTag tag : results) {
+            if (TextUtils.isEmpty(tag.user_id)){
+                FavoriteTag tag1 = new FavoriteTag();
+                tag1.is_lock = tag.is_lock;
+                tag1.number = tag.number;
+                tag1.user_id = MyApplication.mUser.objectId;
+                mRxJavaManager.add(mModel.updateTag(tag1,tag.objectId).subscribeOn(Schedulers.io()).subscribe());
+            }
+        }
+        PrefUtils.getBoolean(Constant.IS_OLD_TAG,false);
     }
 
     public void createTag(final FavoriteTag tag) {
