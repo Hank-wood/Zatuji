@@ -7,6 +7,7 @@ import com.joe.zatuji.base.model.BaseModel;
 import com.joe.zatuji.dao.TagDao;
 import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.BaseListBean;
+import com.joe.zatuji.data.BmobResponseBean;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.data.bean.Pointer;
 import com.joe.zatuji.data.bean.Relation;
@@ -80,5 +81,13 @@ public class FavoriteModel implements BaseModel {
                         return Api.getInstance().mBmobService.update("_User",userId,GsonHelper.toJsonObject(map));
                     }
                 });
+    }
+
+    public Observable<BaseBmobBean> updateTag(FavoriteTag tag,String objectId){
+        return Api.getInstance().mBmobService.update("FavoriteTag",objectId,GsonHelper.toJsonObject(tag));
+    }
+
+    public Observable<BmobResponseBean> deleteTag(FavoriteTag tag){
+        return Api.getInstance().mBmobService.delete("FavoriteTag",tag.objectId);
     }
 }

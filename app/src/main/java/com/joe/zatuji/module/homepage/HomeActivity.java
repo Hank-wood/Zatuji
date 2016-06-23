@@ -14,12 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
-import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.bean.TagBean;
-import com.joe.zatuji.data.bean.UpdateBean;
 import com.joe.zatuji.helper.UpdateHelper;
 import com.joe.zatuji.module.discoverpage.DiscoverFragment;
 import com.joe.zatuji.module.favoritepage.FavoriteFragment;

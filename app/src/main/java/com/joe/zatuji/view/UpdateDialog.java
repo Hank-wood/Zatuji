@@ -68,12 +68,12 @@ public class UpdateDialog extends BaseDialog{
         mTitle.setText(mUpdateBean.version);
         mUpdateLog.setText(log);
     }
-    public void setmUpdateBean(UpdateBean mUpdateBean) {
+    public void setUpdateBean(UpdateBean mUpdateBean) {
         this.mUpdateBean = mUpdateBean;
         showInfo();
     }
 
-    public void setmOnUpdateListener(onUpdateListener mOnUpdateListener) {
+    public void setOnUpdateListener(onUpdateListener mOnUpdateListener) {
         this.mOnUpdateListener = mOnUpdateListener;
     }
 

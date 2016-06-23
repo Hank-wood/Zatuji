@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
+import com.joe.zatuji.data.BmobResponseBean;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
@@ -19,6 +20,7 @@ import com.joe.zatuji.view.CreateTagDialog;
 import com.joe.zatuji.module.gallerypage.GalleryActivity;
 import com.joe.zatuji.view.LockTagDialog;
 import com.joe.zatuji.utils.KToast;
+import com.joe.zatuji.view.MessageDialog;
 
 import java.util.ArrayList;
 
@@ -78,7 +80,7 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
             public void onItemClickListener(int position, FavoriteTag tag) {
                 //判断是否上锁
                 if(tag.is_lock){
-                    showPwdDialog(tag);
+                    showPwdDialog(tag,PWD_NORMAL);
                 }else{
                     jumpFavoriteDetail(tag);
                 }
@@ -113,15 +115,27 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
         i.putExtra(Constant.GALLERY_TAG,tag);
         mActivity.startActivity(i);
     }
-
+    private final int PWD_NORMAL = 0;
+    private final int PWD_EDIT = 1;
+    private final int PWD_DELETE = 2;
     //带锁的图集需要密码
-    private void showPwdDialog(final FavoriteTag tag) {
+    private void showPwdDialog(final FavoriteTag tag, final int type) {
         LockTagDialog dialog = new LockTagDialog(mActivity,tag);
         dialog.setOnPwdListener(new LockTagDialog.OnPwdListener() {
             @Override
             public void OnSuccess(LockTagDialog dialog) {
                 //跳转到图集列表页
-                jumpFavoriteDetail(tag);
+                switch (type){
+                    case PWD_NORMAL:
+                        jumpFavoriteDetail(tag);
+                        break;
+                    case PWD_EDIT:
+                        showCreateTag(tag);
+                        break;
+                    case PWD_DELETE:
+                        showDeleteDialog(tag);
+                        break;
+                }
                 dialog.dismiss();
             }
         });
@@ -135,12 +149,20 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
         mEditDialog.setOnMenuClickListener(new BottomMenuDialog.OnMenuClickListener() {
             @Override
             public void onEdit(FavoriteTag tag) {
-                LogUtils.d("tag:"+tag.tag);
+                if(tag.is_lock) {
+                    showPwdDialog(tag,PWD_EDIT);
+                    return;
+                }
                 showCreateTag(tag);
             }
 
             @Override
             public void onDelete(FavoriteTag tag) {
+                if(tag.is_lock) {
+                    showPwdDialog(tag,PWD_DELETE);
+                    return;
+                }
+                showDeleteDialog(tag);
             }
         });
     }
@@ -158,14 +180,22 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
             }
 
             @Override
-            public void onUpdate(FavoriteTag tag) {
-                LogUtils.d("update:"+tag.objectId);
-            }
+            public void onUpdate(FavoriteTag tag, String objectId) {mPresenter.updateTag(tag,objectId);}
         });
         dialog.show();
     }
 
-
+    public void showDeleteDialog(final FavoriteTag tag){
+        MessageDialog dialog = new MessageDialog(mActivity);
+        dialog.setTitleAndContent("删除:"+tag.tag,"您确定要删除图集："+tag.tag+" 吗？一旦删除，将无法恢复！");
+        dialog.setonConfirmListener(new MessageDialog.onConfirmListener() {
+            @Override
+            public void onConfirm() {
+                mPresenter.deleteTag(tag);
+            }
+        });
+        dialog.show();
+    }
     @Override
     public void showTag(ArrayList<FavoriteTag> tags) {
         doneLoading();

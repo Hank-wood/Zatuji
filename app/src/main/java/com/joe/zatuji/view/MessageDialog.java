@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.joe.zatuji.R;
+import com.joe.zatuji.data.bean.UpdateBean;
 import com.joe.zatuji.view.base.BaseDialog;
 
 /**
@@ -50,6 +51,7 @@ public class MessageDialog extends BaseDialog{
         mComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mOnConfirmListener!=null) mOnConfirmListener.onConfirm();
                 dismiss();
             }
         });
@@ -62,5 +64,15 @@ public class MessageDialog extends BaseDialog{
 
     public void disableCancel(){
         mCancel.setVisibility(View.GONE);
+    }
+
+    public void setonConfirmListener(onConfirmListener listener) {
+        this.mOnConfirmListener = listener;
+    }
+
+    private onConfirmListener mOnConfirmListener;
+
+    public interface onConfirmListener{
+        void onConfirm();
     }
 }

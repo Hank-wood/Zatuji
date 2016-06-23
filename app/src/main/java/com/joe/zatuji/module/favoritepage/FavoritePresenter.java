@@ -7,6 +7,7 @@ import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.base.BasePresenter;
 import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.BaseListBean;
+import com.joe.zatuji.data.BmobResponseBean;
 import com.joe.zatuji.helper.BmobSubscriber;
 import com.joe.zatuji.helper.RxSubscriber;
 import com.joe.zatuji.data.bean.FavoriteTag;
@@ -115,4 +116,39 @@ public class FavoritePresenter extends BasePresenter<TagView, FavoriteModel> {
                 }));
     }
 
+    public void updateTag(FavoriteTag tag,String objectId){
+        mRxJavaManager.add(mModel.updateTag(tag,objectId)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new BmobSubscriber<BaseBmobBean>() {
+            @Override
+            public void onError(ResultException e) {
+                mView.showToastMsg("编辑失败");
+            }
+
+            @Override
+            public void onNext(BaseBmobBean baseBmobBean) {
+                getFavoriteTag();
+                mView.showToastMsg("编辑成功！");
+            }
+        }));
+    }
+
+    public void deleteTag(FavoriteTag tag){
+        mRxJavaManager.add(mModel.deleteTag(tag)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new BmobSubscriber<BmobResponseBean>() {
+            @Override
+            public void onError(ResultException e) {
+                mView.showToastMsg("删除失败");
+            }
+
+            @Override
+            public void onNext(BmobResponseBean bmobResponseBean) {
+                mView.showToastMsg("删除成功");
+                getFavoriteTag();
+            }
+        }));
+    }
 }

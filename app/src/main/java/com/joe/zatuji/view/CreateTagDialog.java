@@ -52,6 +52,7 @@ public class CreateTagDialog extends Dialog implements View.OnClickListener{
         mDialogTitle.setText("修改图集");
         mTitle.setText(tag.tag);
         mPwd.setText(tag.pwd);
+        mCreate.setText("修改");
 
     }
     @Override
@@ -70,7 +71,9 @@ public class CreateTagDialog extends Dialog implements View.OnClickListener{
         FavoriteTag tag = null;
         boolean isUpdate = false;
         if(mTag!=null) {
-            tag = mTag;
+            tag = new FavoriteTag();
+            tag.number = mTag.number;
+            tag.is_lock = mTag.is_lock;
             isUpdate = true;
         }else {
             tag = new FavoriteTag();
@@ -92,7 +95,7 @@ public class CreateTagDialog extends Dialog implements View.OnClickListener{
             tag.is_lock = false;
         }
         if(isUpdate){
-            mCallBack.onUpdate(tag);
+            mCallBack.onUpdate(tag,mTag.objectId);
         }else {
             mCallBack.OnCreate(tag);
         }
@@ -105,6 +108,6 @@ public class CreateTagDialog extends Dialog implements View.OnClickListener{
     }
     public interface OnCreateCallBack{
         void OnCreate(FavoriteTag tag);
-        void onUpdate(FavoriteTag tag);
+        void onUpdate(FavoriteTag tag, String objectId);
     }
 }

@@ -73,6 +73,8 @@ public class BottomMenuDialog extends BaseDialog implements View.OnClickListener
                 dismiss();
                 break;
             case R.id.tv_delete_dialog:
+                mListener.onDelete(mTag);
+                dismiss();
                 break;
         }
 

@@ -1,6 +1,5 @@
 package com.joe.zatuji.helper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -71,8 +70,8 @@ public class UpdateHelper {
 
     public void showUpdate(UpdateBean updateBean,Context Context){
         UpdateDialog dialog = new UpdateDialog(Context);
-        dialog.setmUpdateBean(updateBean);
-        dialog.setmOnUpdateListener(new UpdateDialog.onUpdateListener() {
+        dialog.setUpdateBean(updateBean);
+        dialog.setOnUpdateListener(new UpdateDialog.onUpdateListener() {
             @Override
             public void onUpdate(UpdateBean updateBean) {
                 startUpdate(updateBean.path);

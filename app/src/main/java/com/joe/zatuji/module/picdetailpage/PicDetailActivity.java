@@ -143,7 +143,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                 }
 
                 @Override
-                public void onUpdate(FavoriteTag tag) {}
+                public void onUpdate(FavoriteTag tag, String objectId) {}
             });
             dialog.show();
         }else{
