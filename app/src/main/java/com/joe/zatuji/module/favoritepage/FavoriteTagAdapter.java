@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.adapter.DataViewHolder;
@@ -46,14 +47,15 @@ public class FavoriteTagAdapter extends RecyclerView.Adapter<DataViewHolder> {
 
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position) {
-        holder.ivPic.setBackgroundColor(mContext.getResources().getColor(getRandomColor()));
+//        holder.ivPic.setBackgroundColor(mContext.getResources().getColor(getRandomColor()));
         boolean isCreate=false;
         FavoriteTag tag = mTags.get(position);
         holder.tvDesc.setText(tag.tag+"("+tag.number+")");
         if(!TextUtils.isEmpty(tag.front)){
             ImageHelper.showSmall(holder.ivPic,tag.front);
         }else{
-            holder.ivPic.setImageResource(R.mipmap.ic_launcher);
+            holder.ivPic.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            holder.ivPic.setImageResource(R.drawable.front_default);
         }
 
         //替换为imageloader

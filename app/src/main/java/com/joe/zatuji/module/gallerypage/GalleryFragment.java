@@ -8,12 +8,16 @@ import com.joe.zatuji.Constant;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredFragment;
+import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredView;
 import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.module.picdetailpage.PicDetailActivity;
+import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
+import com.joe.zatuji.view.GalleryMenuDialog;
+import com.joe.zatuji.view.MessageDialog;
 
 import java.util.List;
 
@@ -61,7 +65,56 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
                 mActivity.startActivity(i);
             }
 
+            @Override
+            public void onItemLongClick(RecyclerView.ViewHolder vh, final int position) {
+                GalleryMenuDialog dialog = new GalleryMenuDialog(mActivity,mGalleryAdapter.getItem(position));
+                dialog.setOnMenuClickListener(new GalleryMenuDialog.OnMenuClickListener() {
+                    @Override
+                    public void onFront(MyFavorite img) {
+                        showConfirmDialog(img,CONFIRM_FRONT);
+                    }
+
+                    @Override
+                    public void onDelete(MyFavorite img) {
+                        mRemovePos = position;
+                        showConfirmDialog(img,CONFIRM_DELETE);
+                    }
+                });
+                dialog.show();
+
+            }
         });
+
+    }
+    private final int CONFIRM_FRONT = 0;
+    private final int CONFIRM_DELETE = 1;
+    private int mRemovePos = -1;//当前被删除的条目
+    private void showConfirmDialog(final MyFavorite img, final int type) {
+        final MessageDialog dialog = new MessageDialog(mActivity);
+        switch (type){
+            case CONFIRM_FRONT:
+                dialog.setTitleAndContent("设为封面","确定将该图片设为封面吗？");
+                break;
+            case CONFIRM_DELETE:
+                dialog.setTitleAndContent("取消收藏","您确定要将该图片移除图集么？");
+                break;
+        }
+        dialog.setonConfirmListener(new MessageDialog.onConfirmListener() {
+            @Override
+            public void onConfirm() {
+                switch (type){
+                    case CONFIRM_FRONT:
+                        showLoading("设置封面");
+                        mPresenter.setAsFront(mTag,img.img_url);
+                        break;
+                    case CONFIRM_DELETE:
+                        showLoading("移除图片");
+                        mPresenter.removeImg(mTag,img);
+                        break;
+                }
+            }
+        });
+        dialog.show();
     }
 
 
@@ -86,10 +139,25 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
     }
 
     @Override
+    public void showToastMsg(String msg) {
+        doneLoading();
+        KToast.show(msg);
+    }
+
+    @Override
     public void showEmptyView() {
         mGalleryAdapter.setNewData(null);
         mGalleryAdapter.setEmptyView(mActivity.getLayoutInflater().inflate(R.layout.view_empty, (ViewGroup) mRecyclerView.getParent(),false));
         mLoadingDialog.dismiss();
         mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void removeItem(boolean isRemove) {
+        if(!isRemove) mRemovePos = -1;
+        if(mRemovePos!=-1){
+            mGalleryAdapter.remove(mRemovePos);
+            mRemovePos = -1;
+        }
     }
 }

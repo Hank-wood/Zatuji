@@ -177,20 +177,24 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
             @Override
             public void OnCreate(FavoriteTag tag) {
                 mPresenter.createTag(tag);
+                showLoading("创建图集～");
             }
 
             @Override
-            public void onUpdate(FavoriteTag tag, String objectId) {mPresenter.updateTag(tag,objectId);}
+            public void onUpdate(FavoriteTag tag, String objectId) {
+                showLoading("修改图集");
+                mPresenter.updateTag(tag,objectId);}
         });
         dialog.show();
     }
 
     public void showDeleteDialog(final FavoriteTag tag){
         MessageDialog dialog = new MessageDialog(mActivity);
-        dialog.setTitleAndContent("删除:"+tag.tag,"您确定要删除图集："+tag.tag+" 吗？一旦删除，将无法恢复！");
+        dialog.setTitleAndContent("删除-"+tag.tag,"您确定要删除图集:"+tag.tag+" 吗？一旦删除，将无法恢复！");
         dialog.setonConfirmListener(new MessageDialog.onConfirmListener() {
             @Override
             public void onConfirm() {
+                showLoading("删除图集～");
                 mPresenter.deleteTag(tag);
             }
         });
@@ -238,6 +242,7 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
     }
     @Override
     public void addTag(ArrayList<FavoriteTag> tags) {
+        doneLoading();
         showEmpty(false);
         mAdapter.refreshData(tags,true);
     }

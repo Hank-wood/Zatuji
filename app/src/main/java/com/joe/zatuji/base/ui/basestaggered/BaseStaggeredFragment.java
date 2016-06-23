@@ -168,7 +168,6 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
     /****                ****/
     @Override
     public void loadData(List<? extends BaseBean> beanList) {
-        LogUtils.d("show data");
         doneLoading();
         mRefreshLayout.setRefreshing(false);
         mAdapter.setNewData((List<DataBean.PicBean>) beanList);
@@ -207,7 +206,6 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
     }
 
     public void showLoading(String msg){
-        LogUtils.d("show loading:"+mActivity.getLocalClassName());
 
         if(mLoadingDialog==null) mLoadingDialog = new LoadingDialog(mActivity,msg);
         mLoadingDialog.setMessage(msg);

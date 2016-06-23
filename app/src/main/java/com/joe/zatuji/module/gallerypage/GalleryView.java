@@ -9,4 +9,5 @@ import java.util.ArrayList;
  * Created by Joe on 2016/5/2.
  */
 public interface GalleryView extends BaseStaggeredView{
+    void removeItem(boolean isRemove);
 }

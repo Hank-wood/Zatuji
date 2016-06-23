@@ -1,12 +1,17 @@
 package com.joe.zatuji.module.gallerypage;
 
 
+import com.joe.zatuji.Event;
 import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredPresenter;
+import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredView;
+import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.BaseListBean;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.helper.BmobSubscriber;
+import com.joe.zatuji.module.favoritepage.FavoriteModel;
+import com.joe.zatuji.utils.KToast;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -102,4 +107,41 @@ public class GalleryPresenter extends BaseStaggeredPresenter<GalleryView,Gallery
         }
     }
 
+    public void setAsFront(FavoriteTag tag,String url){
+        mRxJavaManager.add(mModel.setFront(tag.objectId,url)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new BmobSubscriber<BaseBmobBean>() {
+            @Override
+            public void onError(ResultException e) {
+                mView.showToastMsg("设置失败");
+            }
+
+            @Override
+            public void onNext(BaseBmobBean baseBmobBean) {
+                mView.showToastMsg("设置成功");
+                mRxJavaManager.post(Event.SET_FRONT,baseBmobBean);
+            }
+        }));
+    }
+
+    public void removeImg(FavoriteTag tag,MyFavorite img){
+        mRxJavaManager.add(mModel.removeImg(tag,img.objectId)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new BmobSubscriber<BaseBmobBean>() {
+            @Override
+            public void onError(ResultException e) {
+                mView.showToastMsg("移除失败");
+                mView.removeItem(false);
+            }
+
+            @Override
+            public void onNext(BaseBmobBean baseBmobBean) {
+                mView.showToastMsg("移除成功");
+                mView.removeItem(true);
+                mRxJavaManager.post(Event.REMOVE_FAVORITE,baseBmobBean);
+            }
+        }));
+    }
 }

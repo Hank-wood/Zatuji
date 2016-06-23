@@ -58,6 +58,18 @@ public class FavoritePresenter extends BasePresenter<TagView, FavoriteModel> {
                 mView.setAddedNew(true);
             }
         });
+        mRxJavaManager.subscribe(Event.SET_FRONT, new Action1<Object>() {
+            @Override
+            public void call(Object o) {
+                getFavoriteTag();
+            }
+        });
+        mRxJavaManager.subscribe(Event.QUITE_GALLERY, new Action1<Object>() {
+            @Override
+            public void call(Object o) {
+                getFavoriteTag();
+            }
+        });
     }
 
     public void getFavoriteTag() {
