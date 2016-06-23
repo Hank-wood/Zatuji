@@ -1,5 +1,6 @@
 package com.joe.zatuji.module.homesettingpage;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -8,8 +9,8 @@ import android.widget.TextView;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
+import com.joe.zatuji.module.aboutpage.AboutActivity;
 import com.joe.zatuji.module.homesettingpage.user.UserFragment;
-import com.joe.zatuji.module.loginpage.LoginActivity;
 import com.joe.zatuji.utils.DoubleClick;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
@@ -17,15 +18,15 @@ import com.joe.zatuji.utils.LogUtils;
 /**
  * Created by Joe on 2016/4/18.
  */
-public class HomeHomeSettingFragment extends BaseFragment<HomeSettingPresenter> implements HomeSettingView,View.OnClickListener{
+public class HomeSettingFragment extends BaseFragment<HomeSettingPresenter> implements HomeSettingView,View.OnClickListener{
 
     private TextView tvCache;
     private RelativeLayout mExit;
     private UserFragment userFragment;
-    private static HomeHomeSettingFragment mInstance;
-    public static synchronized HomeHomeSettingFragment getInstance(){
+    private static HomeSettingFragment mInstance;
+    public static synchronized HomeSettingFragment getInstance(){
         if(mInstance==null){
-            mInstance = new HomeHomeSettingFragment();
+            mInstance = new HomeSettingFragment();
         }
         return mInstance;
     }
@@ -80,18 +81,20 @@ public class HomeHomeSettingFragment extends BaseFragment<HomeSettingPresenter> 
     public void onClick(View v) {
         if(DoubleClick.isDoubleClick(v.getId())) return;
         switch (v.getId()){
-            case R.id.card_clear_cache:
+            case R.id.card_clear_cache://缓存
                 showLoading("努力清扫中...");
                 mPresenter.clearCache();
                 break;
-            case R.id.card_exit:
-                showLoading("退出...");
-                mPresenter.exit();
+            case R.id.card_about://关于
+                startActivity(new Intent(mActivity, AboutActivity.class));
                 break;
-
-            case R.id.card_update:
+            case R.id.card_update://更新
                 showLoading("新版在哪里...");
                 mPresenter.checkUpdate();
+                break;
+            case R.id.card_exit://退出
+                showLoading("退出...");
+                mPresenter.exit();
                 break;
         }
     }

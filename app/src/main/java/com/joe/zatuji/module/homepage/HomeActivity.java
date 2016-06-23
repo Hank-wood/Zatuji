@@ -24,7 +24,7 @@ import com.joe.zatuji.module.favoritepage.FavoriteFragment;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.module.searchingpage.SearchingActivity;
-import com.joe.zatuji.module.homesettingpage.HomeHomeSettingFragment;
+import com.joe.zatuji.module.homesettingpage.HomeSettingFragment;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.DropMenuDialog;
 
@@ -39,7 +39,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     private HomeFragment homeFragment;
     private Fragment mCurrentFragment;
     private DiscoverFragment discoverFragment;
-    private HomeHomeSettingFragment homeSettingFragment;
+    private HomeSettingFragment homeSettingFragment;
     private FavoriteFragment favoriteFragment;
     private int currentPos;//当前fragment
     private ActionBar mActionbar;
@@ -84,7 +84,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         homeFragment = new HomeFragment();
         discoverFragment = new DiscoverFragment();
         favoriteFragment = new FavoriteFragment();
-        homeSettingFragment = new HomeHomeSettingFragment();
+        homeSettingFragment = new HomeSettingFragment();
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction transition= mFragmentManager.beginTransaction().add(R.id.fl_container_home, homeFragment,TAG_HOME_FRAG);
         transition.addToBackStack(TAG_HOME_FRAG);

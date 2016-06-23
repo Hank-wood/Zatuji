@@ -56,6 +56,8 @@
         <activity android:name=".module.gallerypage.GalleryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
+        <activity android:name=".module.aboutpage.AboutActivity"
+            android:exported="false"/>
 
         <!--框架所需-->
         <activity android:name="com.yongchun.library.view.ImageSelectorActivity"
@@ -70,9 +72,10 @@
             android:label="剪裁头像"
             android:theme="@style/AppTheme.NoActionBar"
             />
-
+        <!--下载的服务-->
         <service android:name=".helper.download.DownloadService"
             android:exported="false"/>
+
     </application>
 
 </manifest>
