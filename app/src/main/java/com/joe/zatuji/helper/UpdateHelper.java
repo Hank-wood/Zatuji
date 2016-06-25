@@ -37,7 +37,7 @@ public class UpdateHelper {
             @Override
             public void onUpdate(UpdateBean updateBean) {
                 if(updateBean==null){
-                    KToast.show("当前已是最新版～");
+                    //KToast.show("当前已是最新版～");什么也不干
                 }else if (updateBean.isforce){
                     startUpdate(updateBean.path);
                 }else if(updateBean.version_i==SettingHelper.getIgnoreVersion()){
@@ -88,19 +88,17 @@ public class UpdateHelper {
         @Override
         public void onError(ResultException e){
             LogUtils.e("update:"+e.getMessage());
-            KToast.show("检查更新失败");
         };
 
         @Override
         public void onNext(BaseListBean<UpdateBean> results) {
             if(results.results.size()>0){
                 UpdateBean updateBean = results.results.get(0);
-                onUpdate(updateBean);
-//                if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
-//                    onUpdate(updateBean);//回调更新
-//                }else{
-//                    onUpdate(null);
-//                }
+                if(updateBean.version_i>MyApplication.getInstance().getVersionCode()){
+                    onUpdate(updateBean);//回调更新
+                }else{
+                    onUpdate(null);
+                }
 
             }
         }

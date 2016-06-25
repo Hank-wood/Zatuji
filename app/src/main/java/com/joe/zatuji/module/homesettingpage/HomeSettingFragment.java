@@ -9,11 +9,13 @@ import android.widget.TextView;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
+import com.joe.zatuji.data.bean.FeedBackBean;
 import com.joe.zatuji.module.aboutpage.AboutActivity;
 import com.joe.zatuji.module.homesettingpage.user.UserFragment;
 import com.joe.zatuji.utils.DoubleClick;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
+import com.joe.zatuji.view.InputDialog;
 
 /**
  * Created by Joe on 2016/4/18.
@@ -23,6 +25,7 @@ public class HomeSettingFragment extends BaseFragment<HomeSettingPresenter> impl
     private TextView tvCache;
     private RelativeLayout mExit;
     private UserFragment userFragment;
+    private String mFeedBack="";
     private static HomeSettingFragment mInstance;
     public static synchronized HomeSettingFragment getInstance(){
         if(mInstance==null){
@@ -88,6 +91,9 @@ public class HomeSettingFragment extends BaseFragment<HomeSettingPresenter> impl
             case R.id.card_about://关于
                 startActivity(new Intent(mActivity, AboutActivity.class));
                 break;
+            case R.id.card_feedback:
+                showFeedBack();
+                break;
             case R.id.card_update://更新
                 showLoading("新版在哪里...");
                 mPresenter.checkUpdate();
@@ -97,6 +103,29 @@ public class HomeSettingFragment extends BaseFragment<HomeSettingPresenter> impl
                 mPresenter.exit();
                 break;
         }
+    }
+
+    private void showFeedBack() {
+        InputDialog dialog = new InputDialog(mActivity,"意见反馈","请输入您宝贵的建议");
+        dialog.setContent(mFeedBack);
+        final FeedBackBean feedBack = new FeedBackBean();
+        feedBack.type = "反馈";
+        feedBack.version = MyApplication.getInstance().getVersionName();
+        feedBack.user_id = MyApplication.mUser.objectId;
+        feedBack.android_version = android.os.Build.VERSION.SDK;
+        feedBack.user_email = MyApplication.mUser.email;
+        feedBack.user_name = MyApplication.mUser.nickname;
+        dialog.setOnCompleteListener(new InputDialog.OnCompleteListener() {
+            @Override
+            public void OnComplete(String input, InputDialog dialog) {
+                feedBack.content = input;
+                mFeedBack = input;
+                mPresenter.feedBack(feedBack);
+                showLoading("正在上传反馈...");
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 

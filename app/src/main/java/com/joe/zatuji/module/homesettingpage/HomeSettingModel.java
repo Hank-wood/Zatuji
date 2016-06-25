@@ -18,5 +18,4 @@ public class HomeSettingModel implements BaseModel {
                 .feedBack(GsonHelper.toJsonObject(feedBack));
     }
 
-
 }

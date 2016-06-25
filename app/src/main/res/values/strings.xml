@@ -14,4 +14,8 @@
     <string name="change_nickname">修改昵称</string>
     <string name="change_email">绑定邮箱</string>
     <string name="change_pwd">修改密码</string>
+
+    <!--提示-->
+    <string name="no_wifi_title">当前为非Wi-Fi网络状态！</string>
+    <string name="no_wifi_content">当前网络状态非Wi-Fi，如果继续浏览可能会消耗大量流量，是否继续？（如果您不需要该提示，可以在设置中关闭）</string>
 </resources>

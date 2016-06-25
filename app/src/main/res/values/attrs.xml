@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SettingView">
+        <attr name="settingTitle" format="string" />
+        <attr name="settingDesc" format="string" />
+        <attr name="showSettingSwitch" format="boolean" />
+        <attr name="showSettingArrow" format="boolean" />
+        <attr name="setHint" format="string" />
+    </declare-styleable>
+</resources>

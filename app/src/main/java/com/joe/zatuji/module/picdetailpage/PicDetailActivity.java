@@ -106,6 +106,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                 mPresenter.saveToPhone(img.file.key);
                 break;
             case R.id.action_share://分享
+                showToastMsg("开发者还未添加该功能～");
                 break;
         }
         return true;
@@ -169,20 +170,6 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         }
     }
 
-//    @Override
-//    public void showErrorMsg(String msg) {
-//        KToast.show(msg);
-//    }
-//
-//    @Override
-//    public void showNotSign() {
-//        KToast.show("请先登录账号");
-//    }
-//
-//    @Override
-//    public void addTag(ArrayList<FavoriteTag> tags) {
-////        mPresenter.saveToFavorite(img,desc,width,height,tags.get(0));
-//    }
 
     @Override
     protected void onDestroy() {

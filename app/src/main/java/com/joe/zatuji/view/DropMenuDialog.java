@@ -57,7 +57,7 @@ public class DropMenuDialog extends BaseDialog implements View.OnClickListener{
         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
         findViewById(R.id.ll_container_drop).setOnClickListener(this);
         mAdapter = new SimpleAdapter(mContext);
-        mAdapter.setNewData(new TagBean().tagList);
+        mAdapter.resetData(new TagBean().tagList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLoadMoreEnabled(false);
     }

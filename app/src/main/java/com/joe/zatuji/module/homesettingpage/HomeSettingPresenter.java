@@ -8,8 +8,12 @@ import android.text.format.Formatter;
 import com.bumptech.glide.Glide;
 import com.joe.zatuji.Event;
 import com.joe.zatuji.MyApplication;
+import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.base.BasePresenter;
+import com.joe.zatuji.data.BaseBmobBean;
+import com.joe.zatuji.data.bean.FeedBackBean;
 import com.joe.zatuji.data.bean.UpdateBean;
+import com.joe.zatuji.helper.BmobSubscriber;
 import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.helper.UpdateHelper;
 import com.joe.zatuji.utils.LogUtils;
@@ -54,8 +58,17 @@ public class HomeSettingPresenter extends BasePresenter<HomeSettingView, HomeSet
         helper.checkUpdate(new UpdateHelper.UpdateSubscribe() {
             @Override
             public void onUpdate(UpdateBean updateBean) {
+                if(updateBean==null) {
+                    mView.showToastMsg("当前已是最新版本～");
+                    return;
+                }
                 helper.showUpdate(updateBean,mContext);
                 mView.showToastMsg("发现新版本");
+            }
+
+            @Override
+            public void onError(ResultException e) {
+                mView.showToastMsg("检查更新失败！");
             }
         });
     }
@@ -141,6 +154,23 @@ public class HomeSettingPresenter extends BasePresenter<HomeSettingView, HomeSet
             e.printStackTrace();
         }
         return size;
+    }
+
+    public void feedBack(FeedBackBean feedBackBean){
+        mRxJavaManager.add(mModel.feedBack(feedBackBean)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new BmobSubscriber<BaseBmobBean>() {
+            @Override
+            public void onError(ResultException e) {
+                mView.showToastMsg("哎呀，反馈失败了。还好保存了您的意见～");
+            }
+
+            @Override
+            public void onNext(BaseBmobBean baseBmobBean) {
+                mView.showToastMsg("反馈成功！感谢您宝贵的意见！");
+            }
+        }));
     }
 }
 

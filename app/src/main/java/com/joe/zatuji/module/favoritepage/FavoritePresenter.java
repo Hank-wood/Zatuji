@@ -139,9 +139,10 @@ public class FavoritePresenter extends BasePresenter<TagView, FavoriteModel> {
 
                     @Override
                     public void onNext(BaseBmobBean baseBmobBean) {
-                        ArrayList<FavoriteTag> tags = new ArrayList<FavoriteTag>();
-                        tags.add(tag);
-                        mView.addTag(tags);
+                        getFavoriteTag();
+//                        ArrayList<FavoriteTag> tags = new ArrayList<FavoriteTag>();
+//                        tags.add(tag);
+//                        mView.addTag(tags);
                     }
                 }));
     }

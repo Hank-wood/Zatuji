@@ -64,7 +64,9 @@ public class InputDialog extends BaseDialog{
         mInput.setHint(hint);
     }
 
-
+    public void setContent(String content){
+        mInput.setText(content);
+    }
     public void clearInput(){
         mInput.setText("");
     }

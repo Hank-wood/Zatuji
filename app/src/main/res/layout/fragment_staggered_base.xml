@@ -13,7 +13,7 @@
             android:paddingLeft="1dp"
             android:paddingRight="1dp"
             android:id="@+id/recycler_fragment_base"
-            app:maxDragDistance="100"
+            app:maxDragDistance="20"
             app:enableLoad="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

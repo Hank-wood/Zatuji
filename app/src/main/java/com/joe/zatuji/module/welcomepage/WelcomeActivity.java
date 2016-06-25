@@ -3,6 +3,7 @@ package com.joe.zatuji.module.welcomepage;
 import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.Event;
@@ -37,6 +38,8 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        TextView mVersion = (TextView) findViewById(R.id.tv_version);
+        mVersion.setText("杂图集 "+MyApplication.getInstance().getVersionName());
         boolean isExit = PrefUtils.getBoolean(this,Constant.IS_EXIT,false);
         //如果是用户手动退出 则不自动登录
         start = System.currentTimeMillis();

@@ -22,6 +22,7 @@ import com.joe.zatuji.view.MessageDialog;
 import java.util.List;
 
 import cc.solart.turbo.OnItemClickListener;
+import cc.solart.turbo.OnItemLongClickListener;
 
 /**
  * Created by joe on 16/6/12.
@@ -64,7 +65,8 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
                 i.putExtra(Constant.PIC_DATA, picBean);
                 mActivity.startActivity(i);
             }
-
+        });
+        mGalleryAdapter.addOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public void onItemLongClick(RecyclerView.ViewHolder vh, final int position) {
                 GalleryMenuDialog dialog = new GalleryMenuDialog(mActivity,mGalleryAdapter.getItem(position));
@@ -81,10 +83,8 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
                     }
                 });
                 dialog.show();
-
             }
         });
-
     }
     private final int CONFIRM_FRONT = 0;
     private final int CONFIRM_DELETE = 1;
@@ -123,13 +123,13 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
         LogUtils.d("show data");
         doneLoading();
         mRefreshLayout.setRefreshing(false);
-        mGalleryAdapter.setNewData((List<MyFavorite>) beanList);
+        mGalleryAdapter.resetData((List<MyFavorite>) beanList);
     }
 
     @Override
     public void refreshData(List<? extends BaseBean> beanList) {
         mRefreshLayout.setRefreshing(false);
-        mGalleryAdapter.setNewData((List<MyFavorite>) beanList);
+        mGalleryAdapter.resetData((List<MyFavorite>) beanList);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
 
     @Override
     public void showEmptyView() {
-        mGalleryAdapter.setNewData(null);
+        mGalleryAdapter.resetData(null);
         mGalleryAdapter.setEmptyView(mActivity.getLayoutInflater().inflate(R.layout.view_empty, (ViewGroup) mRecyclerView.getParent(),false));
         mLoadingDialog.dismiss();
         mRefreshLayout.setRefreshing(false);

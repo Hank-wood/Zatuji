@@ -170,13 +170,13 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
     public void loadData(List<? extends BaseBean> beanList) {
         doneLoading();
         mRefreshLayout.setRefreshing(false);
-        mAdapter.setNewData((List<DataBean.PicBean>) beanList);
+        mAdapter.resetData((List<DataBean.PicBean>) beanList);
     }
 
     @Override
     public void refreshData(List<? extends BaseBean> beanList) {
         mRefreshLayout.setRefreshing(false);
-        mAdapter.setNewData((List<DataBean.PicBean>) beanList);
+        mAdapter.resetData((List<DataBean.PicBean>) beanList);
     }
 
     @Override
@@ -187,7 +187,7 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
 
     @Override
     public void showEmptyView() {
-        mAdapter.setNewData(null);
+        mAdapter.resetData(null);
         mAdapter.setEmptyView(mActivity.getLayoutInflater().inflate(R.layout.view_empty, (ViewGroup) mRecyclerView.getParent(),false));
         mLoadingDialog.dismiss();
         mRefreshLayout.setRefreshing(false);

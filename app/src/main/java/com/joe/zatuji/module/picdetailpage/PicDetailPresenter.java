@@ -34,10 +34,6 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
     private Context context;
     private LoadingView loadingView;
 
-//    public PicDetailPresenter(Context context, LoadingView loadingView){
-//        this.context=context;
-//        this.loadingView=loadingView;
-//    }
     public void showTags(){
         mRxJavaManager.add(new FavoriteModel().getAllTags(MyApplication.mUser.objectId)
         .subscribeOn(Schedulers.io())

@@ -50,6 +50,7 @@ public class Constant {
     public static final String UPDATE_NO_WIFI = "update_no_wifi";//boolean 无wifi也检查更新
     public static final String NOTIFY_NO_WIFI = "notify_no_wifi";//boolean 无wifi时提醒用户是否加载图片
     public static final String UPDATE_IGNORE = "update_ignore";//被用户忽略的版本
+    public static final String AUTO_CLEAR = "auto_clear";//自动清理缓存
 
     //标记
     public static final String IS_OLD_TAG ="is_old_tag";//老的FavortiteTag没有userid字段

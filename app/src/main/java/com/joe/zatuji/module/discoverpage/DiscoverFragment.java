@@ -4,6 +4,8 @@ import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredFragment;
 import com.joe.zatuji.R;
+import com.joe.zatuji.data.bean.TagBean;
+import com.joe.zatuji.helper.SettingHelper;
 import com.joe.zatuji.module.homepage.HomeFragment;
 
 /**

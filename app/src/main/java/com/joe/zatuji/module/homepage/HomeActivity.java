@@ -9,24 +9,37 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.format.Formatter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.bean.TagBean;
+import com.joe.zatuji.helper.ImageHelper;
+import com.joe.zatuji.helper.SettingHelper;
 import com.joe.zatuji.helper.UpdateHelper;
 import com.joe.zatuji.module.discoverpage.DiscoverFragment;
 import com.joe.zatuji.module.favoritepage.FavoriteFragment;
+import com.joe.zatuji.module.settingpage.SettingActivity;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.module.searchingpage.SearchingActivity;
 import com.joe.zatuji.module.homesettingpage.HomeSettingFragment;
 import com.joe.zatuji.utils.LogUtils;
+import com.joe.zatuji.utils.NetWorkUtils;
 import com.joe.zatuji.view.DropMenuDialog;
+import com.joe.zatuji.view.MessageDialog;
+
+import java.io.File;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 
 public class HomeActivity extends BaseActivity implements HideFabView, FloatingToolbar.ItemClickListener, DropMenuDialog.OnMenuClickListener {
@@ -76,7 +89,34 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         mActionbar = getSupportActionBar();
         mBottomBar.attachFab(mFab);
         mBottomBar.setClickListener(this);
+        findViewById(R.id.home_setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, SettingActivity.class));
+            }
+        });
+        clearCache();
+        checkWifi();
         initFragment();
+    }
+
+    private void clearCache() {
+        int size = ImageHelper.getCacheSize();
+        if(SettingHelper.getAutoClear() || size>200){
+            Observable.create(new Observable.OnSubscribe<Object>() {
+                @Override
+                public void call(Subscriber<? super Object> subscriber) {
+                    ImageHelper.clearCache();
+                }
+            }).subscribeOn(Schedulers.io()).subscribe();
+        }
+    }
+
+    private void checkWifi() {
+        if(SettingHelper.isNotifyNoWifi()&& NetWorkUtils.getNetType(mActivity)!=NetWorkUtils.TYPE_WIFI){
+            MessageDialog dialog = new MessageDialog(mActivity,getResources().getString(R.string.no_wifi_title),getResources().getString(R.string.no_wifi_content));
+            dialog.show();
+        }
     }
 
 

@@ -14,7 +14,7 @@ public class SettingHelper {
         return PrefUtils.getBoolean(Constant.CHECK_UPDATE,true);
     }
     public static void setCheckUpdate(boolean checkUpdate){
-        PrefUtils.putBoolean(Constant.CHECK_UPDATE,true);
+        PrefUtils.putBoolean(Constant.CHECK_UPDATE,checkUpdate);
     }
 
     public static int getIgnoreVersion(){
@@ -25,10 +25,10 @@ public class SettingHelper {
     }
     /**是否允许流量更新*/
     public static boolean isCheckUpdateWithNoWifi(){
-        return PrefUtils.getBoolean(Constant.UPDATE_NO_WIFI,true);
+        return PrefUtils.getBoolean(Constant.UPDATE_NO_WIFI,false);
     }
     public static void setCheckUpdateWithNoWifi(boolean noWifi){
-        PrefUtils.putBoolean(Constant.CHECK_UPDATE,true);
+        PrefUtils.putBoolean(Constant.UPDATE_NO_WIFI,noWifi);
     }
 
     /**2G状态是否提示*/
@@ -36,7 +36,7 @@ public class SettingHelper {
         return PrefUtils.getBoolean(Constant.NOTIFY_NO_WIFI,true);
     }
     public static void setNotifyNoWifi(boolean isNotify){
-        PrefUtils.putBoolean(Constant.NOTIFY_NO_WIFI,true);
+        PrefUtils.putBoolean(Constant.NOTIFY_NO_WIFI,isNotify);
     }
 
 
@@ -48,6 +48,8 @@ public class SettingHelper {
     public static void setDefaultTag(int tag){
         PrefUtils.putInt(Constant.DEFAULT_TAG,tag);
     }
+    /**设置自动清理*/
+    public static void setAutoClear(boolean clear){PrefUtils.putBoolean(Constant.AUTO_CLEAR,clear);}
 
-
+    public static boolean getAutoClear(){return PrefUtils.getBoolean(Constant.AUTO_CLEAR,false);}
 }

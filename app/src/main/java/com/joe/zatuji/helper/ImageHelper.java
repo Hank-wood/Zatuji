@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +23,8 @@ import com.joe.zatuji.api.Api;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
+
+import java.io.File;
 
 /**
  * Created by joe on 16/5/21.
@@ -146,5 +149,36 @@ public class ImageHelper {
 
     public static void clearCache(){
         Glide.get(MyApplication.getInstance()).clearDiskCache();
+    }
+
+    public static int getCacheSize(){
+        File cacheDir = Glide.getPhotoCacheDir(MyApplication.getInstance());
+        LogUtils.d("" + cacheDir.length());
+        LogUtils.d("" + Formatter.formatFileSize(MyApplication.getInstance(), cacheDir.length()));
+        long size = 0;
+        try {
+            size = getFolderSize(cacheDir);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (int) (size/(1024*1024));
+    }
+
+    public static long getFolderSize(File file) throws Exception {
+        long size = 0;
+        try {
+            File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                // 如果下面还有文件
+                if (fileList[i].isDirectory()) {
+                    size = size + getFolderSize(fileList[i]);
+                } else {
+                    size = size + fileList[i].length();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
     }
 }

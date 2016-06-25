@@ -54,10 +54,14 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity android:name=".module.gallerypage.GalleryActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".module.aboutpage.AboutActivity"
-            android:exported="false"/>
+            />
+        <activity android:name=".module.settingpage.SettingActivity"
+            android:screenOrientation="portrait"
+            />
 
         <!--框架所需-->
         <activity android:name="com.yongchun.library.view.ImageSelectorActivity"
