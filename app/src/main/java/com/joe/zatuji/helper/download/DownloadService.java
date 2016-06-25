@@ -46,11 +46,6 @@ public class DownloadService extends IntentService {
         String url = intent.getStringExtra("url");
         initNotification();
         file = new File(Environment.getExternalStorageDirectory()+"/"+ Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD+"/"+"zatuji.apk");
-        if(!file.exists()) try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         com.joe.zatuji.api.DownloadService service = Api.createDownloadService(com.joe.zatuji.api.DownloadService.class, new ProgressCallback.ProgressDownloadListener() {
             @Override
             public void onDownLoadProgress(long bytesRead, long contentLength, boolean done) {

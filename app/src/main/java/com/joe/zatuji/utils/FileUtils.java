@@ -46,7 +46,13 @@ public class FileUtils {
     public static void writeFile(byte[] buffer,String filePath){
         FileOutputStream fileOutputStream=null;
         try {
-            fileOutputStream = new FileOutputStream(new File(filePath));
+            File folder = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD);
+            if(!folder.exists()){
+                folder.mkdirs();
+            }
+            File file = new File(filePath);
+            if(!file.exists())file.createNewFile();
+            fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(buffer);
             fileOutputStream.flush();
         } catch (Exception e) {
