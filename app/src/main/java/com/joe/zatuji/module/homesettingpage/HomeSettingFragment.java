@@ -111,10 +111,18 @@ public class HomeSettingFragment extends BaseFragment<HomeSettingPresenter> impl
         final FeedBackBean feedBack = new FeedBackBean();
         feedBack.type = "反馈";
         feedBack.version = MyApplication.getInstance().getVersionName();
-        feedBack.user_id = MyApplication.mUser.objectId;
+        if(MyApplication.mUser!=null){
+            feedBack.user_id = MyApplication.mUser.objectId;
+            feedBack.user_email = MyApplication.mUser.email;
+            feedBack.user_name = MyApplication.mUser.nickname;
+        }
         feedBack.android_version = android.os.Build.VERSION.SDK;
-        feedBack.user_email = MyApplication.mUser.email;
-        feedBack.user_name = MyApplication.mUser.nickname;
+        dialog.setOnTextChangeWatcher(new InputDialog.OnTextWatcher() {
+            @Override
+            public void onChange(String text) {
+                mFeedBack = text;
+            }
+        });
         dialog.setOnCompleteListener(new InputDialog.OnCompleteListener() {
             @Override
             public void OnComplete(String input, InputDialog dialog) {

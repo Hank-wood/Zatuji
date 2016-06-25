@@ -1,6 +1,8 @@
 package com.joe.zatuji.view;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -42,6 +44,22 @@ public class InputDialog extends BaseDialog{
     @Override
     protected void initListener() {
         super.initListener();
+        mInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(mWatcher!= null) mWatcher.onChange(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,5 +104,13 @@ public class InputDialog extends BaseDialog{
 
     public int getType(){
         return this.mType;
+    }
+
+    private OnTextWatcher mWatcher;
+    public void setOnTextChangeWatcher(OnTextWatcher watcher){
+        this.mWatcher = watcher;
+    }
+    public interface OnTextWatcher{
+        void onChange(String text);
     }
 }
