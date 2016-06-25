@@ -79,6 +79,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         mMyFavoriteImg.img_url = Api.HOST_PIC+img.file.key;
         mMyFavoriteImg.width = img.file.width;
         mMyFavoriteImg.height = img.file.height;
+        mMyFavoriteImg.type = img.file.type;
     }
 
     @Override

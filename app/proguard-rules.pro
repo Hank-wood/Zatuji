@@ -82,6 +82,8 @@
 -keep public class com.joe.zatuji.data.** { *;}
 -keep public class com.joe.zatuji.dao.** { *;}
 
+#glide
+-keep class com.bumptech.glide.** {*;}
 #Gson
 -keep class sun.misc.Unsafe { *; }
 #不混淆jar包中的类

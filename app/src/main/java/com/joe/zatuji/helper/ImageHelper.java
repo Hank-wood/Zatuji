@@ -48,7 +48,7 @@ public class ImageHelper {
         return Glide.with(iv.getContext())
                 .load(key)
                 .asGif()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .error(null)
                 .placeholder(null);
     }
@@ -63,6 +63,13 @@ public class ImageHelper {
             baseGlide(iv,Api.HOST_PIC+key).centerCrop().into(iv);
         }
 
+    }
+    public static void showSmallFullKey(ImageView iv , String fullKey,String type){
+        if(type!=null&&type.contains("gif")){
+            baseGif(iv,fullKey).fitCenter().into(iv);
+        }else{
+            baseGlide(iv,fullKey).centerCrop().into(iv);
+        }
     }
 
     public static void showSmall(ImageView iv , String fullKey){

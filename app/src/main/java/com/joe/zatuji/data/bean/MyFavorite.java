@@ -12,6 +12,7 @@ public class MyFavorite extends BaseBmobBean{
     public String desc;//图片描述
     public int width;//
     public int height;//
+    public String type;
 //    public BmobRelation tag;//用户自己添加的标签，多对关系
 //    public BmobRelation user;//收藏该图片的用户
 

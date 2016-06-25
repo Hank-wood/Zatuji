@@ -166,10 +166,10 @@ public class PicDetailModel implements BaseModel {
             Date now = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String name = dateFormat.format(now);
+            String type = body.contentType().toString().split("/")[1];
             File folder = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD);
             if(!folder.exists()) folder.mkdirs();
-            File avatar = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD+"/"+url+".jpg");
-
+            File avatar = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD+"/"+url+"."+type);
             InputStream inputStream = null;
             OutputStream outputStream = null;
 

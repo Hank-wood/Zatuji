@@ -39,7 +39,7 @@ public class GalleryAdapter extends BaseTurboAdapter<MyFavorite,GalleryAdapter.B
         holder.ivPic.setBackgroundColor(mContext.getResources().getColor(getRandomColor()));
         holder.ivPic.setLayoutParams(params);
         //替换为Glide
-        ImageHelper.showSmall(holder.ivPic,item.img_url);
+        ImageHelper.showSmallFullKey(holder.ivPic,item.img_url,item.type);
     }
 
 
