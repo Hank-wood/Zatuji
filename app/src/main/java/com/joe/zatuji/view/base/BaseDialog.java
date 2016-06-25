@@ -3,6 +3,8 @@ package com.joe.zatuji.view.base;
 import android.app.Dialog;
 import android.content.Context;
 
+import com.joe.zatuji.R;
+
 /**
  * Created by joe on 16/5/28.
  */
@@ -18,7 +20,7 @@ public abstract class BaseDialog extends Dialog {
         initListener();
     }
     public BaseDialog(Context context) {
-        super(context);
+        super(context, R.style.dialog_theme);
         this.mContext = context;
         setContentView(getLayout());
         initView();

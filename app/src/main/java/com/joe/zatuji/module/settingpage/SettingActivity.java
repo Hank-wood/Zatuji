@@ -67,7 +67,7 @@ public class SettingActivity extends BaseActivity implements SettingView.OnCheck
         dialog.setOnMenuClickListener(new DropMenuDialog.OnMenuClickListener() {
             @Override
             public void onMenuClick(TagBean.Tag tag) {
-                SettingHelper.setDefaultTag(tag.position);
+                SettingHelper.setDefaultTag(tag.position-1);
                 MyApplication.getInstance().setDefaultTag();
                 mTagSetting.setHint(tag.name);
             }
