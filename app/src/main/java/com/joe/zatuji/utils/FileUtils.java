@@ -4,6 +4,7 @@ package com.joe.zatuji.utils;
 import android.os.Environment;
 
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.MyApplication;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,7 +44,7 @@ public class FileUtils {
         return body;
     }
 
-    public static void writeFile(byte[] buffer,String filePath){
+    public static String writeFile(byte[] buffer,String filePath){
         FileOutputStream fileOutputStream=null;
         try {
             File folder = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD);
@@ -55,8 +56,35 @@ public class FileUtils {
             fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(buffer);
             fileOutputStream.flush();
+            return file.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        }finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static String writeCache(byte[] buffer,String filePath){
+        FileOutputStream fileOutputStream=null;
+        try {
+            File folder = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_SHARE);
+            if(!folder.exists()){
+                folder.mkdirs();
+            }
+            File file = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_SHARE+"/"+filePath);
+            if(!file.exists())file.createNewFile();
+            fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(buffer);
+            fileOutputStream.flush();
+            return file.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }finally {
             try {
                 fileOutputStream.close();

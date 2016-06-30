@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.api.Api;
+import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.base.model.BaseModel;
 import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.BaseListBean;
@@ -21,8 +22,11 @@ import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.data.bean.Pointer;
 import com.joe.zatuji.data.bean.Relation;
 import com.joe.zatuji.data.bean.RelationQuery;
+import com.joe.zatuji.helper.BmobSubscriber;
 import com.joe.zatuji.helper.GsonHelper;
+import com.joe.zatuji.helper.ShareHelper;
 import com.joe.zatuji.helper.TableHelper;
+import com.joe.zatuji.utils.FileUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
@@ -41,7 +45,9 @@ import java.util.Map;
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by joe on 16/6/2.
@@ -146,74 +152,58 @@ public class PicDetailModel implements BaseModel {
                 });
     }
 
+    public Observable<String> share(final String url){
+        return Api.getInstance().mApiService.download(Api.HOST_PIC+url)
+                .flatMap(new Func1<ResponseBody, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(ResponseBody responseBody) {
+                        return toCache(responseBody,url);
+                    }
+                });
+
+    }
+
     public Observable<String> toDisk(final ResponseBody body, final String url){
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
-                boolean done = writeResponseBodyToDisk(body,url);
-                if(done) {
-                    subscriber.onNext("保存成功");
+                String type = body.contentType().toString().split("/")[1];
+                String address = Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD+"/"+url+"."+type;
+                String path = null;
+                try {
+                    path = FileUtils.writeFile(body.bytes(),address);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(!TextUtils.isEmpty(path)) {
+                    subscriber.onNext(path);
                 }else{
                     subscriber.onError(new Throwable("保存失败"));
                 }
             }
         });
     }
-
-    private boolean writeResponseBodyToDisk(ResponseBody body, String url) {
-        try {
-            // todo change the file location/name according to your needs
-            Date now = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String name = dateFormat.format(now);
-            String type = body.contentType().toString().split("/")[1];
-            File folder = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD);
-            if(!folder.exists()) folder.mkdirs();
-            File avatar = new File(Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD+"/"+url+"."+type);
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            try {
-                byte[] fileReader = new byte[4096];
-
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(avatar);
-
-                while (true) {
-                    int read = inputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
-                    }
-
-                    outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
-
+    public Observable<String> toCache(final ResponseBody body, final String url){
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                String type = body.contentType().toString().split("/")[1];
+                String address = url+"."+type;
+                String path = null;
+                try {
+                    path = FileUtils.writeCache(body.bytes(),address);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-                outputStream.flush();
-                updateGallery(avatar,name);
-                return true;
-            } catch (IOException e) {
-                return false;
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
+                if(!TextUtils.isEmpty(path)) {
+                    subscriber.onNext(path);
+                }else{
+                    subscriber.onError(new Throwable("保存失败"));
                 }
             }
-        } catch (IOException e) {
-            return false;
-        }
+        });
     }
-    private void updateGallery(File file,String fileName){
+    public void updateGallery(File file,String fileName){
         try {
             MediaStore.Images.Media.insertImage(MyApplication.getInstance().getContentResolver(),
                     file.getAbsolutePath(), fileName, null);

@@ -1,5 +1,6 @@
 package com.joe.zatuji.module.picdetailpage;
 
+import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +20,9 @@ import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.helper.ShareHelper;
 import com.joe.zatuji.utils.KToast;
+import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.ChooseTagDialog;
 import com.joe.zatuji.view.CreateTagDialog;
 
@@ -107,7 +110,11 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                 mPresenter.saveToPhone(img.file.key);
                 break;
             case R.id.action_share://分享
-                showToastMsg("开发者还未添加该功能～");
+                LogUtils.d("url:"+mMyFavoriteImg.img_url);
+                showLoading("正在分享...");
+                mPresenter.share(img.file.key);
+//                ShareHelper.share("分享自杂图集", Uri.parse(mMyFavoriteImg.img_url),mActivity);
+//                showToastMsg("开发者还未添加该功能～");
                 break;
         }
         return true;

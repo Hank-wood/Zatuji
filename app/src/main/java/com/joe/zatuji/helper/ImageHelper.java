@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.github.siyamed.shapeimageview.CircularImageView;
+import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
@@ -25,6 +27,10 @@ import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by joe on 16/5/21.
@@ -37,7 +43,8 @@ public class ImageHelper {
 //        LogUtils.d("show img");
         return Glide.with(iv.getContext())
                 .load(key)
-                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                .crossFade(300)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE);
 //                .error(null)
 //                .placeholder(null);
     }
@@ -155,7 +162,21 @@ public class ImageHelper {
     }
 
     public static void clearCache(){
-        Glide.get(MyApplication.getInstance()).clearDiskCache();
+        Observable.create(new Observable.OnSubscribe<Object>() {
+            @Override
+            public void call(Subscriber<? super Object> subscriber) {
+                Glide.get(MyApplication.getInstance()).clearDiskCache();
+                File cache = new File(Environment.getExternalStorageDirectory()+"/"+ Constant.DIR_APP+"/"+Constant.DIR_SHARE);
+                if(cache.isDirectory()&&cache.exists()) {
+                    File[] files = cache.listFiles();
+                    if(files==null) return;
+                    for (int i=0;i<files.length;i++){
+                        files[i].delete();
+                    }
+                }
+            }
+        }).subscribeOn(Schedulers.io())
+                .subscribe();
     }
 
     public static int getCacheSize(){

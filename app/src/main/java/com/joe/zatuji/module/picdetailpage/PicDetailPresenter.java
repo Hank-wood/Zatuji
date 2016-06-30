@@ -1,6 +1,7 @@
 package com.joe.zatuji.module.picdetailpage;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.joe.zatuji.Event;
 import com.joe.zatuji.MyApplication;
@@ -15,15 +16,22 @@ import com.joe.zatuji.Constant;
 import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.helper.BmobSubscriber;
 import com.joe.zatuji.helper.RxSubscriber;
+import com.joe.zatuji.helper.ShareHelper;
 import com.joe.zatuji.module.favoritepage.FavoriteModel;
 import com.joe.zatuji.utils.KToast;
+import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 import com.joe.zatuji.data.bean.User;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -115,6 +123,15 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
             return;
         }
         mRxJavaManager.add(mModel.download(picUrl)
+                .doOnNext(new Action1<String>() {
+                    @Override
+                    public void call(String path) {
+                        Date now = new Date();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String name = dateFormat.format(now);
+                        mModel.updateGallery(new File(path),name);
+                    }
+                })
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new RxSubscriber<String>() {
@@ -124,13 +141,27 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
             }
 
             @Override
-            public void onNext(String s) {
-                mView.showToastMsg(s);
+            public void onNext(String path) {
+                mView.showToastMsg("保存成功");
             }
         }));
     }
     public void share(String picUrl){
+        mRxJavaManager.add(mModel.share(picUrl).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BmobSubscriber<String>() {
+                    @Override
+                    public void onError(ResultException e) {
+                        mView.showToastMsg("分享失败");
+                    }
 
+                    @Override
+                    public void onNext(String path) {
+                        LogUtils.d("uri:"+ Uri.fromFile(new File(path)));
+                        mView.showToastMsg("选择要分享的应用");
+                        ShareHelper.share("分享自杂图集",Uri.fromFile(new File(path)),MyApplication.getInstance());
+                    }
+                }));
     }
 
 

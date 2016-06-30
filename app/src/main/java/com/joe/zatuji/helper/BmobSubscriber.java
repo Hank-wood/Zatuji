@@ -18,6 +18,7 @@ public abstract class BmobSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
+        LogUtils.e("error:"+e.getMessage());
         if (e instanceof HttpException) {
             ResponseBody body = ((HttpException) e).response().errorBody();
             int code = ((HttpException) e).response().code();
