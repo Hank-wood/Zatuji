@@ -4,22 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.design.widget.AppBarLayout
-        android:gravity="center"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-
-        <SearchView
-            android:id="@+id/search_view"
-            android:iconifiedByDefault="false"
-            android:inputType="textCapWords"
-            android:imeOptions="actionSearch"
-            android:queryHint="输入你要寻觅的关键词"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="25dp"
+        android:layout_height="?attr/actionBarSize"
+        >
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </SearchView>
+            android:layout_height="?attr/actionBarSize">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"/>
+            <SearchView
+                android:gravity="end"
+                android:layout_gravity="end"
+                android:id="@+id/search_view"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:iconifiedByDefault="true"
+                android:inputType="textCapWords"
+                android:imeOptions="actionSearch"
+                android:queryHint="输入你要寻觅的关键词"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            </SearchView>
+        </LinearLayout>
     </android.support.design.widget.AppBarLayout>
     <FrameLayout
         android:id="@+id/fl_container_search"

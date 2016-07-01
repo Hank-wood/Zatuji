@@ -1,6 +1,7 @@
 package com.joe.zatuji.module.homesettingpage.user;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -63,7 +64,11 @@ public class UserFragment extends BaseFragment<UserInfoPresenter> implements Use
     @Override
     public void setUserInfo(User user) {
         doneLoading();
-        ImageHelper.showAvatar(mAvatar,user.avatar);
+        if(TextUtils.isEmpty(user.avatar)){
+            mAvatar.setImageResource(R.drawable.front_default);
+        }else{
+            ImageHelper.showAvatar(mAvatar,user.avatar);
+        }
         mAvatar.setClickable(true);
         mLogin.setText(user.nickname);
         mLogin.setClickable(false);
@@ -72,7 +77,7 @@ public class UserFragment extends BaseFragment<UserInfoPresenter> implements Use
     @Override
     public void setLoginStyle() {
         doneLoading();
-        mAvatar.setImageResource(R.mipmap.ic_launcher);
+        mAvatar.setImageResource(R.drawable.front_default);
         mLogin.setText("登陆/注册");
         mAvatar.setClickable(false);
         mLogin.setClickable(true);

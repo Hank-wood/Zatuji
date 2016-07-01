@@ -107,12 +107,12 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                 break;
             case R.id.action_download://保存
                 showLoading("保存图片...");
-                mPresenter.saveToPhone(img.file.key);
+                mPresenter.saveToPhone(img.file.key,mMyFavoriteImg.type);
                 break;
             case R.id.action_share://分享
                 LogUtils.d("url:"+mMyFavoriteImg.img_url);
                 showLoading("正在分享...");
-                mPresenter.share(img.file.key);
+                mPresenter.share(img.file.key,mMyFavoriteImg.type);
 //                ShareHelper.share("分享自杂图集", Uri.parse(mMyFavoriteImg.img_url),mActivity);
 //                showToastMsg("开发者还未添加该功能～");
                 break;

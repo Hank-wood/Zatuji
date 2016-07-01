@@ -20,7 +20,7 @@ public class Constant {
     public static final String GALLERY_TAG = "gallery_tag";//图片长
 
     //文件夹
-    public static final String DIR_APP = "ZaTuJi";//文件夹
+    public static final String DIR_APP = "杂图集";//文件夹
     public static final String DIR_DOWNLOAD = "杂图集";//图片保存文件夹
     public static final String DIR_SHARE = "share";//图片保存文件夹
     public static final String BMOB_KEY = "396b7abd4336bd6e9564a34a310e2365";

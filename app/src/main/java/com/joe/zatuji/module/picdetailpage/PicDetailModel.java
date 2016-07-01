@@ -5,15 +5,11 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.google.gson.JsonElement;
-import com.google.gson.internal.ObjectConstructor;
 import com.google.gson.reflect.TypeToken;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.api.Api;
-import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.base.model.BaseModel;
 import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.BaseListBean;
@@ -22,32 +18,24 @@ import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.data.bean.Pointer;
 import com.joe.zatuji.data.bean.Relation;
 import com.joe.zatuji.data.bean.RelationQuery;
-import com.joe.zatuji.helper.BmobSubscriber;
 import com.joe.zatuji.helper.GsonHelper;
-import com.joe.zatuji.helper.ShareHelper;
+import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.helper.TableHelper;
 import com.joe.zatuji.utils.FileUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by joe on 16/6/2.
@@ -142,75 +130,47 @@ public class PicDetailModel implements BaseModel {
         return false;
     }
 
-    public Observable<String> download(final String url){
-        return Api.getInstance().mApiService.download(Api.HOST_PIC+url)
-                .flatMap(new Func1<ResponseBody, Observable<String>>() {
-                    @Override
-                    public Observable<String> call(ResponseBody responseBody) {
-                        return toDisk(responseBody,url);
-                    }
-                });
-    }
+    public Observable<String> download(final String url, final String type){
 
-    public Observable<String> share(final String url){
-        return Api.getInstance().mApiService.download(Api.HOST_PIC+url)
-                .flatMap(new Func1<ResponseBody, Observable<String>>() {
-                    @Override
-                    public Observable<String> call(ResponseBody responseBody) {
-                        return toCache(responseBody,url);
-                    }
-                });
-
-    }
-
-    public Observable<String> toDisk(final ResponseBody body, final String url){
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
-                String type = body.contentType().toString().split("/")[1];
-                String address = Environment.getExternalStorageDirectory()+"/"+Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD+"/"+url+"."+type;
-                String path = null;
-                try {
-                    path = FileUtils.writeFile(body.bytes(),address);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if(!TextUtils.isEmpty(path)) {
-                    subscriber.onNext(path);
-                }else{
+                File picture = ImageHelper.copyBytesFromCache(Api.HOST_PIC+url);
+                if(picture==null) {
                     subscriber.onError(new Throwable("保存失败"));
+                }else {
+                    String name = picture.getName().replace(".","")+"."+ImageHelper.getType(type);
+                    byte[] bytes = FileUtils.file2Bytes(picture);
+                    String path = FileUtils.writePicture(bytes,name);
+                    if(path==null) subscriber.onError(new Throwable("保存失败"));
+                    subscriber.onNext(path);
+                    subscriber.onCompleted();
                 }
             }
         });
     }
-    public Observable<String> toCache(final ResponseBody body, final String url){
+
+    public Observable<String> share(final String url, final String type){
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
-                String type = body.contentType().toString().split("/")[1];
-                String address = url+"."+type;
-                String path = null;
-                try {
-                    path = FileUtils.writeCache(body.bytes(),address);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if(!TextUtils.isEmpty(path)) {
+                File picture = ImageHelper.copyBytesFromCache(Api.HOST_PIC+url);
+                if(picture==null) {
+                    subscriber.onError(new Throwable("分享失败"));
+                }else {
+                    String name = picture.getName().replace(".","")+"."+ImageHelper.getType(type);
+                    byte[] bytes = FileUtils.file2Bytes(picture);
+                    String path = FileUtils.writeCache(bytes,name);
+                    if(path==null) subscriber.onError(new Throwable("分享失败"));
                     subscriber.onNext(path);
-                }else{
-                    subscriber.onError(new Throwable("保存失败"));
+                    subscriber.onCompleted();
                 }
             }
         });
+
     }
+
     public void updateGallery(File file,String fileName){
-        try {
-            MediaStore.Images.Media.insertImage(MyApplication.getInstance().getContentResolver(),
-                    file.getAbsolutePath(), fileName, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        // 最后通知图库更新
         MyApplication.getInstance().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
     }
 }

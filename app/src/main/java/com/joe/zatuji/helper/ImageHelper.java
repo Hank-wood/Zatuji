@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.request.target.Target;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
@@ -27,6 +28,9 @@ import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.concurrent.ExecutionException;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -102,6 +106,28 @@ public class ImageHelper {
         iv.setBorderWidth(DPUtils.dip2px(iv.getContext(),2));
         iv.setBorderColor(iv.getContext().getResources().getColor(R.color.white));
     }
+
+    /**
+     * 下载图片，从缓存中复制
+     */
+    public static File copyBytesFromCache(String url){
+        File file = null;
+        try {
+            file = Glide.with(MyApplication.getInstance())
+                    .load(url)
+                    .downloadOnly(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL)
+                    .get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if(file==null){
+            return null;
+        }else {
+            return file;
+        }
+    }
+
     /**
      * 显示大图时重新计算图片的大小
      * 宽同屏幕
@@ -166,7 +192,7 @@ public class ImageHelper {
             @Override
             public void call(Subscriber<? super Object> subscriber) {
                 Glide.get(MyApplication.getInstance()).clearDiskCache();
-                File cache = new File(Environment.getExternalStorageDirectory()+"/"+ Constant.DIR_APP+"/"+Constant.DIR_SHARE);
+                File cache = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/"+Constant.DIR_SHARE);
                 if(cache.isDirectory()&&cache.exists()) {
                     File[] files = cache.listFiles();
                     if(files==null) return;
@@ -208,5 +234,19 @@ public class ImageHelper {
             e.printStackTrace();
         }
         return size;
+    }
+
+    public static String getType(String type){
+        if(type.contains("jpeg")){
+            return "jpeg";
+        }else if(type.contains("jpg")){
+            return "jpg";
+        }else if(type.contains("gif")){
+            return "gif";
+        }else if(type.contains("png")){
+            return "png";
+        }else {
+            return "jpeg";
+        }
     }
 }

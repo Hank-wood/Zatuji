@@ -117,18 +117,19 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
             }
         }));
     }
-    public void saveToPhone(String picUrl){
+    public void saveToPhone(String picUrl,String type){
         if(mModel.alreadySaved(picUrl)){
             mView.showToastMsg("已经保存过咯～");
             return;
         }
-        mRxJavaManager.add(mModel.download(picUrl)
+        mRxJavaManager.add(mModel.download(picUrl,type)
                 .doOnNext(new Action1<String>() {
                     @Override
                     public void call(String path) {
                         Date now = new Date();
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         String name = dateFormat.format(now);
+                        LogUtils.d("save:"+path);
                         mModel.updateGallery(new File(path),name);
                     }
                 })
@@ -146,8 +147,8 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
             }
         }));
     }
-    public void share(String picUrl){
-        mRxJavaManager.add(mModel.share(picUrl).subscribeOn(Schedulers.io())
+    public void share(String picUrl,String type){
+        mRxJavaManager.add(mModel.share(picUrl,type).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BmobSubscriber<String>() {
                     @Override

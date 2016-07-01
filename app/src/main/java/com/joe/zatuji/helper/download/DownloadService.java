@@ -12,7 +12,6 @@ import com.joe.zatuji.Constant;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.utils.FileUtils;
-import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class DownloadService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String url = intent.getStringExtra("url");
         initNotification();
-        file = new File(Environment.getExternalStorageDirectory()+"/"+ Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD+"/"+"zatuji.apk");
+        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/"+ Constant.DIR_APP+"/"+"zatuji.apk");
         com.joe.zatuji.api.DownloadService service = Api.createDownloadService(com.joe.zatuji.api.DownloadService.class, new ProgressCallback.ProgressDownloadListener() {
             @Override
             public void onDownLoadProgress(long bytesRead, long contentLength, boolean done) {
@@ -59,7 +58,7 @@ public class DownloadService extends IntentService {
         });
         try {
             Response<ResponseBody> body =service.download(url).execute();
-            FileUtils.writeFile(body.body().bytes(), Environment.getExternalStorageDirectory()+"/"+ Constant.DIR_APP+"/"+Constant.DIR_DOWNLOAD+"/"+"zatuji.apk");
+            FileUtils.writeFiles(body.body().bytes(),"zatuji.apk");
             startActivity(installAPK(file));
         } catch (IOException e) {
             e.printStackTrace();

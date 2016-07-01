@@ -26,11 +26,7 @@ public abstract class BmobSubscriber<T> extends Subscriber<T> {
             if (code == 404) {
                 try {
                     ResultException resultException = GsonHelper.fromJson(body.string(), ResultException.class);
-                    if(resultException.getCode()!=0){
-                        onError(resultException);
-                    }else{
-                        onError(new ResultException("网络异常"));
-                    }
+                    onError(resultException);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     onError(new ResultException("网络异常"));
@@ -41,7 +37,7 @@ public abstract class BmobSubscriber<T> extends Subscriber<T> {
             onError(e);
         }
         else {
-            onError(new ResultException("网络异常"));
+            onError(new ResultException(e.getMessage()));
         }
     }
 

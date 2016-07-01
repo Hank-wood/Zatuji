@@ -36,11 +36,16 @@ public class SearchPresenter extends BaseStaggeredPresenter<BaseStaggeredView,Se
             @Override
             public void onError(Throwable e) {
                 mView.showEmptyView();
+                mView.showToastMsg("没有查到与"+query+"相关图片");
             }
 
             @Override
             public void onNext(DataBean dataBean) {
-                mView.loadData(dataBean.pins);
+                if(dataBean.pins==null||dataBean.pins.size()<=0){
+                    mView.showToastMsg("没有查到与"+query+"相关图片");
+                }else{
+                    mView.loadData(dataBean.pins);
+                }
                 countOffset(dataBean);
             }
         }));

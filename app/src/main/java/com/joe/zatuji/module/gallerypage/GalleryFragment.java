@@ -59,7 +59,7 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
                 picBean.raw_text = mGalleryAdapter.getItem(position).desc;
                 picBean.file.height =  mGalleryAdapter.getItem(position).height;
                 picBean.file.width =  mGalleryAdapter.getItem(position).width;
-                picBean.file.type = "jpeg";
+                picBean.file.type = mGalleryAdapter.getItem(position).type;
                 LogUtils.d("key:"+mGalleryAdapter.getItem(position).img_url.substring(Api.HOST_PIC.length()));
                 picBean.file.key = mGalleryAdapter.getItem(position).img_url.substring(Api.HOST_PIC.length());
                 i.putExtra(Constant.PIC_DATA, picBean);

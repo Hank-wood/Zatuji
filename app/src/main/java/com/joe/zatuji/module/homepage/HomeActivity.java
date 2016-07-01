@@ -210,6 +210,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
             mBottomBar.hide();
             mFab.hide();
         }else{
+            if(mBottomBar.isShowing())return;
             mFab.show();
         }
     }
