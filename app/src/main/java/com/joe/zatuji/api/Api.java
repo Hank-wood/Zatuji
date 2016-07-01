@@ -29,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class Api {
     //接口地址
-    public static final String HOST="http://api.huaban.com/";//主机地址
+    public static final String HOST="https://api.huaban.com/";//主机地址
     public static final String HOST_PIC="http://img.hb.aicdn.com/";//图片保存地址
     public static final String HOST_BMOB = "https://api.bmob.cn/ ";//后台主机地址
 

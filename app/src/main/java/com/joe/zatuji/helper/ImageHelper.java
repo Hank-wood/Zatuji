@@ -5,9 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -18,6 +20,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.request.target.Target;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
@@ -34,6 +38,8 @@ import java.util.concurrent.ExecutionException;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -92,6 +98,7 @@ public class ImageHelper {
      */
     public static void showBig(ImageView iv , DataBean.PicBean pic){
         resizeImage(iv,pic);
+        iv.setScaleType(ImageView.ScaleType.FIT_XY);
         if(pic.file.type.equals("gif")){
             baseGif(iv,Api.HOST_PIC+pic.file.key).into(iv);
         }else{
@@ -99,6 +106,29 @@ public class ImageHelper {
         }
     }
 
+    public static void showScaleBig(final SubsamplingScaleImageView iv, final DataBean.PicBean pic){
+        resizeImage(iv,pic);
+        Observable.create(new Observable.OnSubscribe<Uri>() {
+            @Override
+            public void call(Subscriber<? super Uri> subscriber) {
+                File file = copyBytesFromCache(Api.HOST_PIC+pic.file.key);
+                if(file!=null && file.exists()){
+                    LogUtils.d("uri:"+Uri.fromFile(file));
+                    subscriber.onNext(Uri.fromFile(file));
+                }else{
+                    subscriber.onError(new Throwable("加载大图失败"));
+                }
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Uri>() {
+                    @Override
+                    public void call(Uri uri) {
+                        iv.setImage(ImageSource.uri(uri));
+                    }
+                });
+    }
     public static void showAvatar(CircularImageView iv , String url){
         baseGlide(iv,url)
                 .transform(new GlideCircleTransform(iv.getContext()))
@@ -111,6 +141,7 @@ public class ImageHelper {
      * 下载图片，从缓存中复制
      */
     public static File copyBytesFromCache(String url){
+        LogUtils.d("cache:"+url);
         File file = null;
         try {
             file = Glide.with(MyApplication.getInstance())
@@ -133,7 +164,7 @@ public class ImageHelper {
      * 宽同屏幕
      * 高按原图比例计算
      */
-    public static void resizeImage(ImageView iv, DataBean.PicBean  pic){
+    public static void resizeImage(View iv, DataBean.PicBean  pic){
         ViewGroup.LayoutParams params = iv.getLayoutParams();
         //获取屏幕宽高
         DisplayMetrics dm =iv.getContext().getResources().getDisplayMetrics();
@@ -145,7 +176,6 @@ public class ImageHelper {
             params.height+=1;
         }
         iv.setLayoutParams(params);
-        iv.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
     //转换为圆形的图片

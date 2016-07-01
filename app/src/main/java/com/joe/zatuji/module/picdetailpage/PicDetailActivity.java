@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
@@ -26,6 +27,7 @@ import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.ChooseTagDialog;
 import com.joe.zatuji.view.CreateTagDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -34,7 +36,7 @@ import java.util.ArrayList;
  * Created by Joe on 2016/4/16.
  */
 public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implements PicDetailView{
-    private ImageView ivPic;
+    private SubsamplingScaleImageView ivPic;
     private TextView tvDesc;
     private Toolbar toolbar;
     private AppBarLayout appBarLayout;
@@ -56,9 +58,10 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
 
     @Override
     protected void initView() {
+        img = (DataBean.PicBean) getIntent().getSerializableExtra(Constant.PIC_DATA);
         tvDesc = (TextView) findViewById(R.id.tv_desc_item);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ivPic = (ImageView) findViewById(R.id.iv_pic);
+        ivPic = (SubsamplingScaleImageView) findViewById(R.id.iv_pic);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
         tvDesc.setVisibility(View.INVISIBLE);
@@ -69,14 +72,14 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         initData();
     }
     private void initData() {
-        img = (DataBean.PicBean) getIntent().getSerializableExtra(Constant.PIC_DATA);
         desc = img.raw_text;
         if(!TextUtils.isEmpty(desc)){
             tvDesc.setText(desc);
         }else{
             dontShowTv=true;
         }
-        ImageHelper.showBig(ivPic, img);
+//        ImageHelper.showBig(ivPic, img);
+        ImageHelper.showScaleBig(ivPic,img);
         mMyFavoriteImg = new MyFavorite();
         mMyFavoriteImg.desc = desc;
         mMyFavoriteImg.img_url = Api.HOST_PIC+img.file.key;
