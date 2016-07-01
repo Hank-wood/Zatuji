@@ -128,7 +128,11 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     @Override
     public void setAvatar(String url) {
-        ImageHelper.showAvatar(mAvatar,url);
+        if(TextUtils.isEmpty(url)){
+            mAvatar.setImageResource(R.mipmap.ic_launcher);
+        }else{
+            ImageHelper.showAvatar(mAvatar,url);
+        }
     }
 
     @Override
