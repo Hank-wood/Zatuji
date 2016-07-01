@@ -4,7 +4,7 @@ package com.joe.zatuji;
  * Created by Joe on 2016/3/11.
  */
 public class Constant {
-    public static final boolean IS_DEBUG =true;
+    public static final boolean IS_DEBUG =false;
     //接口地址
     public static final String HOST = "http://api.huaban.com/";//主机地址
     public static final String HOST_PIC = "http://img.hb.aicdn.com/";//图片保存地址
