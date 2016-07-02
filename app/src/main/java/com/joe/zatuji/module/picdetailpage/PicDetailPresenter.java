@@ -170,4 +170,9 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
     public void onStart() {
 
     }
+
+    public void getMoreData(){
+
+    }
+
 }

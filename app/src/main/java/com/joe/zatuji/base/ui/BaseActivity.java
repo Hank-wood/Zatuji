@@ -74,7 +74,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         dialog.show();
         dialog.setContentView(loadingView);
 
-        LogUtils.d("loading");
     }
     @Override
     public void doneLoading(){
@@ -83,7 +82,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
             mLoadingDialog.dismiss();
         }
 
-        LogUtils.d("doneLoading");
     }
     @Override
     public void showError(String str) {

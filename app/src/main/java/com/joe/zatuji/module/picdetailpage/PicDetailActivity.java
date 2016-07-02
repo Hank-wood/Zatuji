@@ -1,17 +1,15 @@
 package com.joe.zatuji.module.picdetailpage;
 
-import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
@@ -19,15 +17,12 @@ import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.data.bean.MyFavorite;
-import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.Constant;
-import com.joe.zatuji.helper.ShareHelper;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.ChooseTagDialog;
 import com.joe.zatuji.view.CreateTagDialog;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -36,7 +31,6 @@ import java.util.ArrayList;
  * Created by Joe on 2016/4/16.
  */
 public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implements PicDetailView{
-    private SubsamplingScaleImageView ivPic;
     private TextView tvDesc;
     private Toolbar toolbar;
     private AppBarLayout appBarLayout;
@@ -45,7 +39,11 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     private String desc;
     private DataBean.PicBean img;
     private MyFavorite mMyFavoriteImg;
-
+    private ViewPager mViewPager;
+    private ArrayList<DataBean.PicBean> mPicList;
+    private ArrayList<MyFavorite> mGallerys;
+    private boolean isFromGallery;
+    private PicDetailAdapter mAdapter;
     @Override
     protected int getLayout() {
         return R.layout.activity_pic_detail;
@@ -58,10 +56,12 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
 
     @Override
     protected void initView() {
-        img = (DataBean.PicBean) getIntent().getSerializableExtra(Constant.PIC_DATA);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager_detail);
+        mAdapter = new PicDetailAdapter(mActivity);
+        mViewPager.setAdapter(mAdapter);
+        getDataFromWhere();
         tvDesc = (TextView) findViewById(R.id.tv_desc_item);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ivPic = (SubsamplingScaleImageView) findViewById(R.id.iv_pic);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
         tvDesc.setVisibility(View.INVISIBLE);
@@ -71,15 +71,36 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         mActionBar.setDisplayHomeAsUpEnabled(true);
         initData();
     }
+
+    private void getDataFromWhere() {
+        img = (DataBean.PicBean) getIntent().getSerializableExtra(Constant.PIC_DATA);
+        isFromGallery = getIntent().getBooleanExtra(Constant.PIC_FROM_GALLERY,false);
+        LogUtils.d("isFromGallery:"+isFromGallery);
+        if(isFromGallery){
+            mGallerys = (ArrayList<MyFavorite>) getIntent().getSerializableExtra(Constant.PIC_LIST);
+            LogUtils.d("mGallery:"+mGallerys);
+            mAdapter.setMyFavorites(mGallerys);
+        }else{
+            mPicList = (ArrayList<DataBean.PicBean>) getIntent().getSerializableExtra(Constant.PIC_LIST);
+            mAdapter.setPics(mPicList);
+        }
+        mViewPager.setCurrentItem(getIntent().getIntExtra(Constant.PIC_POS,0));
+
+    }
+
     private void initData() {
+
+    }
+
+    private void setData(DataBean.PicBean picBean){
+        img = picBean;
         desc = img.raw_text;
         if(!TextUtils.isEmpty(desc)){
             tvDesc.setText(desc);
         }else{
             dontShowTv=true;
         }
-//        ImageHelper.showBig(ivPic, img);
-        ImageHelper.showScaleBig(ivPic,img);
+//        showBigImage(img.file.type);
         mMyFavoriteImg = new MyFavorite();
         mMyFavoriteImg.desc = desc;
         mMyFavoriteImg.img_url = Api.HOST_PIC+img.file.key;
@@ -125,20 +146,40 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
 
     @Override
     protected void initListener() {
-        ivPic.setOnClickListener(new View.OnClickListener() {
+        mAdapter.setOnItemClickListener(new PicDetailAdapter.onItemClickListener() {
             @Override
-            public void onClick(View v) {
-                if(appBarLayout.getVisibility()==View.VISIBLE){
-                    tvDesc.setVisibility(View.INVISIBLE);
-                    toolbar.setVisibility(View.INVISIBLE);
-                    appBarLayout.setVisibility(View.INVISIBLE);
-                }else{
-                    toolbar.setVisibility(View.VISIBLE);
-                    appBarLayout.setVisibility(View.VISIBLE);
-                    if(!dontShowTv) tvDesc.setVisibility(View.VISIBLE);
-                }
+            public void OnItemClicked(int position, DataBean.PicBean picBean) {
+                hideOrShowAppBar();
             }
         });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if(position == mAdapter.getCount()-1){
+                    LogUtils.d("load more");
+                }else {
+                    setData(mAdapter.getItem(position));
+                }
+            }
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+    private void hideOrShowAppBar() {
+        if(appBarLayout.getVisibility()==View.VISIBLE){
+            tvDesc.setVisibility(View.INVISIBLE);
+            toolbar.setVisibility(View.INVISIBLE);
+            appBarLayout.setVisibility(View.INVISIBLE);
+        }else{
+            toolbar.setVisibility(View.VISIBLE);
+            appBarLayout.setVisibility(View.VISIBLE);
+            if(!dontShowTv) tvDesc.setVisibility(View.VISIBLE);
+        }
     }
 
     //让用户选择图集

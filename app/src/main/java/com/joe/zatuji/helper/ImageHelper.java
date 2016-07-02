@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -141,7 +142,6 @@ public class ImageHelper {
      * 下载图片，从缓存中复制
      */
     public static File copyBytesFromCache(String url){
-        LogUtils.d("cache:"+url);
         File file = null;
         try {
             file = Glide.with(MyApplication.getInstance())
@@ -169,11 +169,16 @@ public class ImageHelper {
         //获取屏幕宽高
         DisplayMetrics dm =iv.getContext().getResources().getDisplayMetrics();
         params.width = dm.widthPixels;
-        double times= (dm.widthPixels+0.0)/(pic.file.width +0.0);
-        double resizeHeight = pic.file.height*times;
-        params.height = (int) resizeHeight;
-        if(resizeHeight-params.height>=0.5){
-            params.height+=1;
+        //高小于屏幕的 与屏幕同高，大于的按图片高
+        if(pic.file.height<=dm.heightPixels && !(iv instanceof ImageView)){
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        }else{
+            double times= (dm.widthPixels+0.0)/(pic.file.width +0.0);
+            double resizeHeight = pic.file.height*times;
+            params.height = (int) resizeHeight;
+            if(resizeHeight-params.height>=0.5){
+                params.height+=1;
+            }
         }
         iv.setLayoutParams(params);
     }
@@ -267,6 +272,7 @@ public class ImageHelper {
     }
 
     public static String getType(String type){
+        if(TextUtils.isEmpty(type)) return "jpeg";
         if(type.contains("jpeg")){
             return "jpeg";
         }else if(type.contains("jpg")){

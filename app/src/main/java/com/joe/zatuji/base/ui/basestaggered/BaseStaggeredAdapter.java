@@ -11,6 +11,7 @@ import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.utils.DPUtils;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import cc.solart.turbo.BaseTurboAdapter;
@@ -57,6 +58,10 @@ public class BaseStaggeredAdapter extends BaseTurboAdapter<DataBean.PicBean,Base
     private int getRandomColor() {
         Random random=new Random();
         return defaultColor[ random.nextInt(4)];
+    }
+
+    public ArrayList<DataBean.PicBean> getAllData(){
+        return (ArrayList<DataBean.PicBean>) mData;
     }
 }
 

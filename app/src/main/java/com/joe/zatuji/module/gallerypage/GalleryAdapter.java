@@ -11,6 +11,7 @@ import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.utils.DPUtils;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import cc.solart.turbo.BaseTurboAdapter;
@@ -56,5 +57,9 @@ public class GalleryAdapter extends BaseTurboAdapter<MyFavorite,GalleryAdapter.B
     private int getRandomColor() {
         Random random=new Random();
         return defaultColor[ random.nextInt(4)];
+    }
+
+    public ArrayList<MyFavorite> getAllItem(){
+        return (ArrayList<MyFavorite>) mData;
     }
 }
