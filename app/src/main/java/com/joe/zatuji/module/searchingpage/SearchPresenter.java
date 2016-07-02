@@ -2,6 +2,7 @@ package com.joe.zatuji.module.searchingpage;
 
 import android.text.TextUtils;
 
+import com.joe.zatuji.Event;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredPresenter;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredView;
 import com.joe.zatuji.data.bean.DataBean;
@@ -67,12 +68,14 @@ public class SearchPresenter extends BaseStaggeredPresenter<BaseStaggeredView,Se
                     @Override
                     public void onError(Throwable e) {
                         mView.showEmptyView();
+                        mRxJavaManager.post(Event.LOAD_MORE_DONE,null);
                     }
 
                     @Override
                     public void onNext(DataBean dataBean) {
                         mView.addData(dataBean.pins);
                         countOffset(dataBean);
+                        mRxJavaManager.post(Event.LOAD_MORE_DONE,dataBean.pins);
                     }
                 }));
     }

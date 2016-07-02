@@ -44,6 +44,7 @@ public class Constant {
     public static final String TOKEN = "token";
     public static final String USER_NAME = "user_name";
     public static final String PWD = "pwd";
+    public static final String USER_AVATAR = "user_avatar";//用户头像
 
     //设置
     public static final String DEFAULT_TAG = "default_tag" ;//默认的发现tag

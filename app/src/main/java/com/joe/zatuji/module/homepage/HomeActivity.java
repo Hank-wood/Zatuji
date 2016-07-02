@@ -111,7 +111,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     }
 
     private void checkWifi() {
-        if(SettingHelper.isNotifyNoWifi()&& NetWorkUtils.getNetType(mActivity)!=NetWorkUtils.TYPE_WIFI){
+        if(SettingHelper.isNotifyNoWifi()&& NetWorkUtils.getNetType(mActivity)==NetWorkUtils.TYPE_4G){
             MessageDialog dialog = new MessageDialog(mActivity,getResources().getString(R.string.no_wifi_title),getResources().getString(R.string.no_wifi_content));
             dialog.show();
         }
@@ -179,11 +179,10 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         }
         return true;
     }
-
     @Override
     public void onMenuClick(TagBean.Tag tag) {
         setCurrentTitle(1,tag.name);
-        discoverFragment.loadAnotherTagData(tag.requestName);
+        discoverFragment.loadAnotherTagData(tag);
     }
 
     @Override
@@ -226,7 +225,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
                 break;
             case R.id.action_discover:
                 changeFragment(discoverFragment,TAG_DISCOVER_FRAG);
-                setCurrentTitle(1,MyApplication.getInstance().mDefaultTag.name);
+                setCurrentTitle(1,discoverFragment.getTagName());
                 currentPos=1;
                 break;
             case R.id.action_favorite:

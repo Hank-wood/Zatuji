@@ -46,7 +46,7 @@ dependencies {
 //    compile 'de.hdodenhof:circleimageview:2.0.0'
 
     //图片选择器
-    compile 'com.commit451:PhotoView:1.2.4'
+//    compile 'com.commit451:PhotoView:1.2.4'
     compile 'com.isseiaoki:simplecropview:1.0.13'
     compile 'com.yongchun:com.yongchun.imageselector:1.1.0'
 
@@ -71,5 +71,5 @@ dependencies {
     //switch
     compile 'com.kyleduo.switchbutton:library:1.4.1'
     //scale image to show big
-    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
 }

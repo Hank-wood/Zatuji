@@ -44,6 +44,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     private ArrayList<MyFavorite> mGallerys;
     private boolean isFromGallery;
     private PicDetailAdapter mAdapter;
+    private int mCurrentPos = 0;
     @Override
     protected int getLayout() {
         return R.layout.activity_pic_detail;
@@ -75,21 +76,20 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     private void getDataFromWhere() {
         img = (DataBean.PicBean) getIntent().getSerializableExtra(Constant.PIC_DATA);
         isFromGallery = getIntent().getBooleanExtra(Constant.PIC_FROM_GALLERY,false);
-        LogUtils.d("isFromGallery:"+isFromGallery);
         if(isFromGallery){
             mGallerys = (ArrayList<MyFavorite>) getIntent().getSerializableExtra(Constant.PIC_LIST);
-            LogUtils.d("mGallery:"+mGallerys);
             mAdapter.setMyFavorites(mGallerys);
         }else{
             mPicList = (ArrayList<DataBean.PicBean>) getIntent().getSerializableExtra(Constant.PIC_LIST);
             mAdapter.setPics(mPicList);
         }
+        mCurrentPos = getIntent().getIntExtra(Constant.PIC_POS,0);
         mViewPager.setCurrentItem(getIntent().getIntExtra(Constant.PIC_POS,0));
 
     }
 
     private void initData() {
-
+        setData((DataBean.PicBean) getIntent().getSerializableExtra(Constant.PIC_DATA));
     }
 
     private void setData(DataBean.PicBean picBean){
@@ -119,6 +119,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                mPresenter.quiet(mCurrentPos);
                 finish();
                 break;
             case R.id.action_save://收藏
@@ -152,13 +153,21 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                 hideOrShowAppBar();
             }
         });
+        mViewPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideOrShowAppBar();
+            }
+        });
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if(position == mAdapter.getCount()-1){
                     LogUtils.d("load more");
+                    mPresenter.getMoreData();
                 }else {
                     setData(mAdapter.getItem(position));
+                    mCurrentPos = position;
                 }
             }
             @Override
@@ -222,6 +231,23 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         }
     }
 
+    @Override
+    public void addGallery(ArrayList<MyFavorite> data) {
+        mAdapter.addMyFavorites(data);
+        doneLoading();
+    }
+
+    @Override
+    public void addPics(ArrayList<DataBean.PicBean> data) {
+        mAdapter.addPics(data);
+        doneLoading();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mPresenter.quiet(mCurrentPos);
+    }
 
     @Override
     protected void onDestroy() {

@@ -133,6 +133,7 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
                 i.putExtra(Constant.PIC_FROM_GALLERY,false);
                 i.putExtra(Constant.PIC_LIST,mAdapter.getAllData());
                 mActivity.startActivity(i);
+                mPresenter.subcribeForPicDetail();
             }
 
         });
@@ -182,11 +183,13 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
         mRefreshLayout.setRefreshing(false);
         mAdapter.resetData((List<DataBean.PicBean>) beanList);
     }
-
     @Override
     public void addData(List<? extends BaseBean> addList) {
-
+        int before= mAdapter.getAllData().size();
         mRecyclerView.loadMoreComplete(addList);
+        if(before== mAdapter.getAllData().size()){
+            mAdapter.addData((List<DataBean.PicBean>) addList);
+        }
     }
 
     @Override
@@ -230,5 +233,10 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
 
     protected View findView(int id){
         return mRootView.findViewById(id);
+    }
+
+    @Override
+    public void setToCurrentPosition(int position) {
+        mRecyclerView.scrollToPosition(position);
     }
 }

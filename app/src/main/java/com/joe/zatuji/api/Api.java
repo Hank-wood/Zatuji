@@ -112,8 +112,8 @@ public class Api {
     private OkHttpClient getOkHttpClient(Interceptor header) {
         mLog.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
-                .readTimeout(7676, TimeUnit.MILLISECONDS)
-                .connectTimeout(7676, TimeUnit.MILLISECONDS)
+                .readTimeout(3000, TimeUnit.MILLISECONDS)
+                .connectTimeout(3000, TimeUnit.MILLISECONDS)
                 .addInterceptor(header)
                 .addInterceptor(mLog)
                 .build();

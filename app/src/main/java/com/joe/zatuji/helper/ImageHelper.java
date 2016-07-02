@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,9 +21,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
@@ -33,15 +35,11 @@ import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.concurrent.ExecutionException;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by joe on 16/5/21.
@@ -51,7 +49,6 @@ public class ImageHelper {
      * 普通图片显示
      */
     private static DrawableRequestBuilder<String> baseGlide(ImageView iv, String key){
-//        LogUtils.d("show img");
         return Glide.with(iv.getContext())
                 .load(key)
                 .crossFade(300)
@@ -97,39 +94,26 @@ public class ImageHelper {
     /**
      * 展示全屏大图
      */
-    public static void showBig(ImageView iv , DataBean.PicBean pic){
+    public static PhotoViewAttacher showBig(final ImageView iv , DataBean.PicBean pic){
         resizeImage(iv,pic);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        if(pic.file.type.equals("gif")){
+        if(getType(pic.file.type).contains("gif")){
             baseGif(iv,Api.HOST_PIC+pic.file.key).into(iv);
+            return null;
         }else{
-            baseGlide(iv,Api.HOST_PIC+pic.file.key).into(iv);
+            final PhotoViewAttacher attacher = new PhotoViewAttacher(iv);
+            baseGlide(iv,Api.HOST_PIC+pic.file.key).into(new SimpleTarget<GlideDrawable>() {
+                @Override
+                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                    iv.setImageDrawable(resource);
+                    attacher.update();
+                }
+            });
+            return attacher;
         }
     }
 
-    public static void showScaleBig(final SubsamplingScaleImageView iv, final DataBean.PicBean pic){
-        resizeImage(iv,pic);
-        Observable.create(new Observable.OnSubscribe<Uri>() {
-            @Override
-            public void call(Subscriber<? super Uri> subscriber) {
-                File file = copyBytesFromCache(Api.HOST_PIC+pic.file.key);
-                if(file!=null && file.exists()){
-                    LogUtils.d("uri:"+Uri.fromFile(file));
-                    subscriber.onNext(Uri.fromFile(file));
-                }else{
-                    subscriber.onError(new Throwable("加载大图失败"));
-                }
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Uri>() {
-                    @Override
-                    public void call(Uri uri) {
-                        iv.setImage(ImageSource.uri(uri));
-                    }
-                });
-    }
+
     public static void showAvatar(CircularImageView iv , String url){
         baseGlide(iv,url)
                 .transform(new GlideCircleTransform(iv.getContext()))
@@ -170,11 +154,11 @@ public class ImageHelper {
         DisplayMetrics dm =iv.getContext().getResources().getDisplayMetrics();
         params.width = dm.widthPixels;
         //高小于屏幕的 与屏幕同高，大于的按图片高
-        if(pic.file.height<=dm.heightPixels && !(iv instanceof ImageView)){
+        double times= (dm.widthPixels+0.0)/(pic.file.width +0.0);
+        double resizeHeight = pic.file.height*times;
+        if(resizeHeight<=dm.heightPixels && !getType(pic.file.type).contains("gif")){
             params.height = ViewGroup.LayoutParams.MATCH_PARENT;
         }else{
-            double times= (dm.widthPixels+0.0)/(pic.file.width +0.0);
-            double resizeHeight = pic.file.height*times;
             params.height = (int) resizeHeight;
             if(resizeHeight-params.height>=0.5){
                 params.height+=1;

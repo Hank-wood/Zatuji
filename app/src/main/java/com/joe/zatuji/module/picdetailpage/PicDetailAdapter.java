@@ -6,14 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.helper.ImageHelper;
+import com.joe.zatuji.utils.LogUtils;
 
 import java.util.ArrayList;
+
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by joe on 16/7/2.
@@ -43,6 +46,20 @@ public class PicDetailAdapter extends PagerAdapter {
             notifyDataSetChanged();
         }
     }
+
+    public void addMyFavorites(ArrayList<MyFavorite> myFavorites){
+        if(myFavorites!=null){
+            this.myFavorites.addAll(myFavorites);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void addPics(ArrayList<DataBean.PicBean> mPics){
+        if(mPics!=null){
+            this.mPics.addAll(mPics);
+            notifyDataSetChanged();
+        }
+    }
     @Override
     public int getCount() {
 
@@ -63,53 +80,43 @@ public class PicDetailAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = View.inflate(context, R.layout.item_pic_detail_viewpager,null);
         container.addView(view);
-        ImageView gif = (ImageView) view.findViewById(R.id.iv_pic_gif);
-        SubsamplingScaleImageView pic = (SubsamplingScaleImageView) view.findViewById(R.id.iv_pic);
-//        if(position == getCount()-1) {
-//            pic.setImage(ImageSource.resource(R.drawable.front_default));
-//            return view;
-//        }
-        gif.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mListener!=null){
-                    if(isGallery){
-                        mListener.OnItemClicked(position, gallery2PicBean(myFavorites.get(position)));
-                    }else {
-                        mListener.OnItemClicked(position,mPics.get(position));
-                    }
-                }
-            }
-        });
-        pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mListener!=null){
-                    if(isGallery){
-                        mListener.OnItemClicked(position, gallery2PicBean(myFavorites.get(position)));
-                    }else {
-                        mListener.OnItemClicked(position,mPics.get(position));
-                    }
-                }
-            }
-        });
+        ImageView image = (ImageView) view.findViewById(R.id.iv_pic_gif);
+        PhotoViewAttacher attacher = null;
         if(isGallery) {
-            showPic(gif,pic, gallery2PicBean(myFavorites.get(position)));
+            attacher = showPic(image, gallery2PicBean(myFavorites.get(position)));
         }else {
-            showPic(gif, pic, mPics.get(position));
+            attacher = showPic(image,mPics.get(position));
+        }
+        if(attacher!=null){
+            attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+                @Override
+                public void onPhotoTap(View view, float v, float v1) {
+                    if(isGallery){
+                        mListener.OnItemClicked(position, gallery2PicBean(myFavorites.get(position)));
+                    }else {
+                        mListener.OnItemClicked(position,mPics.get(position));
+                    }
+                }
+                @Override
+                public void onOutsidePhotoTap() {}
+            });
+        }else{
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isGallery){
+                        mListener.OnItemClicked(position, gallery2PicBean(myFavorites.get(position)));
+                    }else {
+                        mListener.OnItemClicked(position,mPics.get(position));
+                    }
+                }
+            });
         }
         return view;
     }
 
-    private void showPic(ImageView gif, SubsamplingScaleImageView pic, DataBean.PicBean picBean) {
-        boolean isGif = ImageHelper.getType(picBean.file.type).contains("gif");
-        if(isGif){
-            ImageHelper.showBig(gif,picBean);
-        }else{
-            ImageHelper.showScaleBig(pic,picBean);
-        }
-        gif.setVisibility(isGif?View.VISIBLE:View.GONE);
-        pic.setVisibility(isGif?View.GONE:View.VISIBLE);
+    private PhotoViewAttacher showPic(ImageView gif, DataBean.PicBean picBean) {
+            return ImageHelper.showBig(gif,picBean);
     }
 
     private DataBean.PicBean gallery2PicBean(MyFavorite favorite) {

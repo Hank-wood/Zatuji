@@ -13,5 +13,10 @@ public class Event {
     public static final String ADD_FAVORITE = "add_favorite";//收藏图片
     public static final String REMOVE_FAVORITE = "remove_favorite";//移除图片
     public static final String SET_FRONT = "set_front";//设置封面
-    public static final String QUITE_GALLERY = "quite_gallery";//设置封面
+    public static final String QUITE_GALLERY = "quite_gallery";//退出收藏详情
+
+    //detail
+    public static final String LOAD_MORE_DATA = "load_more_data";//加载更多，由大图页发起
+    public static final String LOAD_MORE_DONE = "load_more_done";//退出大图页
+    public static final String QUITE_PIC_DETAIL = "quite_detail";//退出大图页
 }

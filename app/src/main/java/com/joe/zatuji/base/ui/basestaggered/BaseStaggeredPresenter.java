@@ -1,10 +1,14 @@
 package com.joe.zatuji.base.ui.basestaggered;
 
+import com.joe.zatuji.Event;
 import com.joe.zatuji.SConstant;
 import com.joe.zatuji.base.model.BaseModel;
 import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.utils.TUtil;
+
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by joe on 16/5/27.
@@ -66,4 +70,21 @@ public abstract class BaseStaggeredPresenter<T extends BaseStaggeredView, E exte
         }
     }
 
+    public void subcribeForPicDetail(){
+        final Observable observable =mRxJavaManager.subscribe(Event.LOAD_MORE_DATA, new Action1<Object>() {
+            @Override
+            public void call(Object o) {
+                loadMoreData();
+            }
+        });
+        mRxJavaManager.subscribe(Event.QUITE_PIC_DETAIL, new Action1<Object>() {
+            @Override
+            public void call(Object o) {
+                int position = (int) o;
+                mView.setToCurrentPosition(position);
+                mRxJavaManager.unSubscribe(Event.LOAD_MORE_DATA,observable);
+                mRxJavaManager.unSubscribe(Event.QUITE_PIC_DETAIL);
+            }
+        });
+    }
 }
