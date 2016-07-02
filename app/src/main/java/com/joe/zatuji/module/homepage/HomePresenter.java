@@ -1,6 +1,7 @@
 package com.joe.zatuji.module.homepage;
 
 
+import com.joe.zatuji.Event;
 import com.joe.zatuji.SConstant;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.helper.RxSubscriber;
@@ -72,12 +73,14 @@ public class HomePresenter extends BaseStaggeredPresenter<BaseStaggeredView, Hom
             public void onError(Throwable e) {
                 LogUtils.d("error no more data");
                 showNoMoreData();
+                mRxJavaManager.post(Event.LOAD_MORE_DONE,null);
             }
 
             @Override
             public void onNext(DataBean dataBean) {
                 mView.addData(dataBean.pins);
                 countOffset(dataBean);
+                mRxJavaManager.post(Event.LOAD_MORE_DONE,dataBean.pins);
             }
         }));
     }

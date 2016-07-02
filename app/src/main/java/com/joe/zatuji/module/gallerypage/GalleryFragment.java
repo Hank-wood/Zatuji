@@ -25,6 +25,7 @@ import cc.solart.turbo.OnItemClickListener;
 import cc.solart.turbo.OnItemLongClickListener;
 
 /**
+ * 收藏详情页
  * Created by joe on 16/6/12.
  */
 public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> implements GalleryView{
@@ -63,7 +64,11 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
                 LogUtils.d("key:"+mGalleryAdapter.getItem(position).img_url.substring(Api.HOST_PIC.length()));
                 picBean.file.key = mGalleryAdapter.getItem(position).img_url.substring(Api.HOST_PIC.length());
                 i.putExtra(Constant.PIC_DATA, picBean);
+                i.putExtra(Constant.PIC_POS,position);
+                i.putExtra(Constant.PIC_FROM_GALLERY,true);
+                i.putExtra(Constant.PIC_LIST,mGalleryAdapter.getAllItem());
                 mActivity.startActivity(i);
+                mPresenter.subcribeForPicDetail();
             }
         });
         mGalleryAdapter.addOnItemLongClickListener(new OnItemLongClickListener() {
@@ -134,8 +139,11 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
 
     @Override
     public void addData(List<? extends BaseBean> addList) {
-
+        int before= mGalleryAdapter.getAllItem().size();
         mRecyclerView.loadMoreComplete(addList);
+        if(before== mGalleryAdapter.getAllItem().size()){
+            mGalleryAdapter.addData((List<MyFavorite>) addList);
+        }
     }
 
     @Override

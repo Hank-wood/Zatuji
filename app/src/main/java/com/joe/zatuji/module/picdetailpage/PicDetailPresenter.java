@@ -25,6 +25,7 @@ import com.joe.zatuji.data.bean.User;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import retrofit2.adapter.rxjava.HttpException;
@@ -165,9 +166,33 @@ public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailMod
                 }));
     }
 
-
+    private boolean noMoreData = false;
     @Override
     public void onStart() {
+        mRxJavaManager.subscribe(Event.LOAD_MORE_DONE, new Action1<Object>() {
+            @Override
+            public void call(Object data) {
+                ArrayList list = (ArrayList) data;
+                if(data ==null||list.size() == 0) {
+                    noMoreData = true;
+//                    mView.showToastMsg("加载更多图片失败～");
+                }else if(list.get(0) instanceof MyFavorite){
+                    LogUtils.d("gallery load more");
+                    mView.addGallery(list);
+                }else {
+                    LogUtils.d("pics load more");
+                    mView.addPics(list);
+                }
+            }
+        });
+    }
 
+    public void getMoreData(){
+        if(noMoreData) return;
+        mRxJavaManager.post(Event.LOAD_MORE_DATA,null);
+    }
+
+    public void quiet(int position){
+        mRxJavaManager.post(Event.QUITE_PIC_DETAIL,position);
     }
 }

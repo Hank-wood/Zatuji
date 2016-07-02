@@ -1,5 +1,7 @@
 package com.joe.zatuji.base.model;
 
+import com.joe.zatuji.Event;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +34,7 @@ public class RxJavaManager {
         }
     }
 
-    public void subscribe(String eventName, Action1<Object> action1) {
+    public Observable subscribe(String eventName, Action1<Object> action1) {
         Observable<?> mObservable = mRxBus.subscribe(eventName);
         mObservables.put(eventName, mObservable);
         mCompositeSubscription.add(mObservable.observeOn(AndroidSchedulers.mainThread())
@@ -42,8 +44,14 @@ public class RxJavaManager {
                         throwable.printStackTrace();
                     }
                 }));
+        return mObservable;
     }
-
+    public void unSubscribe(String event,Observable<?> observable){
+        mRxBus.unSubscribe(event,observable);
+    }
+    public void unSubscribe(String event){
+        mRxBus.unSubscribe(event);
+    }
     public void post(Object tag, Object content) {
         mRxBus.post(tag, content);
     }

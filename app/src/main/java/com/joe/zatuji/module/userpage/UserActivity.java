@@ -126,6 +126,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements UserVie
     public void updateAvatar(String url) {
         doneLoading();
         ImageHelper.showAvatar(mAvatar, url);
+        UserHelper.saveAvatar(url);
     }
 
     @Override

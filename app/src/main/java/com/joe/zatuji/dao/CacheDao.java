@@ -88,9 +88,7 @@ public class CacheDao extends BaseDao{
      * params picBeanList
      */
     public void intoCache(List<DataBean.PicBean> picDataList,String tag){
-        LogUtils.d("intoCache");
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        LogUtils.d("getDatabase");
         Date date = new Date(System.currentTimeMillis());
         ContentValues values = new ContentValues();
         for (DataBean.PicBean pic:picDataList) {

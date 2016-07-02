@@ -13,9 +13,9 @@ public class Constant {
 
     //跳转携带数据
     public static final String PIC_DATA = "picData";//图片数据
-    public static final String PIC_DESC = "picDesc";//图片描述
-    public static final String PIC_WIDTH = "picWidth";//图片宽
-    public static final String PIC_HEIGHT = "picHeight";//图片长
+    public static final String PIC_LIST = "picList";//图片列表
+    public static final String PIC_FROM_GALLERY = "picFromGallery";//图片列表
+    public static final String PIC_POS = "picPos";//图片位置
 
     public static final String GALLERY_TAG = "gallery_tag";//图片长
 
@@ -44,6 +44,7 @@ public class Constant {
     public static final String TOKEN = "token";
     public static final String USER_NAME = "user_name";
     public static final String PWD = "pwd";
+    public static final String USER_AVATAR = "user_avatar";//用户头像
 
     //设置
     public static final String DEFAULT_TAG = "default_tag" ;//默认的发现tag

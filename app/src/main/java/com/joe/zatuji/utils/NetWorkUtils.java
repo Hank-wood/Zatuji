@@ -27,11 +27,11 @@ public class NetWorkUtils {
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         int mNetWorkType=0;
         if (networkInfo != null && networkInfo.isConnected()) {
-            String type = networkInfo.getTypeName();
+            int type = networkInfo.getType();
 
-            if (type.equalsIgnoreCase("WIFI")) {
+            if (type == ConnectivityManager.TYPE_WIFI) {
                 mNetWorkType = TYPE_WIFI;
-            } else if (type.equalsIgnoreCase("MOBILE")) {
+            } else if (type == ConnectivityManager.TYPE_MOBILE) {
                 String proxyHost = android.net.Proxy.getDefaultHost();
 
                 mNetWorkType = TYPE_4G;

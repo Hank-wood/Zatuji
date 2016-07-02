@@ -14,7 +14,6 @@ import com.joe.zatuji.utils.LogUtils;
 public class BaseStaggeredModel  implements BaseModel{
     public void saveToCache(String max,DataBean dataBean,String tag){
         CacheDao cacheDao = new CacheDao();
-        LogUtils.d("max:"+max);
         if(TextUtils.isEmpty(max)) cacheDao.clearTagCache(tag);
         if(dataBean!=null && dataBean.pins.size()>0)cacheDao.intoCache(dataBean.pins,tag);
     }

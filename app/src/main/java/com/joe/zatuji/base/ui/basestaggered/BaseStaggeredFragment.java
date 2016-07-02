@@ -28,6 +28,7 @@ import com.joe.zatuji.utils.TUtil;
 import com.joe.zatuji.view.LoadingDialog;
 import com.squareup.leakcanary.RefWatcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cc.solart.turbo.OnItemClickListener;
@@ -128,7 +129,11 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
                 Intent i = new Intent(mActivity, PicDetailActivity.class);
                 DataBean.PicBean picBean = mAdapter.getItem(position);
                 i.putExtra(Constant.PIC_DATA, picBean);
+                i.putExtra(Constant.PIC_POS,position);
+                i.putExtra(Constant.PIC_FROM_GALLERY,false);
+                i.putExtra(Constant.PIC_LIST,mAdapter.getAllData());
                 mActivity.startActivity(i);
+                mPresenter.subcribeForPicDetail();
             }
 
         });
@@ -178,11 +183,13 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
         mRefreshLayout.setRefreshing(false);
         mAdapter.resetData((List<DataBean.PicBean>) beanList);
     }
-
     @Override
     public void addData(List<? extends BaseBean> addList) {
-
+        int before= mAdapter.getAllData().size();
         mRecyclerView.loadMoreComplete(addList);
+        if(before== mAdapter.getAllData().size()){
+            mAdapter.addData((List<DataBean.PicBean>) addList);
+        }
     }
 
     @Override
@@ -224,8 +231,12 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
         if(mPresenter!=null) mPresenter.onRemove();
     }
 
-
     protected View findView(int id){
         return mRootView.findViewById(id);
+    }
+
+    @Override
+    public void setToCurrentPosition(int position) {
+        mRecyclerView.scrollToPosition(position);
     }
 }

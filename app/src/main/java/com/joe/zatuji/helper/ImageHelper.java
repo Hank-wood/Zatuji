@@ -5,9 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -17,6 +21,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.Constant;
@@ -28,13 +35,11 @@ import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.concurrent.ExecutionException;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by joe on 16/5/21.
@@ -44,7 +49,6 @@ public class ImageHelper {
      * 普通图片显示
      */
     private static DrawableRequestBuilder<String> baseGlide(ImageView iv, String key){
-//        LogUtils.d("show img");
         return Glide.with(iv.getContext())
                 .load(key)
                 .crossFade(300)
@@ -90,14 +94,25 @@ public class ImageHelper {
     /**
      * 展示全屏大图
      */
-    public static void showBig(ImageView iv , DataBean.PicBean pic){
+    public static PhotoViewAttacher showBig(final ImageView iv , DataBean.PicBean pic){
         resizeImage(iv,pic);
-        if(pic.file.type.equals("gif")){
+        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+        if(getType(pic.file.type).contains("gif")){
             baseGif(iv,Api.HOST_PIC+pic.file.key).into(iv);
+            return null;
         }else{
-            baseGlide(iv,Api.HOST_PIC+pic.file.key).into(iv);
+            final PhotoViewAttacher attacher = new PhotoViewAttacher(iv);
+            baseGlide(iv,Api.HOST_PIC+pic.file.key).into(new SimpleTarget<GlideDrawable>() {
+                @Override
+                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                    iv.setImageDrawable(resource);
+                    attacher.update();
+                }
+            });
+            return attacher;
         }
     }
+
 
     public static void showAvatar(CircularImageView iv , String url){
         baseGlide(iv,url)
@@ -133,19 +148,23 @@ public class ImageHelper {
      * 宽同屏幕
      * 高按原图比例计算
      */
-    public static void resizeImage(ImageView iv, DataBean.PicBean  pic){
+    public static void resizeImage(View iv, DataBean.PicBean  pic){
         ViewGroup.LayoutParams params = iv.getLayoutParams();
         //获取屏幕宽高
         DisplayMetrics dm =iv.getContext().getResources().getDisplayMetrics();
         params.width = dm.widthPixels;
+        //高小于屏幕的 与屏幕同高，大于的按图片高
         double times= (dm.widthPixels+0.0)/(pic.file.width +0.0);
         double resizeHeight = pic.file.height*times;
-        params.height = (int) resizeHeight;
-        if(resizeHeight-params.height>=0.5){
-            params.height+=1;
+        if(resizeHeight<=dm.heightPixels && !getType(pic.file.type).contains("gif")){
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        }else{
+            params.height = (int) resizeHeight;
+            if(resizeHeight-params.height>=0.5){
+                params.height+=1;
+            }
         }
         iv.setLayoutParams(params);
-        iv.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
     //转换为圆形的图片
@@ -237,6 +256,7 @@ public class ImageHelper {
     }
 
     public static String getType(String type){
+        if(TextUtils.isEmpty(type)) return "jpeg";
         if(type.contains("jpeg")){
             return "jpeg";
         }else if(type.contains("jpg")){

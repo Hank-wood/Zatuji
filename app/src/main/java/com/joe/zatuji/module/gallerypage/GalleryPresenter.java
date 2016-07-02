@@ -85,6 +85,7 @@ public class GalleryPresenter extends BaseStaggeredPresenter<GalleryView,Gallery
                     @Override
                     public void onError(ResultException e) {
                         mView.showToastMsg(e.getError());
+                        mRxJavaManager.post(Event.LOAD_MORE_DONE,null);
                     }
 
                     @Override
@@ -92,9 +93,10 @@ public class GalleryPresenter extends BaseStaggeredPresenter<GalleryView,Gallery
                         countOffset(myFavoriteBaseListBean);
                         if(myFavoriteBaseListBean.results!=null && myFavoriteBaseListBean.results.size()>0){
                             mView.addData(myFavoriteBaseListBean.results);
-
+                            mRxJavaManager.post(Event.LOAD_MORE_DONE,myFavoriteBaseListBean.results);
                         }else {
                             showNoMoreData();
+                            mRxJavaManager.post(Event.LOAD_MORE_DONE,null);
                         }
                     }
                 }));

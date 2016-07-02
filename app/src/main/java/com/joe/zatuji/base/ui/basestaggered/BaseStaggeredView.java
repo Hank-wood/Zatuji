@@ -15,4 +15,5 @@ public interface BaseStaggeredView extends BaseView {
     void addData(List<? extends BaseBean> addList);
     void disableLoadMore(boolean isDisable);
     void showEmptyView();
+    void setToCurrentPosition(int position);
 }
