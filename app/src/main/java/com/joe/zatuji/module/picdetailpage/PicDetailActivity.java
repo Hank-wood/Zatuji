@@ -99,6 +99,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         desc = img.raw_text;
         if(!TextUtils.isEmpty(desc)){
             tvDesc.setText(desc);
+            dontShowTv = false;
         }else{
             dontShowTv=true;
         }

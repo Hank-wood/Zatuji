@@ -131,7 +131,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         homeSettingFragment = new HomeSettingFragment();
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction transition= mFragmentManager.beginTransaction().add(R.id.fl_container_home, homeFragment,TAG_HOME_FRAG);
-        transition.addToBackStack(TAG_HOME_FRAG);
+//        transition.addToBackStack(TAG_HOME_FRAG);
         transition.commit();
         mCurrentFragment=homeFragment;
     }

@@ -5,15 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.GifRequestBuilder;
@@ -98,6 +101,9 @@ public class ImageHelper {
         resizeImage(iv,pic);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         if(getType(pic.file.type).contains("gif")){
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)iv.getLayoutParams();
+            params.gravity = Gravity.CENTER;
+            iv.setLayoutParams(params);
             baseGif(iv,Api.HOST_PIC+pic.file.key).into(iv);
             return null;
         }else{
@@ -153,17 +159,29 @@ public class ImageHelper {
         //获取屏幕宽高
         DisplayMetrics dm =iv.getContext().getResources().getDisplayMetrics();
         params.width = dm.widthPixels;
+        int statusBarHeight1 = -1;
+//获取status_bar_height资源的ID
+        int resourceId = iv.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            statusBarHeight1 = iv.getContext().getResources().getDimensionPixelSize(resourceId);
+        }
         //高小于屏幕的 与屏幕同高，大于的按图片高
         double times= (dm.widthPixels+0.0)/(pic.file.width +0.0);
         double resizeHeight = pic.file.height*times;
         if(resizeHeight<=dm.heightPixels && !getType(pic.file.type).contains("gif")){
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.height = dm.heightPixels - statusBarHeight1;
         }else{
             params.height = (int) resizeHeight;
             if(resizeHeight-params.height>=0.5){
                 params.height+=1;
             }
         }
+//        LogUtils.d("=======================================");
+//        LogUtils.d("图宽："+pic.file.width+"图高："+pic.file.height);
+//        LogUtils.d("屏幕宽："+dm.widthPixels+"屏幕高："+dm.heightPixels);
+//        LogUtils.d("图片宽："+params.width+"图片高："+params.height);
+//        LogUtils.d("=======================================");
         iv.setLayoutParams(params);
     }
 

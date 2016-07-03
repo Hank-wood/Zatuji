@@ -37,6 +37,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:name=".module.homepage.HomeActivity"
+            android:launchMode="singleTask"
             />
         <activity
             android:theme="@style/AppTheme.NoActionBar"
