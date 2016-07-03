@@ -8,14 +8,17 @@ import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.data.bean.TagBean;
 import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.helper.SettingHelper;
+import com.joe.zatuji.utils.AppUtils;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 import com.squareup.leakcanary.RefWatcher;
+import com.umeng.analytics.MobclickAgent;
 
 
 import rx.functions.Action1;
 
 /**
+ * 全局
  * Created by Joe on 2016/3/11.
  */
 public class MyApplication extends Application {
@@ -30,8 +33,11 @@ public class MyApplication extends Application {
         super.onCreate();
         myApplication = this;
         registerEvent();
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+        MobclickAgent.setDebugMode(Constant.IS_DEBUG);
         //refWatcher = LeakCanary.install(this);
         mDefaultTag = new TagBean().tagList.get(SettingHelper.getDefaultTag());
+        if(Constant.IS_DEBUG) LogUtils.d(AppUtils.getDeviceInfo(this));
     }
 
 

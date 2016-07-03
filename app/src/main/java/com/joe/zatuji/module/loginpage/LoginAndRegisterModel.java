@@ -15,6 +15,7 @@ import com.joe.zatuji.helper.UserHelper;
 import com.joe.zatuji.utils.FileUtils;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class LoginAndRegisterModel implements BaseModel {
                     public void call(User user) {
                         UserHelper.saveToken(user.sessionToken);
                         Api.getInstance().updateToke(user.sessionToken);
+                        MobclickAgent.onProfileSignIn(user.objectId);//统计用户
                     }
                 });
     }

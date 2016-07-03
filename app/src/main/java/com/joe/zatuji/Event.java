@@ -19,4 +19,10 @@ public class Event {
     public static final String LOAD_MORE_DATA = "load_more_data";//加载更多，由大图页发起
     public static final String LOAD_MORE_DONE = "load_more_done";//退出大图页
     public static final String QUITE_PIC_DETAIL = "quite_detail";//退出大图页
+
+    //统计
+    public static final String EVENT_SHARE = "share";
+    public static final String EVENT_DOWNLOAD = "download";
+    public static final String EVENT_UPDATE = "update";
+    public static final String EVENT_FAOVRITE = "favorite";
 }

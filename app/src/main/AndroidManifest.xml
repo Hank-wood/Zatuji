@@ -14,6 +14,7 @@
     <!--允许读取手机状态 用于创建BmobInstallation-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -79,6 +80,10 @@
         <!--下载的服务-->
         <service android:name=".helper.download.DownloadService"
             android:exported="false"/>
+
+        <!--Umeng-->
+        <meta-data android:value="571af892e0f55ae32f0016ed" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>
 
     </application>
 

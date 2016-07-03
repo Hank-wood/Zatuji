@@ -5,8 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:src="@drawable/bg_welcome"
-        android:scaleType="fitXY"
+        android:id="@+id/bg_welcome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:src="@drawable/icon_welcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <TextView

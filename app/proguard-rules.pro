@@ -142,3 +142,15 @@
 #####################记录生成的日志数据，gradle build时 在本项目根目录输出-end################
 
 -keepattributes Signature #泛型
+
+#友盟
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keep public class com.joe.zatuji.R$*{
+public static final int *;
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}

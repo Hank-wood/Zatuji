@@ -16,6 +16,7 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.data.bean.TagBean;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.base.BaseDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import cc.solart.turbo.BaseTurboAdapter;
 import cc.solart.turbo.BaseViewHolder;
@@ -60,12 +61,16 @@ public class DropMenuDialog extends BaseDialog implements View.OnClickListener{
         mAdapter.resetData(new TagBean().tagList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLoadMoreEnabled(false);
+        this.setCanceledOnTouchOutside(true);
     }
     @Override
     protected void initListener() {
         mAdapter.addOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh, int position) {
+                //友盟统计事件
+                LogUtils.d("event:"+mAdapter.getItem(position).requestName);
+                MobclickAgent.onEvent(getContext(),mAdapter.getItem(position).requestName);
                 if(mListener!=null) mListener.onMenuClick(mAdapter.getItem(position));
                 dismiss();
             }

@@ -43,5 +43,14 @@
             app:showSettingSwitch="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <com.joe.zatuji.view.SettingView
+            android:layout_marginTop="@dimen/d1"
+            android:id="@+id/setting_debug"
+            app:settingTitle="开发者模式"
+            app:settingDesc="开启后进入开发者模式"
+            app:showSettingSwitch="true"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>

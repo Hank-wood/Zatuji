@@ -9,7 +9,7 @@ import com.joe.zatuji.data.bean.BmobFile;
 import com.joe.zatuji.data.bean.TokenBean;
 import com.joe.zatuji.data.bean.UpdateBean;
 import com.joe.zatuji.data.bean.User;
-
+import com.joe.zatuji.data.bean.WelcomeCover;
 
 
 import okhttp3.RequestBody;
@@ -107,4 +107,16 @@ public interface BmobService {
 
     @POST("1/batch")
     Call<ResponseBody> multi(@Body JsonElement jsonElement);
+
+    //welcome
+    /**
+     * 启动页正式
+     */
+    @POST("1/functions/welcome")
+    Observable<WelcomeCover> getWelcomeCover(@Body JsonElement body);
+    /**
+     * 启动页调试
+     */
+    @POST("1/functions/debugWelcome")
+    Observable<WelcomeCover> getWelcomeCoverDebug(@Body JsonElement body);
 }

@@ -72,4 +72,6 @@ dependencies {
     compile 'com.kyleduo.switchbutton:library:1.4.1'
     //scale image to show big
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    //Umeng
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

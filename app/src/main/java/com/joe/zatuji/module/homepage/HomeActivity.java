@@ -32,6 +32,7 @@ import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.NetWorkUtils;
 import com.joe.zatuji.view.DropMenuDialog;
 import com.joe.zatuji.view.MessageDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 
@@ -81,8 +82,6 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         mBottomBar = (FloatingToolbar) findViewById(R.id.floatingToolbar);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
-        mTagMenu = new DropMenuDialog(mActivity);
-        mTagMenu.setOnMenuClickListener(this);
         setSupportActionBar(mToolbar);
         mActionbar = getSupportActionBar();
         mBottomBar.attachFab(mFab);
@@ -96,6 +95,13 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         clearCache();
         checkWifi();
         initFragment();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTagMenu = new DropMenuDialog(mActivity);
+        mTagMenu.setOnMenuClickListener(this);
     }
 
     private void clearCache() {

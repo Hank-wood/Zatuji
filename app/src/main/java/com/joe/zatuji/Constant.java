@@ -4,7 +4,7 @@ package com.joe.zatuji;
  * Created by Joe on 2016/3/11.
  */
 public class Constant {
-    public static final boolean IS_DEBUG =true;
+    public static final boolean IS_DEBUG =false;
     //接口地址
     public static final String HOST = "http://api.huaban.com/";//主机地址
     public static final String HOST_PIC = "http://img.hb.aicdn.com/";//图片保存地址
@@ -53,9 +53,13 @@ public class Constant {
     public static final String NOTIFY_NO_WIFI = "notify_no_wifi";//boolean 无wifi时提醒用户是否加载图片
     public static final String UPDATE_IGNORE = "update_ignore";//被用户忽略的版本
     public static final String AUTO_CLEAR = "auto_clear";//自动清理缓存
+    public static final String DEBUG_MODE = "debug_mode";//开发者模式
 
     //标记
     public static final String IS_OLD_TAG ="is_old_tag";//老的FavortiteTag没有userid字段
+
+    //welcome
+    public static final String WELCOME_COVER = "welcome_cover";//欢迎页图片
 
 }
 
