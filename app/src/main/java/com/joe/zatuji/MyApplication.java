@@ -3,11 +3,15 @@ package com.joe.zatuji;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 
+import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.base.model.RxJavaManager;
 import com.joe.zatuji.data.bean.TagBean;
 import com.joe.zatuji.data.bean.User;
+import com.joe.zatuji.helper.BmobSubscriber;
 import com.joe.zatuji.helper.SettingHelper;
+import com.joe.zatuji.module.loginpage.LoginAndRegisterModel;
 import com.joe.zatuji.utils.AppUtils;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
@@ -15,7 +19,9 @@ import com.squareup.leakcanary.RefWatcher;
 import com.umeng.analytics.MobclickAgent;
 
 
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * 全局
@@ -33,11 +39,12 @@ public class MyApplication extends Application {
         super.onCreate();
         myApplication = this;
         registerEvent();
-        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+        //MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         MobclickAgent.setDebugMode(Constant.IS_DEBUG);
         //refWatcher = LeakCanary.install(this);
         mDefaultTag = new TagBean().tagList.get(SettingHelper.getDefaultTag());
         if(Constant.IS_DEBUG) LogUtils.d(AppUtils.getDeviceInfo(this));
+        if(!PrefUtils.getBoolean(this,Constant.IS_EXIT,false)) autoLogin();
     }
 
 
@@ -96,5 +103,28 @@ public class MyApplication extends Application {
             e.printStackTrace();
         }
         return version;
+    }
+
+    private void autoLogin() {
+        User user = new User();
+        user.username = PrefUtils.getString(this,Constant.USER_NAME,"");
+        user.password = PrefUtils.getString(this,Constant.PWD,"");
+        if(!TextUtils.isEmpty(user.username)){
+            mRxManager.add(new LoginAndRegisterModel().login(user)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new BmobSubscriber<User>() {
+                        @Override
+                        public void onError(ResultException e) {
+                            LogUtils.d("auto login error:"+e.getError());
+                        }
+
+                        @Override
+                        public void onNext(User user) {
+                            mRxManager.post(Event.LOGIN_SUCCESS,user);
+                        }
+                    }));
+        }
+
     }
 }

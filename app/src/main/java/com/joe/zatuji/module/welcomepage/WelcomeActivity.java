@@ -55,19 +55,13 @@ public class WelcomeActivity extends BaseActivity {
         mIvBg = (ImageView) findViewById(R.id.bg_welcome);
         ImageHelper.showSmall(mIvBg,PrefUtils.getString(Constant.WELCOME_COVER,""));
         mVersion.setText("杂图集 "+MyApplication.getInstance().getVersionName());
-        boolean isExit = PrefUtils.getBoolean(this,Constant.IS_EXIT,false);
         rxJavaManager = new RxJavaManager();
         //如果是用户手动退出 则不自动登录
+        start = System.currentTimeMillis();
         if(Constant.IS_DEBUG||SettingHelper.isDebug()){
             getDebugCover();
         }else {
             getCover();
-        }
-        start = System.currentTimeMillis();
-        if(isExit){
-            toHome();
-        }else{
-            autoLogin();
         }
 
     }
@@ -108,6 +102,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onError(ResultException e) {
                         LogUtils.d("cover error:"+e.getMessage());
+                        toHome();
                     }
 
                     @Override
@@ -116,6 +111,7 @@ public class WelcomeActivity extends BaseActivity {
                             ImageHelper.showSmall(mIvBg,welcomeCover.result);
                             PrefUtils.putString(Constant.WELCOME_COVER,welcomeCover.result);
                         }
+                        toHome();
                     }
                 })
         );
@@ -131,6 +127,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onError(ResultException e) {
                         LogUtils.d("cover error:"+e.getMessage());
+                        toHome();
                     }
 
                     @Override
@@ -139,6 +136,7 @@ public class WelcomeActivity extends BaseActivity {
                             ImageHelper.showSmall(mIvBg,welcomeCover.result);
                             PrefUtils.putString(Constant.WELCOME_COVER,welcomeCover.result);
                         }
+                        toHome();
                     }
                 })
         );

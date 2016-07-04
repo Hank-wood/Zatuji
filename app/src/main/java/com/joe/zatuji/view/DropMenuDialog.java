@@ -52,8 +52,6 @@ public class DropMenuDialog extends BaseDialog implements View.OnClickListener{
         //设置dialog的位置在底部
         lp.gravity = Gravity.BOTTOM;
         window.setAttributes(lp);
-        LogUtils.d("convert dialog");
-
         mRecyclerView = (TurboRecyclerView)findViewById(R.id.recycler_drop_menu);
         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
         findViewById(R.id.ll_container_drop).setOnClickListener(this);
@@ -103,7 +101,6 @@ public class DropMenuDialog extends BaseDialog implements View.OnClickListener{
 
         @Override
         protected void convert(Holder holder, TagBean.Tag tag) {
-            LogUtils.d("convert dialog");
             holder.textView.setText(tag.name);
         }
 

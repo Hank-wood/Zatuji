@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
-import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.bean.TagBean;
@@ -32,9 +31,6 @@ import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.NetWorkUtils;
 import com.joe.zatuji.view.DropMenuDialog;
 import com.joe.zatuji.view.MessageDialog;
-import com.umeng.analytics.MobclickAgent;
-
-import java.io.File;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -49,11 +45,11 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     private final String TAG_SETTING_FRAG = "homeSettingFragment";
     private FragmentManager mFragmentManager;
     private HomeFragment homeFragment;
-    private Fragment mCurrentFragment;
+    private String mCurrentFragment;
     private DiscoverFragment discoverFragment;
     private HomeSettingFragment homeSettingFragment;
     private FavoriteFragment favoriteFragment;
-    private int currentPos;//当前fragment
+    private int mCurrentPos;//当前fragment
     private ActionBar mActionbar;
     private FloatingActionButton mFab;
     private Toolbar mToolbar;
@@ -67,6 +63,14 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         super.onCreate(savedInstanceState);
         mUpdateHelper = new UpdateHelper(mActivity);
         mUpdateHelper.autoCheckUpdate();
+        mFragmentManager = getSupportFragmentManager();
+        if(savedInstanceState==null){
+            initFragment();
+        }else {
+            mCurrentFragment = savedInstanceState.getString(CURRENT_FRAG);
+            mCurrentPos = savedInstanceState.getInt(CURRENT_POS);
+        }
+
     }
 
 
@@ -94,7 +98,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         });
         clearCache();
         checkWifi();
-        initFragment();
+
     }
 
     @Override
@@ -129,11 +133,10 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         discoverFragment = new DiscoverFragment();
         favoriteFragment = new FavoriteFragment();
         homeSettingFragment = new HomeSettingFragment();
-        mFragmentManager = getSupportFragmentManager();
         FragmentTransaction transition= mFragmentManager.beginTransaction().add(R.id.fl_container_home, homeFragment,TAG_HOME_FRAG);
 //        transition.addToBackStack(TAG_HOME_FRAG);
         transition.commit();
-        mCurrentFragment=homeFragment;
+        mCurrentFragment=TAG_HOME_FRAG;
     }
 
     //当前的题目
@@ -153,14 +156,14 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
 
     //改变fragment
     private void changeFragment(Fragment switchFragment,String tag) {
-        if(mCurrentFragment!=switchFragment){
+        if(!mCurrentFragment.equals(tag)){
             FragmentTransaction transaction= mFragmentManager.beginTransaction();
             if (!switchFragment.isAdded()) {    // 先判断是否被add过
-                transaction.hide(mCurrentFragment).add(R.id.fl_container_home, switchFragment,tag).commit(); // 隐藏当前的fragment，add下一个到Activity中
+                transaction.hide(mFragmentManager.findFragmentByTag(mCurrentFragment)).add(R.id.fl_container_home, switchFragment,tag).commit(); // 隐藏当前的fragment，add下一个到Activity中
             } else {
-                transaction.hide(mCurrentFragment).show(switchFragment).commit(); // 隐藏当前的fragment，显示下一个
+                transaction.hide(mFragmentManager.findFragmentByTag(mCurrentFragment)).show(switchFragment).commit(); // 隐藏当前的fragment，显示下一个
             }
-            mCurrentFragment=switchFragment;
+            mCurrentFragment=tag;
         }
 
     }
@@ -194,13 +197,13 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         //menu.setGroupVisible();
-        if(currentPos==1){
+        if(mCurrentPos ==1){
             menu.setGroupVisible(R.id.menu_discover,true);
         }else{
             menu.setGroupVisible(R.id.menu_discover,false);
         }
 
-        if(currentPos==2){
+        if(mCurrentPos ==2){
             menu.setGroupVisible(R.id.menu_favorite,true);
         }else{
             menu.setGroupVisible(R.id.menu_favorite,false);
@@ -225,28 +228,32 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         if(mAppBar.getVisibility()==View.GONE&&menuItem.getItemId()!=R.id.action_setting && menuItem.getItemId()!=R.id.action_search) mAppBar.setVisibility(View.VISIBLE);
         switch (menuItem.getItemId()){
             case R.id.action_home:
+                if(homeFragment==null) homeFragment = (HomeFragment) createFragment(TAG_HOME_FRAG);
                 changeFragment(homeFragment,TAG_HOME_FRAG);
                 setCurrentTitle(0);
-                currentPos=0;
+                mCurrentPos =0;
                 break;
             case R.id.action_discover:
+                if(discoverFragment == null) discoverFragment = (DiscoverFragment) createFragment(TAG_DISCOVER_FRAG);
                 changeFragment(discoverFragment,TAG_DISCOVER_FRAG);
                 setCurrentTitle(1,discoverFragment.getTagName());
-                currentPos=1;
+                mCurrentPos =1;
                 break;
             case R.id.action_favorite:
+                if(favoriteFragment == null) favoriteFragment = (FavoriteFragment) createFragment(TAG_FAVORITE_FRAG);
                 changeFragment(favoriteFragment,TAG_FAVORITE_FRAG);
                 setCurrentTitle(2);
-                currentPos=2;
+                mCurrentPos =2;
                 favoriteFragment.update();
                 break;
             case R.id.action_setting:
+                if(homeSettingFragment == null) homeSettingFragment = (HomeSettingFragment) createFragment(TAG_SETTING_FRAG);
                 changeFragment(homeSettingFragment,TAG_SETTING_FRAG);
                 //homeSettingFragment.getCache();
                 homeSettingFragment.onResume();
                 mAppBar.setVisibility(View.GONE);
                 setCurrentTitle(3);
-                currentPos=3;
+                mCurrentPos =3;
 
                 //mToolbar.setVisibility(View.GONE);
                 break;
@@ -257,7 +264,20 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         }
         invalidateOptionsMenu();
     }
-
+    public Fragment createFragment(String tag){
+        if(mFragmentManager.findFragmentByTag(tag)!=null) return mFragmentManager.findFragmentByTag(tag);
+        if(tag.equals(TAG_HOME_FRAG)){
+            return new HomeFragment();
+        }else if(tag.equals(TAG_DISCOVER_FRAG)){
+            return new DiscoverFragment();
+        }else if(tag.equals(TAG_FAVORITE_FRAG)){
+            return new FavoriteFragment();
+        }else if(tag.equals(TAG_SETTING_FRAG)){
+            return new HomeSettingFragment();
+        }else {
+            return null;
+        }
+    }
     @Override
     public void onItemLongClick(MenuItem menuItem) {
         KToast.show(menuItem.getTitle()+"");
@@ -267,13 +287,21 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     @Override
     public void onBackPressed() {
         long duration = System.currentTimeMillis()-lastTime;
-        LogUtils.d("onBackPressed:"+duration);
         lastTime = System.currentTimeMillis();
         if(duration<2000)  {
             finish();
             return;
         }
         KToast.show("再按一次退出");
+    }
+
+    private static final String CURRENT_FRAG = "current_Tag";
+    private static final String CURRENT_POS = "current_Pos";
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CURRENT_FRAG,mCurrentFragment);
+        outState.putInt(CURRENT_POS, mCurrentPos);
     }
 
     @Override

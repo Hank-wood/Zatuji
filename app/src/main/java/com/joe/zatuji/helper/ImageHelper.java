@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
@@ -122,6 +123,8 @@ public class ImageHelper {
 
     public static void showAvatar(CircularImageView iv , String url){
         baseGlide(iv,url)
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.drawable.front_default)
                 .transform(new GlideCircleTransform(iv.getContext()))
                 .into(iv);
         iv.setBorderWidth(DPUtils.dip2px(iv.getContext(),2));

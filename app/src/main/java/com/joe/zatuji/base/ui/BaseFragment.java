@@ -3,6 +3,7 @@ package com.joe.zatuji.base.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,28 @@ public abstract class BaseFragment<T extends BasePresenter> extends android.supp
         this.mActivity=getActivity();
         this.myApplication= (MyApplication) mActivity.getApplication();
         //initLeakCanary();
+        onSaveFragmentInstance(savedInstanceState);
         initLoading();
+    }
+    private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
+    private void onSaveFragmentInstance(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            boolean isSupportHidden = savedInstanceState.getBoolean(STATE_SAVE_IS_HIDDEN);
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (isSupportHidden) {
+                ft.hide(this);
+            } else {
+                ft.show(this);
+            }
+            ft.commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_SAVE_IS_HIDDEN,isHidden());
     }
 
     protected void initLeakCanary(){
