@@ -24,5 +24,6 @@ public class Event {
     public static final String EVENT_SHARE = "share";
     public static final String EVENT_DOWNLOAD = "download";
     public static final String EVENT_UPDATE = "update";
-    public static final String EVENT_FAOVRITE = "favorite";
+    public static final String EVENT_FAVORITE = "favorite";
+    public static final String EVENT_SEARCH = "search";
 }

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 
 /**
- * 大图详情页吗面
+ * 大图详情页面
  * Created by Joe on 2016/4/16.
  */
 public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implements PicDetailView{
@@ -126,7 +126,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                 finish();
                 break;
             case R.id.action_save://收藏
-                MobclickAgent.onEvent(mActivity, Event.EVENT_FAOVRITE);
+                MobclickAgent.onEvent(mActivity, Event.EVENT_FAVORITE);
                 if(!MyApplication.isLogin()){
                     showToastMsg("请先登录帐号～");
                 }else{

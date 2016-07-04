@@ -60,6 +60,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".module.aboutpage.AboutActivity"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".module.settingpage.SettingActivity"
             android:screenOrientation="portrait"

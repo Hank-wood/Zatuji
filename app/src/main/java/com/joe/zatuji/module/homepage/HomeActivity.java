@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
+import com.joe.zatuji.Event;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.bean.TagBean;
@@ -27,10 +28,10 @@ import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.module.searchingpage.SearchingActivity;
 import com.joe.zatuji.module.homesettingpage.HomeSettingFragment;
-import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.NetWorkUtils;
 import com.joe.zatuji.view.DropMenuDialog;
 import com.joe.zatuji.view.MessageDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -258,6 +259,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
                 //mToolbar.setVisibility(View.GONE);
                 break;
             case R.id.action_search:
+                MobclickAgent.onEvent(mActivity, Event.EVENT_SEARCH);
                 Intent i=new Intent(mActivity, SearchingActivity.class);
                 startActivity(i);
                 break;
