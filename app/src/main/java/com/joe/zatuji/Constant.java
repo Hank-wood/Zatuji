@@ -5,11 +5,6 @@ package com.joe.zatuji;
  */
 public class Constant {
     public static final boolean IS_DEBUG =true;
-    //接口地址
-    public static final String HOST = "http://api.huaban.com/";//主机地址
-    public static final String HOST_PIC = "http://img.hb.aicdn.com/";//图片保存地址
-    public static final String HOST_TAG = "http://api.huaban.com/favorite/";
-    public static final String HOST_SEARCH = "http://api.huaban.com/search/";
 
     //跳转携带数据
     public static final String PIC_DATA = "picData";//图片数据

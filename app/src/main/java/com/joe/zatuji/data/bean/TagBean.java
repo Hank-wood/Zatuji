@@ -16,10 +16,15 @@ public class TagBean {
         tagList.add(new Tag("萌宝","kids",3));
         tagList.add(new Tag("光影","photography",4));
         tagList.add(new Tag("巧手工","diy_crafts",5));
-        tagList.add(new Tag("衣装","apparel",6));
+        tagList.add(new Tag("极客","geek",6));
         tagList.add(new Tag("在路上","travel_places",7));
         tagList.add(new Tag("插画","illustration",8));
         tagList.add(new Tag("建筑","architecture",9));
+        tagList.add(new Tag("艺术","art",10));
+        tagList.add(new Tag("动漫","anime",11));
+//        tagList.add(new Tag("有趣","funny",11));
+        tagList.add(new Tag("吃货","food_drink",12));
+
     }
 
     public class Tag{

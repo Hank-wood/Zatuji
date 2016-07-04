@@ -61,7 +61,7 @@ public class AboutActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 count++;
-                if(count==10){
+                if(count==20){
                     SettingHelper.setDebug(true);
                     KToast.show("开发者模式已开启，可在设置中关闭");
                 }

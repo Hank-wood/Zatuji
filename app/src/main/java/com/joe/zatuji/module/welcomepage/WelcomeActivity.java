@@ -53,7 +53,7 @@ public class WelcomeActivity extends BaseActivity {
     protected void initView() {
         TextView mVersion = (TextView) findViewById(R.id.tv_version);
         mIvBg = (ImageView) findViewById(R.id.bg_welcome);
-        ImageHelper.showSmall(mIvBg,PrefUtils.getString(Constant.WELCOME_COVER,""));
+        ImageHelper.showWelcomeCover(mIvBg,PrefUtils.getString(Constant.WELCOME_COVER,""));
         mVersion.setText("杂图集 "+MyApplication.getInstance().getVersionName());
         rxJavaManager = new RxJavaManager();
         //如果是用户手动退出 则不自动登录
@@ -66,31 +66,6 @@ public class WelcomeActivity extends BaseActivity {
 
     }
 
-    private void autoLogin() {
-        User user = new User();
-        user.username = PrefUtils.getString(this,Constant.USER_NAME,"");
-        user.password = PrefUtils.getString(this,Constant.PWD,"");
-        if(!TextUtils.isEmpty(user.username)){
-            rxJavaManager.add(new LoginAndRegisterModel().login(user)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new BmobSubscriber<User>() {
-                @Override
-                public void onError(ResultException e) {
-                    toHome();
-                }
-
-                @Override
-                public void onNext(User user) {
-                    rxJavaManager.post(Event.LOGIN_SUCCESS,user);
-                    toHome();
-                }
-            }));
-        }else{
-            toHome();
-        }
-
-    }
 
     private void getCover(){
         rxJavaManager.add(Api.getInstance()
@@ -108,7 +83,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onNext(WelcomeCover welcomeCover) {
                         if(welcomeCover!=null&&!TextUtils.isEmpty(welcomeCover.result)){
-                            ImageHelper.showSmall(mIvBg,welcomeCover.result);
+                            ImageHelper.showWelcomeCover(mIvBg,welcomeCover.result);
                             PrefUtils.putString(Constant.WELCOME_COVER,welcomeCover.result);
                         }
                         toHome();
@@ -133,7 +108,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onNext(WelcomeCover welcomeCover) {
                         if(welcomeCover!=null&&!TextUtils.isEmpty(welcomeCover.result)){
-                            ImageHelper.showSmall(mIvBg,welcomeCover.result);
+                            ImageHelper.showWelcomeCover(mIvBg,welcomeCover.result);
                             PrefUtils.putString(Constant.WELCOME_COVER,welcomeCover.result);
                         }
                         toHome();

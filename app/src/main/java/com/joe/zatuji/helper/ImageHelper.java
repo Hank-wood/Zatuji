@@ -6,6 +6,7 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
@@ -39,6 +41,7 @@ import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
+import java.util.Random;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -49,16 +52,21 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by joe on 16/5/21.
  */
 public class ImageHelper {
+    private static int[] defaultColor=new int[]{R.color.DefaultGreen,R.color.DefaultBlue,
+            R.color.DefaultRed,R.color.DefaultPurple};
+    private static int getRandomColor() {
+        Random random=new Random();
+        return defaultColor[ random.nextInt(4)];
+    }
     /**
      * 普通图片显示
      */
     private static DrawableRequestBuilder<String> baseGlide(ImageView iv, String key){
         return Glide.with(iv.getContext())
                 .load(key)
-                .crossFade(300)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE);
-//                .error(null)
-//                .placeholder(null);
+                .crossFade(150)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .placeholder(getRandomColor());
     }
     /**
      * gif图片显示
@@ -67,9 +75,9 @@ public class ImageHelper {
         return Glide.with(iv.getContext())
                 .load(key)
                 .asGif()
+                .crossFade(150)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .error(null)
-                .placeholder(null);
+                .placeholder(getRandomColor());
     }
     /**
      * 展示缩略图
@@ -115,22 +123,37 @@ public class ImageHelper {
                     iv.setImageDrawable(resource);
                     attacher.update();
                 }
+
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    iv.setImageDrawable(placeholder);
+                }
             });
             return attacher;
         }
     }
 
-
+    /**展示头像*/
     public static void showAvatar(CircularImageView iv , String url){
-        baseGlide(iv,url)
-                .placeholder(R.mipmap.ic_launcher)
+        Glide.with(iv.getContext())
+                .load(url)
+                .crossFade(150)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .error(R.drawable.front_default)
                 .transform(new GlideCircleTransform(iv.getContext()))
                 .into(iv);
-        iv.setBorderWidth(DPUtils.dip2px(iv.getContext(),2));
-        iv.setBorderColor(iv.getContext().getResources().getColor(R.color.white));
+//        iv.setBorderWidth(DPUtils.dip2px(iv.getContext(),2));
+//        iv.setBorderColor(iv.getContext().getResources().getColor(R.color.white));
     }
-
+    /**展示启动页*/
+    public static void showWelcomeCover(ImageView iv , String url){
+        Glide.with(iv.getContext())
+                .load(url)
+                .crossFade(150)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(iv);
+    }
     /**
      * 下载图片，从缓存中复制
      */
