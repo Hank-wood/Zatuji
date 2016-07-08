@@ -112,21 +112,23 @@ public class LocalImageLoader {
                             return false;
                         }
                     });
+                    ArrayList<LocalMedia> images = new ArrayList<>();
                     for (int i = 0 ; i < files.length ; i++){
                         File f = files[i];
                         LocalMedia localMedia = new LocalMedia(f.getAbsolutePath());
                         allImages.add(localMedia);
+                        images.add(localMedia);
                     }
-                    if(allImages.size()>0){
-                        localMediaFolder.setImages(allImages);
-                        localMediaFolder.setImageNum(localMediaFolder.getImages().size()-1);
+                    if(images.size()>0){
+                        localMediaFolder.setImages(images);
+                        localMediaFolder.setImageNum(localMediaFolder.getImages().size());
                         imageFolders.add(localMediaFolder);
-                        allImageFolder.getImages().addAll(allImages);
-                        allImageFolder.setImageNum(allImageFolder.getImages().size()-1);
-                        allImageFolder.setFirstImagePath(allImages.get(0).getPath());
-                        allImageFolder.setName(activity.getString(com.yongchun.library.R.string.all_image));
                     }
                 }
+                allImageFolder.setImages(allImages);
+                allImageFolder.setImageNum(allImageFolder.getImages().size());
+                allImageFolder.setFirstImagePath(allImages.get(0).getPath());
+                allImageFolder.setName(activity.getString(com.yongchun.library.R.string.all_image));
                 imageFolders.add(allImageFolder);
                 sortFolder(imageFolders);
                 imageLoadListener.loadComplete(imageFolders);
