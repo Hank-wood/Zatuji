@@ -14,20 +14,20 @@ android {
         versionName "开发版"
     }
     buildTypes {
-//        release {
-//            minifyEnabled true
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            applicationVariants.all { variant ->
-//                variant.outputs.each { output ->
-//                    def outputFile = output.outputFile
-//                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-//                        // 输出apk名称为zatuji_v1.0_2015-01-15.apk
-//                        def fileName = "zatuji_v${defaultConfig.versionName}_${releaseTime()}.apk"
-//                        output.outputFile = new File(outputFile.parent, fileName)
-//                    }
-//                }
-//            }
-//        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为zatuji_v1.0_2015-01-15.apk
+                        def fileName = "zatuji_v${defaultConfig.versionName}_${releaseTime()}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
     }
 }
 repositories{
@@ -43,10 +43,8 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.ashokvarma.android:bottom-navigation-bar:1.0.0'
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
-//    compile 'de.hdodenhof:circleimageview:2.0.0'
 
     //图片选择器
-//    compile 'com.commit451:PhotoView:1.2.4'
     compile 'com.isseiaoki:simplecropview:1.0.13'
     compile 'com.yongchun:com.yongchun.imageselector:1.1.0'
 

@@ -39,7 +39,6 @@ public class MyApplication extends Application {
         super.onCreate();
         myApplication = this;
         registerEvent();
-        //MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         MobclickAgent.setDebugMode(Constant.IS_DEBUG);
         //refWatcher = LeakCanary.install(this);
         mDefaultTag = new TagBean().tagList.get(SettingHelper.getDefaultTag());
