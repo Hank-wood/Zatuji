@@ -1,6 +1,7 @@
 package com.joe.zatuji.module.homepage;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -216,8 +217,9 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
     @Override
     public void hideOrShowFAB(boolean hide){
         if(hide){
-            mBottomBar.hide();
-            mFab.hide();
+            if(mBottomBar.isShowing()) mBottomBar.hide();
+            if(Build.VERSION.SDK_INT>19) mFab.hide();
+//            mFab.hide();
         }else{
             if(mBottomBar.isShowing())return;
             mFab.show();

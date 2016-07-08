@@ -21,15 +21,12 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.bean.DataBean;
-import com.joe.zatuji.module.homepage.HomeFragment;
 import com.joe.zatuji.module.picdetailpage.PicDetailActivity;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.TUtil;
 import com.joe.zatuji.view.LoadingDialog;
 import com.squareup.leakcanary.RefWatcher;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cc.solart.turbo.OnItemClickListener;
