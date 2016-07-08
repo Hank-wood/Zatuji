@@ -67,6 +67,13 @@
             />
 
         <!--框架所需-->
+        <activity android:name=".module.imageselectpage.ImageSelectActivity"
+            android:label="上传头像"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".module.imageselectpage.ImageCropActivity"
+            android:label="剪裁头像"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name="com.yongchun.library.view.ImageSelectorActivity"
             android:label="上传头像"
             android:theme="@style/AppTheme.NoActionBar"

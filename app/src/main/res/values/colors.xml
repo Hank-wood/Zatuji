@@ -3,6 +3,8 @@
     <color name="colorPrimary">#28344E</color>
     <color name="colorPrimaryDark">#1c2546</color>
     <color name="colorAccent">#283465</color>
+
+    <color name="crop_status_gray">#dd2f3033</color>
     <color name="Gray">#EDECEA</color>
     <color name="DarkGray">#6b6767</color>
     <color name="Green">#42BD56</color>
