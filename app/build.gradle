@@ -10,8 +10,8 @@ android {
         applicationId "com.joe.zatuji"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 6
-        versionName "开发版"
+        versionCode 7
+        versionName "1.0.0"
     }
     buildTypes {
         release {
