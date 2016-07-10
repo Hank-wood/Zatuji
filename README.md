@@ -1,20 +1,9 @@
-# 豆瓣妹子
-人手一个豆瓣系列~忽略掉Project名字，想爬花瓣失败了。。。
+# 杂图集
+
+杂图集是一款专注于图片浏览的应用，采用MVP+RxJava+Retrofit开发，使用Glide加载图片
 ### 截图
+![首页.png](http://upload-images.jianshu.io/upload_images/1473110-7e3c19e4590290e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/280)![大图.png](http://upload-images.jianshu.io/upload_images/1473110-5d625d9ddcad61ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/280)
 
-![](http://upload-images.jianshu.io/upload_images/1473110-9ffd3f2dc5a90ae6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/480)
-
-![](http://upload-images.jianshu.io/upload_images/1473110-caeb5bfc486fff5c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/480)
-### 实现
-+ 主界面用ViewPager嵌套RecyclerView
-+ 数据获取 http://www.dbmeinv.com/
-+ 实现dialog显示大图，并左右滑动
-
-### 资源链接
-+ 爬虫教程：（hongyan大神博客）
-http://blog.csdn.net/lmj623565791/article/details/23532797
-+ dialog的高冷用法：
-http://blog.csdn.net/soul_code/article/details/50448443
 
 ### License
 Copyright 2016 Joe Steven
