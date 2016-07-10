@@ -38,7 +38,7 @@ public class BaseStaggeredAdapter extends BaseTurboAdapter<DataBean.PicBean,Base
         params.height=fileBean.height;
         if(fileBean.height> DPUtils.dip2px(mContext,300)) params.height=DPUtils.dip2px(mContext,300);
         if(fileBean.height< DPUtils.dip2px(mContext,120)) params.height=DPUtils.dip2px(mContext,120);
-        holder.ivPic.setBackgroundColor(mContext.getResources().getColor(getRandomColor()));
+        //holder.ivPic.setBackgroundColor(mContext.getResources().getColor(getRandomColor()));
         holder.ivPic.setLayoutParams(params);
         //替换为Glide
         ImageHelper.showSmall(holder.ivPic,fileBean.key,fileBean.type);

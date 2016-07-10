@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseActivity;
+import com.joe.zatuji.helper.SettingHelper;
+import com.joe.zatuji.utils.KToast;
 
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
@@ -50,11 +52,21 @@ public class AboutActivity extends BaseActivity {
                 +"如果您对本应用有好的意见或建议，可以通过意见反馈或者直接联系我。"
                 +"同时感谢项目中所用到的所有开源项目。";
     }
-
+    private int count = 0;
     private Element getVersion(){
         Element versionElement = new Element();
         versionElement.setTitle("当前版本号:"+MyApplication.getInstance().getVersionName());
         //versionElement.setGravity(Gravity.CENTER);
+        versionElement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                count++;
+                if(count==20){
+                    SettingHelper.setDebug(true);
+                    KToast.show("开发者模式已开启，可在设置中关闭");
+                }
+            }
+        });
         return versionElement;
     }
 

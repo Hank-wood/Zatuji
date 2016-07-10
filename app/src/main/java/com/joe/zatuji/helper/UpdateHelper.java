@@ -3,6 +3,7 @@ package com.joe.zatuji.helper;
 import android.content.Context;
 import android.content.Intent;
 
+import com.joe.zatuji.Event;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.api.exception.ResultException;
@@ -14,6 +15,7 @@ import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.NetWorkUtils;
 import com.joe.zatuji.view.UpdateDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -59,6 +61,7 @@ public class UpdateHelper {
     }
 
     public void startUpdate(UpdateBean.PathBean file) {
+        MobclickAgent.onEvent(mContext, Event.EVENT_UPDATE);
         Intent intent = new Intent(mContext, DownloadService.class);
         intent.putExtra("url",file.url);
         mContext.startService(intent);

@@ -14,6 +14,7 @@
     <!--允许读取手机状态 用于创建BmobInstallation-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -36,6 +37,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:name=".module.homepage.HomeActivity"
+            android:launchMode="singleTask"
             />
         <activity
             android:theme="@style/AppTheme.NoActionBar"
@@ -58,12 +60,20 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".module.aboutpage.AboutActivity"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".module.settingpage.SettingActivity"
             android:screenOrientation="portrait"
             />
 
         <!--框架所需-->
+        <activity android:name=".module.imageselectpage.ImageSelectActivity"
+            android:label="上传头像"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".module.imageselectpage.ImageCropActivity"
+            android:label="剪裁头像"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name="com.yongchun.library.view.ImageSelectorActivity"
             android:label="上传头像"
             android:theme="@style/AppTheme.NoActionBar"
@@ -79,6 +89,10 @@
         <!--下载的服务-->
         <service android:name=".helper.download.DownloadService"
             android:exported="false"/>
+
+        <!--Umeng-->
+        <meta-data android:value="571af892e0f55ae32f0016ed" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>
 
     </application>
 

@@ -1,5 +1,6 @@
 package com.joe.zatuji.module.gallerypage;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,21 @@ public class GalleryActivity extends BaseActivity{
     private GalleryFragment mFragment;
     private FavoriteTag tag;
     private RxJavaManager mRxManager;
+    private static final String TAG_GALLERY_FRAG = "tag_gallery_frag";
+    private FragmentManager mFragmentManager;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFragmentManager = getSupportFragmentManager();
+        if(savedInstanceState==null) {
+            initFragment();
+        }else {
+            mFragment = (GalleryFragment) mFragmentManager.findFragmentByTag(TAG_GALLERY_FRAG);
+            tag = (FavoriteTag) savedInstanceState.getSerializable(CURRENT_TAG);
+            mFragment.setTag(tag);
+        }
+    }
 
     @Override
     protected int getLayout() {
@@ -36,7 +52,6 @@ public class GalleryActivity extends BaseActivity{
         setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        initFragment();
     }
 
     private void initFragment() {
@@ -44,8 +59,7 @@ public class GalleryActivity extends BaseActivity{
         tag = (FavoriteTag) getIntent().getSerializableExtra(Constant.GALLERY_TAG);
         mFragment.setTag(tag);
         mActionBar.setTitle(tag.tag+" ("+ tag.number+")");
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fl_container_gallery, mFragment).commit();
+        mFragmentManager.beginTransaction().replace(R.id.fl_container_gallery, mFragment,TAG_GALLERY_FRAG).commit();
     }
 
     @Override
@@ -71,6 +85,13 @@ public class GalleryActivity extends BaseActivity{
         }
         return true;
     }
+    private static final String CURRENT_TAG ="current_tag";
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(CURRENT_TAG,tag);
+    }
+
     private boolean isRemove =false;
     @Override
     protected void onDestroy() {

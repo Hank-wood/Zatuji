@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +15,7 @@ import com.joe.zatuji.base.ui.BaseActivity;
 import com.joe.zatuji.data.bean.User;
 import com.joe.zatuji.helper.ImageHelper;
 import com.joe.zatuji.helper.UserHelper;
+import com.joe.zatuji.module.imageselectpage.ImageSelectActivity;
 import com.joe.zatuji.utils.CheckUitls;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
@@ -94,7 +94,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements UserVie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_avatar_user:
-                ImageSelectorActivity.start(mActivity, 1, ImageSelectorActivity.MODE_SINGLE, true, true, true);
+                ImageSelectActivity.start(mActivity, 1, ImageSelectorActivity.MODE_SINGLE, true, true, true);
                 break;
             case R.id.ll_nick_user:
                 showInputDialog("修改昵称", "输入新的昵称", TYPE_NICK);

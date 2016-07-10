@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.joe.zatuji.Event;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
@@ -22,12 +23,13 @@ import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.ChooseTagDialog;
 import com.joe.zatuji.view.CreateTagDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
 
 /**
- * 大图详情页吗面
+ * 大图详情页面
  * Created by Joe on 2016/4/16.
  */
 public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implements PicDetailView{
@@ -97,6 +99,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         desc = img.raw_text;
         if(!TextUtils.isEmpty(desc)){
             tvDesc.setText(desc);
+            dontShowTv = false;
         }else{
             dontShowTv=true;
         }
@@ -123,6 +126,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                 finish();
                 break;
             case R.id.action_save://收藏
+                MobclickAgent.onEvent(mActivity, Event.EVENT_FAVORITE);
                 if(!MyApplication.isLogin()){
                     showToastMsg("请先登录帐号～");
                 }else{
@@ -131,10 +135,12 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                 }
                 break;
             case R.id.action_download://保存
+                MobclickAgent.onEvent(mActivity, Event.EVENT_DOWNLOAD);
                 showLoading("保存图片...");
                 mPresenter.saveToPhone(img.file.key,mMyFavoriteImg.type);
                 break;
             case R.id.action_share://分享
+                MobclickAgent.onEvent(mActivity, Event.EVENT_SHARE);
                 LogUtils.d("url:"+mMyFavoriteImg.img_url);
                 showLoading("正在分享...");
                 mPresenter.share(img.file.key,mMyFavoriteImg.type);

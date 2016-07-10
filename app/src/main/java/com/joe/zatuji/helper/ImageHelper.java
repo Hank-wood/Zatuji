@@ -5,19 +5,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
@@ -35,6 +41,7 @@ import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
+import java.util.Random;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -45,16 +52,21 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by joe on 16/5/21.
  */
 public class ImageHelper {
+    private static int[] defaultColor=new int[]{R.color.DefaultGreen,R.color.DefaultBlue,
+            R.color.DefaultRed,R.color.DefaultPurple};
+    private static int getRandomColor() {
+        Random random=new Random();
+        return defaultColor[ random.nextInt(4)];
+    }
     /**
      * 普通图片显示
      */
     private static DrawableRequestBuilder<String> baseGlide(ImageView iv, String key){
         return Glide.with(iv.getContext())
                 .load(key)
-                .crossFade(300)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE);
-//                .error(null)
-//                .placeholder(null);
+                .crossFade(150)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .placeholder(getRandomColor());
     }
     /**
      * gif图片显示
@@ -63,9 +75,9 @@ public class ImageHelper {
         return Glide.with(iv.getContext())
                 .load(key)
                 .asGif()
+                .crossFade(150)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .error(null)
-                .placeholder(null);
+                .placeholder(getRandomColor());
     }
     /**
      * 展示缩略图
@@ -98,6 +110,9 @@ public class ImageHelper {
         resizeImage(iv,pic);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         if(getType(pic.file.type).contains("gif")){
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)iv.getLayoutParams();
+            params.gravity = Gravity.CENTER;
+            iv.setLayoutParams(params);
             baseGif(iv,Api.HOST_PIC+pic.file.key).into(iv);
             return null;
         }else{
@@ -108,20 +123,37 @@ public class ImageHelper {
                     iv.setImageDrawable(resource);
                     attacher.update();
                 }
+
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    iv.setImageDrawable(placeholder);
+                }
             });
             return attacher;
         }
     }
 
-
+    /**展示头像*/
     public static void showAvatar(CircularImageView iv , String url){
-        baseGlide(iv,url)
+        Glide.with(iv.getContext())
+                .load(url)
+                .crossFade(150)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .error(R.drawable.front_default)
                 .transform(new GlideCircleTransform(iv.getContext()))
                 .into(iv);
-        iv.setBorderWidth(DPUtils.dip2px(iv.getContext(),2));
-        iv.setBorderColor(iv.getContext().getResources().getColor(R.color.white));
+//        iv.setBorderWidth(DPUtils.dip2px(iv.getContext(),2));
+//        iv.setBorderColor(iv.getContext().getResources().getColor(R.color.white));
     }
-
+    /**展示启动页*/
+    public static void showWelcomeCover(ImageView iv , String url){
+        Glide.with(iv.getContext())
+                .load(url)
+                .crossFade(150)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(iv);
+    }
     /**
      * 下载图片，从缓存中复制
      */
@@ -153,17 +185,29 @@ public class ImageHelper {
         //获取屏幕宽高
         DisplayMetrics dm =iv.getContext().getResources().getDisplayMetrics();
         params.width = dm.widthPixels;
+        int statusBarHeight1 = -1;
+//获取status_bar_height资源的ID
+        int resourceId = iv.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            statusBarHeight1 = iv.getContext().getResources().getDimensionPixelSize(resourceId);
+        }
         //高小于屏幕的 与屏幕同高，大于的按图片高
         double times= (dm.widthPixels+0.0)/(pic.file.width +0.0);
         double resizeHeight = pic.file.height*times;
         if(resizeHeight<=dm.heightPixels && !getType(pic.file.type).contains("gif")){
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.height = dm.heightPixels - statusBarHeight1;
         }else{
             params.height = (int) resizeHeight;
             if(resizeHeight-params.height>=0.5){
                 params.height+=1;
             }
         }
+//        LogUtils.d("=======================================");
+//        LogUtils.d("图宽："+pic.file.width+"图高："+pic.file.height);
+//        LogUtils.d("屏幕宽："+dm.widthPixels+"屏幕高："+dm.heightPixels);
+//        LogUtils.d("图片宽："+params.width+"图片高："+params.height);
+//        LogUtils.d("=======================================");
         iv.setLayoutParams(params);
     }
 

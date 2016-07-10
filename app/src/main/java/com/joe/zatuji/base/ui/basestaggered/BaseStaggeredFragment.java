@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,15 +21,12 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.view.HideFabView;
 import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.bean.DataBean;
-import com.joe.zatuji.module.homepage.HomeFragment;
 import com.joe.zatuji.module.picdetailpage.PicDetailActivity;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.TUtil;
 import com.joe.zatuji.view.LoadingDialog;
 import com.squareup.leakcanary.RefWatcher;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cc.solart.turbo.OnItemClickListener;
@@ -59,6 +57,28 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
         this.mActivity=getActivity();
         this.myApplication= (MyApplication) mActivity.getApplication();
         //initLeakCanary();
+        onSaveFragmentInstance(savedInstanceState);
+    }
+
+    private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
+    private void onSaveFragmentInstance(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            boolean isSupportHidden = savedInstanceState.getBoolean(STATE_SAVE_IS_HIDDEN);
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (isSupportHidden) {
+                ft.hide(this);
+            } else {
+                ft.show(this);
+            }
+            ft.commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_SAVE_IS_HIDDEN,isHidden());
     }
     /**内存泄漏*/
     protected void initLeakCanary(){

@@ -39,7 +39,13 @@ public class SettingHelper {
         PrefUtils.putBoolean(Constant.NOTIFY_NO_WIFI,isNotify);
     }
 
+    public static void setDebug(boolean isDebug){
+        PrefUtils.putBoolean(Constant.DEBUG_MODE,isDebug);
+    }
 
+    public static boolean isDebug(){
+        return PrefUtils.getBoolean(Constant.DEBUG_MODE,false);
+    }
     /**设置默认标签*/
     public static int getDefaultTag(){
         return PrefUtils.getInt(Constant.DEFAULT_TAG,3);

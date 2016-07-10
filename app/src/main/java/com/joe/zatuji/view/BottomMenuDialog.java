@@ -55,6 +55,7 @@ public class BottomMenuDialog extends BaseDialog implements View.OnClickListener
         findViewById(R.id.tv_edit_dialog).setOnClickListener(this);
         findViewById(R.id.tv_delete_dialog).setOnClickListener(this);
         findViewById(R.id.tv_cancel_dialog).setOnClickListener(this);
+        this.setCanceledOnTouchOutside(true);
     }
     @Override
     protected void initListener() {

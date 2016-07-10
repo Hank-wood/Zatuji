@@ -51,6 +51,7 @@ public class GalleryMenuDialog extends BaseDialog implements View.OnClickListene
         mDelete.setOnClickListener(this);
         mDelete.setText("移除");
         findViewById(R.id.tv_cancel_dialog).setOnClickListener(this);
+        this.setCanceledOnTouchOutside(true);
     }
     @Override
     protected void initListener() {

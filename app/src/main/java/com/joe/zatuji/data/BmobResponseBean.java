@@ -6,6 +6,7 @@ package com.joe.zatuji.data;
 public class BmobResponseBean {
     private int code;
     private String error;
+    public String msg;
 
     public int getCode() {
         return code;

@@ -16,6 +16,7 @@ import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.TUtil;
 import com.joe.zatuji.view.LoadingDialog;
 import com.squareup.leakcanary.RefWatcher;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 所有activity的基类
@@ -44,6 +45,17 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         initListener();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     private void initPM() {
         mPresenter = TUtil.getT(this,0);

@@ -24,6 +24,7 @@ public class SettingActivity extends BaseActivity implements SettingView.OnCheck
     private SettingView mUpdateSetting;
     private SettingView mNoWifiSetting;
     private SettingView mNotify;
+    private SettingView mDebug;
 
     @Override
     protected int getLayout() {
@@ -40,12 +41,15 @@ public class SettingActivity extends BaseActivity implements SettingView.OnCheck
         mUpdateSetting = (SettingView) findViewById(R.id.setting_update);
         mNoWifiSetting = (SettingView) findViewById(R.id.setting_update_wifi);
         mNotify = (SettingView) findViewById(R.id.setting_no_wifi);
+        mDebug = (SettingView) findViewById(R.id.setting_debug);
         TagBean mTag = new TagBean();
         mTagSetting.setHint(mTag.tagList.get(SettingHelper.getDefaultTag()).name);
         mClearSetting.setCheckedImmediately(SettingHelper.getAutoClear());
         mUpdateSetting.setCheckedImmediately(SettingHelper.isCheckUpdate());
         mNoWifiSetting.setCheckedImmediately(SettingHelper.isCheckUpdateWithNoWifi());
         mNotify.setCheckedImmediately(SettingHelper.isNotifyNoWifi());
+        mDebug.setCheckedImmediately(SettingHelper.isDebug());
+        mDebug.setVisibility(SettingHelper.isDebug()?View.VISIBLE:View.GONE);
     }
 
     @Override
@@ -60,6 +64,7 @@ public class SettingActivity extends BaseActivity implements SettingView.OnCheck
         mUpdateSetting.setOnCheckedChangeListener(this);
         mNoWifiSetting.setOnCheckedChangeListener(this);
         mNotify.setOnCheckedChangeListener(this);
+        mDebug.setOnCheckedChangeListener(this);
     }
 
     private void showTagChoose() {
@@ -90,6 +95,8 @@ public class SettingActivity extends BaseActivity implements SettingView.OnCheck
             case R.id.setting_no_wifi:
                 SettingHelper.setNotifyNoWifi(isChecked);
                 break;
+            case R.id.setting_debug:
+                SettingHelper.setDebug(isChecked);
         }
     }
     @Override

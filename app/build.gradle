@@ -10,8 +10,8 @@ android {
         applicationId "com.joe.zatuji"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 6
-        versionName "内测版"
+        versionCode 7
+        versionName "1.0.0"
     }
     buildTypes {
         release {
@@ -43,10 +43,8 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.ashokvarma.android:bottom-navigation-bar:1.0.0'
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
-//    compile 'de.hdodenhof:circleimageview:2.0.0'
 
     //图片选择器
-//    compile 'com.commit451:PhotoView:1.2.4'
     compile 'com.isseiaoki:simplecropview:1.0.13'
     compile 'com.yongchun:com.yongchun.imageselector:1.1.0'
 
@@ -66,10 +64,12 @@ dependencies {
     //turboRecyclerView
     compile 'cc.solart:turbo-recyclerview-helper:1.0.9-beta'
     //floating tool bar
-    compile 'com.github.rubensousa:FloatingToolbar:0.3'
+    compile 'com.github.rubensousa:FloatingToolbar:1.0.0'
     compile 'com.github.medyo:android-about-page:1.0.8'
     //switch
     compile 'com.kyleduo.switchbutton:library:1.4.1'
     //scale image to show big
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    //Umeng
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

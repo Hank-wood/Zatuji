@@ -16,6 +16,7 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.data.bean.TagBean;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.base.BaseDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import cc.solart.turbo.BaseTurboAdapter;
 import cc.solart.turbo.BaseViewHolder;
@@ -51,8 +52,6 @@ public class DropMenuDialog extends BaseDialog implements View.OnClickListener{
         //设置dialog的位置在底部
         lp.gravity = Gravity.BOTTOM;
         window.setAttributes(lp);
-        LogUtils.d("convert dialog");
-
         mRecyclerView = (TurboRecyclerView)findViewById(R.id.recycler_drop_menu);
         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
         findViewById(R.id.ll_container_drop).setOnClickListener(this);
@@ -60,12 +59,16 @@ public class DropMenuDialog extends BaseDialog implements View.OnClickListener{
         mAdapter.resetData(new TagBean().tagList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLoadMoreEnabled(false);
+        this.setCanceledOnTouchOutside(true);
     }
     @Override
     protected void initListener() {
         mAdapter.addOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh, int position) {
+                //友盟统计事件
+                LogUtils.d("event:"+mAdapter.getItem(position).requestName);
+                MobclickAgent.onEvent(getContext(),mAdapter.getItem(position).requestName);
                 if(mListener!=null) mListener.onMenuClick(mAdapter.getItem(position));
                 dismiss();
             }
@@ -98,7 +101,6 @@ public class DropMenuDialog extends BaseDialog implements View.OnClickListener{
 
         @Override
         protected void convert(Holder holder, TagBean.Tag tag) {
-            LogUtils.d("convert dialog");
             holder.textView.setText(tag.name);
         }
 
