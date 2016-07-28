@@ -29,7 +29,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends android.supp
     protected LoadingDialog mLoadingDialog;
     protected T mPresenter;
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mActivity=getActivity();
         this.myApplication= (MyApplication) mActivity.getApplication();

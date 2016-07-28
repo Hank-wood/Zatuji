@@ -29,7 +29,6 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
     private CircularImageView mAvatar;
     private EditText mAccount;
     private EditText mPwd;
-    private LoadingView mLoadingView;
 
     @Override
     protected int getLayout() {
@@ -44,7 +43,6 @@ public class LoginFragment extends BaseFragment<LoginPresenter> implements Login
 
     @Override
     protected void initView() {
-        mLoadingView = (LoadingView) mActivity;
         mAvatar = (CircularImageView) mRootView.findViewById(R.id.iv_login_avatar);
         mAccount = (EditText) mRootView.findViewById(R.id.et_login_user);
         mPwd = (EditText) mRootView.findViewById(R.id.et_login_pwd);

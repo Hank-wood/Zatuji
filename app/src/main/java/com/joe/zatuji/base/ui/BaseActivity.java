@@ -12,7 +12,6 @@ import com.joe.zatuji.R;
 import com.joe.zatuji.base.BasePresenter;
 import com.joe.zatuji.base.LoadingView;
 import com.joe.zatuji.utils.KToast;
-import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.TUtil;
 import com.joe.zatuji.view.LoadingDialog;
 import com.squareup.leakcanary.RefWatcher;

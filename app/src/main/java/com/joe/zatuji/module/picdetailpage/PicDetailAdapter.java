@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+import static com.joe.zatuji.helper.ImageHelper.showBig;
+
 /**
  * Created by joe on 16/7/2.
  */
@@ -80,43 +82,37 @@ public class PicDetailAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = View.inflate(context, R.layout.item_pic_detail_viewpager,null);
         container.addView(view);
-        ImageView image = (ImageView) view.findViewById(R.id.iv_pic_gif);
-        PhotoViewAttacher attacher = null;
+        PhotoView image = (PhotoView) view.findViewById(R.id.iv_pic_gif);
+        image.setMinimumScale(1f);
         if(isGallery) {
-            attacher = showPic(image, gallery2PicBean(myFavorites.get(position)));
+            showPic(image, gallery2PicBean(myFavorites.get(position)));
         }else {
-            attacher = showPic(image,mPics.get(position));
+            showPic(image,mPics.get(position));
         }
-        if(attacher!=null){
-            attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-                @Override
-                public void onPhotoTap(View view, float v, float v1) {
-                    if(isGallery){
-                        mListener.OnItemClicked(position, gallery2PicBean(myFavorites.get(position)));
-                    }else {
-                        mListener.OnItemClicked(position,mPics.get(position));
-                    }
+        image.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+            @Override
+            public void onPhotoTap(View view, float v, float v1) {
+                if(isGallery){
+                    mListener.OnItemClicked(position, gallery2PicBean(myFavorites.get(position)));
+                }else {
+                    mListener.OnItemClicked(position,mPics.get(position));
                 }
-                @Override
-                public void onOutsidePhotoTap() {}
-            });
-        }else{
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(isGallery){
-                        mListener.OnItemClicked(position, gallery2PicBean(myFavorites.get(position)));
-                    }else {
-                        mListener.OnItemClicked(position,mPics.get(position));
-                    }
+            }
+
+            @Override
+            public void onOutsidePhotoTap() {
+                if(isGallery){
+                    mListener.OnItemClicked(position, gallery2PicBean(myFavorites.get(position)));
+                }else {
+                    mListener.OnItemClicked(position,mPics.get(position));
                 }
-            });
-        }
+            }
+        });
         return view;
     }
 
-    private PhotoViewAttacher showPic(ImageView gif, DataBean.PicBean picBean) {
-            return ImageHelper.showBig(gif,picBean);
+    private void showPic(PhotoView gif, DataBean.PicBean picBean) {
+        ImageHelper.showBig(gif,picBean);
     }
 
     private DataBean.PicBean gallery2PicBean(MyFavorite favorite) {

@@ -4,7 +4,7 @@ package com.joe.zatuji;
  * Created by Joe on 2016/3/11.
  */
 public class Constant {
-    public static final boolean IS_DEBUG =false;
+    public static final boolean IS_DEBUG =true;
 
     //跳转携带数据
     public static final String PIC_DATA = "picData";//图片数据

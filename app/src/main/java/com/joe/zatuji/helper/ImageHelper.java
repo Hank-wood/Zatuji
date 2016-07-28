@@ -2,6 +2,7 @@ package com.joe.zatuji.helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -46,7 +47,11 @@ import java.util.Random;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
+import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
+
+import static android.R.attr.key;
+import static u.aly.au.B;
 
 /**
  * Created by joe on 16/5/21.
@@ -67,6 +72,7 @@ public class ImageHelper {
                 .crossFade(150)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .placeholder(getRandomColor());
+
     }
     /**
      * gif图片显示
@@ -106,30 +112,43 @@ public class ImageHelper {
     /**
      * 展示全屏大图
      */
-    public static PhotoViewAttacher showBig(final ImageView iv , DataBean.PicBean pic){
+    private static final int MAX_HEIGHT_HEIGHT = 4096;
+    public static void showBig(final PhotoView iv , DataBean.PicBean pic){
         resizeImage(iv,pic);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         if(getType(pic.file.type).contains("gif")){
+            iv.setZoomable(false);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)iv.getLayoutParams();
             params.gravity = Gravity.CENTER;
             iv.setLayoutParams(params);
             baseGif(iv,Api.HOST_PIC+pic.file.key).into(iv);
-            return null;
         }else{
-            final PhotoViewAttacher attacher = new PhotoViewAttacher(iv);
-            baseGlide(iv,Api.HOST_PIC+pic.file.key).into(new SimpleTarget<GlideDrawable>() {
-                @Override
-                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    iv.setImageDrawable(resource);
-                    attacher.update();
-                }
+            iv.setZoomable(true);
+            Glide.with(iv.getContext())
+                    .load(Api.HOST_PIC+pic.file.key)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .placeholder(getRandomColor())
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onStart() {
+                            iv.setImageResource(getRandomColor());
+                        }
 
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    iv.setImageDrawable(placeholder);
-                }
-            });
-            return attacher;
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                            LogUtils.d("size of big :"+resource.getHeight()+"*"+resource.getWidth());
+                            if (resource.getWidth() < resource.getHeight() && resource.getHeight() > MAX_HEIGHT_HEIGHT) {
+                                iv.setImageBitmap(Bitmap.createScaledBitmap(resource, resource.getWidth() * MAX_HEIGHT_HEIGHT / resource.getHeight(), MAX_HEIGHT_HEIGHT, true));
+                            } else if (resource.getWidth() > resource.getHeight() && resource.getWidth() > MAX_HEIGHT_HEIGHT) {
+                                iv.setImageBitmap(Bitmap.createScaledBitmap(resource, MAX_HEIGHT_HEIGHT, resource.getHeight() * MAX_HEIGHT_HEIGHT / resource.getWidth(), true));
+                            } else {
+                                iv.setImageBitmap(resource);
+                            }
+
+                        }
+                    });
+
         }
     }
 

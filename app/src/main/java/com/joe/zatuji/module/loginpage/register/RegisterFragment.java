@@ -28,7 +28,6 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
     private EditText mAccount;
     private EditText mNickName;
     private EditText mPwd;
-    private LoadingView mLoadingView;
     private User mUser ;
     @Override
     protected int getLayout() {
@@ -42,7 +41,6 @@ public class RegisterFragment extends BaseFragment<com.joe.zatuji.module.loginpa
 
     @Override
     protected void initView() {
-        mLoadingView = (LoadingView) mActivity;
         mAvatar = (CircularImageView) mRootView.findViewById(R.id.iv_register_avatar);
         mAvatar.setOnClickListener(this);
         mAccount = (EditText) mRootView.findViewById(R.id.et_register_user);
