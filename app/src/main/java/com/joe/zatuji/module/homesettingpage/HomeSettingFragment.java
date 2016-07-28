@@ -2,6 +2,7 @@ package com.joe.zatuji.module.homesettingpage;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -128,8 +129,10 @@ public class HomeSettingFragment extends BaseFragment<HomeSettingPresenter> impl
             public void OnComplete(String input, InputDialog dialog) {
                 feedBack.content = input;
                 mFeedBack = input;
-                mPresenter.feedBack(feedBack);
-                showLoading("正在上传反馈...");
+                if(!TextUtils.isEmpty(feedBack.content)){
+                    showLoading("正在上传反馈...");
+                    mPresenter.feedBack(feedBack);
+                }
                 dialog.dismiss();
             }
         });
