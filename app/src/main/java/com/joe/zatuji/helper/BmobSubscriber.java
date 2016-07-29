@@ -1,5 +1,6 @@
 package com.joe.zatuji.helper;
 
+import com.google.gson.JsonObject;
 import com.joe.zatuji.api.exception.ResultException;
 import com.joe.zatuji.utils.LogUtils;
 
@@ -22,12 +23,15 @@ public abstract class BmobSubscriber<T> extends Subscriber<T> {
         if (e instanceof HttpException) {
             ResponseBody body = ((HttpException) e).response().errorBody();
             int code = ((HttpException) e).response().code();
-            //服务器自定义异常
+            //服务器自定义异常\
             if (code == 404) {
                 try {
-                    ResultException resultException = GsonHelper.fromJson(body.string(), ResultException.class);
+                    String data = body.string();
+                    LogUtils.e("body:"+data);
+                    ResultException resultException = GsonHelper.fromJson(data, ResultException.class);
                     onError(resultException);
                 } catch (Exception ex) {
+                    LogUtils.e("catch error:"+ex.getMessage());
                     ex.printStackTrace();
                     onError(new ResultException("网络异常"));
                 }
