@@ -117,13 +117,14 @@ public class ImageHelper {
         resizeImage(iv,pic);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         if(getType(pic.file.type).contains("gif")){
-            iv.setZoomable(false);
+            //iv.setZoomable(false);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)iv.getLayoutParams();
             params.gravity = Gravity.CENTER;
             iv.setLayoutParams(params);
             baseGif(iv,Api.HOST_PIC+pic.file.key).into(iv);
         }else{
             iv.setZoomable(true);
+            iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Glide.with(iv.getContext())
                     .load(Api.HOST_PIC+pic.file.key)
                     .asBitmap()
