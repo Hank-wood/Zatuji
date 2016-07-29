@@ -1,6 +1,5 @@
 package com.joe.zatuji.module.discoverpage;
 
-import com.joe.zatuji.Constant;
 import com.joe.zatuji.Event;
 import com.joe.zatuji.SConstant;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredPresenter;
@@ -77,9 +76,14 @@ public class DiscoverPresenter extends BaseStaggeredPresenter<BaseStaggeredView,
 
                     @Override
                     public void onNext(DataBean dataBean) {
-                        mView.addData(dataBean.pins);
-                        countOffset(dataBean);
-                        mRxJavaManager.post(Event.LOAD_MORE_DONE,dataBean.pins);
+                        if(dataBean.pins==null||dataBean.pins.size()==0){
+                            showNoMoreData();
+                            mRxJavaManager.post(Event.LOAD_MORE_DONE,null);
+                        }else{
+                            mView.addData(dataBean.pins);
+                            countOffset(dataBean);
+                            mRxJavaManager.post(Event.LOAD_MORE_DONE,dataBean.pins);
+                        }
                     }
                 }));
     }

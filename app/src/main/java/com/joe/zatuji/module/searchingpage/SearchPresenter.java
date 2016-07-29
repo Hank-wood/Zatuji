@@ -67,15 +67,22 @@ public class SearchPresenter extends BaseStaggeredPresenter<BaseStaggeredView,Se
                 .subscribe(new RxSubscriber<DataBean>() {
                     @Override
                     public void onError(Throwable e) {
-                        mView.showEmptyView();
+//                        mView.showEmptyView();
+                        showNoMoreData();
                         mRxJavaManager.post(Event.LOAD_MORE_DONE,null);
                     }
 
                     @Override
                     public void onNext(DataBean dataBean) {
-                        mView.addData(dataBean.pins);
-                        countOffset(dataBean);
-                        mRxJavaManager.post(Event.LOAD_MORE_DONE,dataBean.pins);
+                        if(dataBean.pins==null||dataBean.pins.size()==0){
+                            showNoMoreData();
+                            mRxJavaManager.post(Event.LOAD_MORE_DONE,null);
+                        }else{
+                            mView.addData(dataBean.pins);
+                            countOffset(dataBean);
+                            mRxJavaManager.post(Event.LOAD_MORE_DONE,dataBean.pins);
+                        }
+
                     }
                 }));
     }

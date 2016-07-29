@@ -23,6 +23,7 @@ import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.ChooseTagDialog;
 import com.joe.zatuji.view.CreateTagDialog;
+import com.joe.zatuji.view.ScaleViewPager;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     private String desc;
     private DataBean.PicBean img;
     private MyFavorite mMyFavoriteImg;
-    private ViewPager mViewPager;
+    private ScaleViewPager mViewPager;
     private ArrayList<DataBean.PicBean> mPicList;
     private ArrayList<MyFavorite> mGallerys;
     private boolean isFromGallery;
@@ -59,7 +60,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
 
     @Override
     protected void initView() {
-        mViewPager = (ViewPager) findViewById(R.id.viewpager_detail);
+        mViewPager = (ScaleViewPager) findViewById(R.id.viewpager_detail);
         mAdapter = new PicDetailAdapter(mActivity);
         mViewPager.setAdapter(mAdapter);
         getDataFromWhere();

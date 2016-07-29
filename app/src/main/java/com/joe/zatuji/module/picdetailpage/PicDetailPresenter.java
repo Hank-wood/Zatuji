@@ -41,7 +41,6 @@ import rx.schedulers.Schedulers;
  */
 public class PicDetailPresenter extends BasePresenter<PicDetailView,PicDetailModel> {
     private Context context;
-    private LoadingView loadingView;
 
     public void showTags(){
         mRxJavaManager.add(new FavoriteModel().getAllTags(MyApplication.mUser.objectId)

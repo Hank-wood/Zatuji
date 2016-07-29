@@ -78,9 +78,14 @@ public class HomePresenter extends BaseStaggeredPresenter<BaseStaggeredView, Hom
 
             @Override
             public void onNext(DataBean dataBean) {
-                mView.addData(dataBean.pins);
-                countOffset(dataBean);
-                mRxJavaManager.post(Event.LOAD_MORE_DONE,dataBean.pins);
+                if(dataBean.pins==null||dataBean.pins.size()==0){
+                    showNoMoreData();
+                    mRxJavaManager.post(Event.LOAD_MORE_DONE,null);
+                }else{
+                    mView.addData(dataBean.pins);
+                    countOffset(dataBean);
+                    mRxJavaManager.post(Event.LOAD_MORE_DONE,dataBean.pins);
+                }
             }
         }));
     }
