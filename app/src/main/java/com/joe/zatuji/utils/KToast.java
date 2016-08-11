@@ -1,5 +1,6 @@
 package com.joe.zatuji.utils;
 
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.joe.zatuji.MyApplication;
@@ -17,6 +18,7 @@ public class KToast {
 //        LogUtils.d("duration:" + (System.currentTimeMillis() - lastTime));
 //        LogUtils.d("lastStr:" + lastStr + ":str:" + str);
         //避免多次重复Toast
+        if(TextUtils.isEmpty(str)) return;
         if (str.equals(lastStr) && (System.currentTimeMillis() - lastTime) < duration) return;
         Toast.makeText(MyApplication.getInstance(), str, Toast.LENGTH_SHORT).show();
         lastTime = System.currentTimeMillis();

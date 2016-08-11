@@ -11,18 +11,18 @@ import com.joe.zatuji.helper.SettingHelper;
 public class LogUtils {
 
     public static void e(String s){
-        if(Constant.IS_DEBUG|| SettingHelper.isDebug()){
+        if(Constant.IS_DEBUG){
             Log.e("Zatuji",s);
         }
     }
     public static void d(String s){
-        if(Constant.IS_DEBUG|| SettingHelper.isDebug()){
+        if(Constant.IS_DEBUG){
             Log.d("Zatuji",s);
         }
     }
 
     public static void api(String s){
-        if(Constant.IS_DEBUG|| SettingHelper.isDebug()){
+        if(Constant.IS_DEBUG){
             Log.d("api",s);
         }
     }

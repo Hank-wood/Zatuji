@@ -82,10 +82,15 @@
 -keep public class com.joe.zatuji.data.** { *;}
 -keep public class com.joe.zatuji.dao.** { *;}
 
+#不混淆异常类
+-keep public class com.joe.zatuji.api.exception.** {*;}
+
 #glide
 -keep class com.bumptech.glide.** {*;}
 #Gson
 -keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.** {*;}
+
 #不混淆jar包中的类
 -keep class org.jsoup.** { *;}
 -dontwarn org.kxml2.**
