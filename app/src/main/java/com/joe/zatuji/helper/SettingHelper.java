@@ -58,4 +58,8 @@ public class SettingHelper {
     public static void setAutoClear(boolean clear){PrefUtils.putBoolean(Constant.AUTO_CLEAR,clear);}
 
     public static boolean getAutoClear(){return PrefUtils.getBoolean(Constant.AUTO_CLEAR,false);}
+
+    public static boolean isFirstUse(){return PrefUtils.getBoolean(Constant.IS_FIRST_USE,true);}
+
+    public static void setFirstUse(){PrefUtils.putBoolean(Constant.IS_FIRST_USE,false);}
 }

@@ -1,6 +1,7 @@
 package com.joe.zatuji.api;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.BaseListBean;
@@ -9,7 +10,7 @@ import com.joe.zatuji.data.bean.BmobFile;
 import com.joe.zatuji.data.bean.TokenBean;
 import com.joe.zatuji.data.bean.UpdateBean;
 import com.joe.zatuji.data.bean.User;
-import com.joe.zatuji.data.bean.WelcomeCover;
+import com.joe.zatuji.data.bean.WelcomeCoverResult;
 
 
 import okhttp3.RequestBody;
@@ -113,10 +114,14 @@ public interface BmobService {
      * 启动页正式
      */
     @POST("1/functions/welcome")
-    Observable<WelcomeCover> getWelcomeCover(@Body JsonElement body);
+    Observable<WelcomeCoverResult> getWelcomeCover(@Body JsonElement body);
     /**
      * 启动页调试
      */
     @POST("1/functions/debugWelcome")
-    Observable<WelcomeCover> getWelcomeCoverDebug(@Body JsonElement body);
+    Observable<WelcomeCoverResult> getWelcomeCoverDebug(@Body JsonElement body);
+
+    /**意见反馈*/
+    @POST("1/classes/WelcomeCover")
+    Observable<BaseBmobBean> recommendWelcome(@Body JsonElement welcomeCover);
 }

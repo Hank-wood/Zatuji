@@ -7,6 +7,7 @@ import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.helper.UserHelper;
 import com.joe.zatuji.helper.download.HttpClientHelper;
 import com.joe.zatuji.helper.download.ProgressCallback;
+import com.joe.zatuji.utils.AppUtils;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 
@@ -61,6 +62,7 @@ public class Api {
                     .addHeader("X-Bmob-REST-API-Key", Constant.BMOB_REST)
                     .addHeader("Content-Type","application/json")
                     .addHeader("X-Bmob-Session-Token",sToken)
+                    .addHeader("version", MyApplication.getInstance().getVersionName())
 //                    .addHeader("Content-Transfer-Encoding","binary")
                     .build();
             return chain.proceed(request);

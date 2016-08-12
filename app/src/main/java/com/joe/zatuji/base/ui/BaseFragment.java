@@ -129,6 +129,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends android.supp
     public void onDestroy() {
         super.onDestroy();
         if(mPresenter!=null) mPresenter.onRemove();
+        doneLoading();
     }
 
     protected View findView(int id){

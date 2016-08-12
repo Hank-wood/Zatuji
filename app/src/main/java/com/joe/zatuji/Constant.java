@@ -4,7 +4,7 @@ package com.joe.zatuji;
  * Created by Joe on 2016/3/11.
  */
 public class Constant {
-    public static final boolean IS_DEBUG =false;
+    public static final boolean IS_DEBUG =true;
 
     //跳转携带数据
     public static final String PIC_DATA = "picData";//图片数据
@@ -52,9 +52,11 @@ public class Constant {
 
     //标记
     public static final String IS_OLD_TAG ="is_old_tag";//老的FavortiteTag没有userid字段
+    public static final String IS_FIRST_USE ="is_first_use";//第一次使用图集
 
     //welcome
     public static final String WELCOME_COVER = "welcome_cover";//欢迎页图片
+    public static final String WELCOME_AUTHER = "welcome_auther";//欢迎页推荐人
 
 }
 

@@ -29,7 +29,7 @@ public class GalleryMenuDialog extends BaseDialog implements View.OnClickListene
     protected int getLayout() {
         window = this.getWindow();
         window.requestFeature(Window.FEATURE_NO_TITLE);
-        return R.layout.dialog_bottom_menu;
+        return R.layout.dialog_gallary_menu;
     }
     @Override
     protected void initView() {
@@ -51,6 +51,7 @@ public class GalleryMenuDialog extends BaseDialog implements View.OnClickListene
         mDelete.setOnClickListener(this);
         mDelete.setText("移除");
         findViewById(R.id.tv_cancel_dialog).setOnClickListener(this);
+        findViewById(R.id.tv_recommend_dialog).setOnClickListener(this);
         this.setCanceledOnTouchOutside(true);
     }
     @Override
@@ -67,6 +68,9 @@ public class GalleryMenuDialog extends BaseDialog implements View.OnClickListene
                 break;
             case R.id.tv_edit_dialog:
                 mListener.onFront(mImg);
+                dismiss();
+                break;case R.id.tv_recommend_dialog:
+                mListener.onRecommend(mImg);
                 dismiss();
                 break;
             case R.id.tv_delete_dialog:
@@ -85,6 +89,7 @@ public class GalleryMenuDialog extends BaseDialog implements View.OnClickListene
     public interface OnMenuClickListener{
         void onFront(MyFavorite img);
         void onDelete(MyFavorite img);
+        void onRecommend(MyFavorite img);
     }
 
     public void setTag(MyFavorite img){

@@ -2,9 +2,11 @@ package com.joe.zatuji.module.gallerypage;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredFragment;
@@ -13,16 +15,22 @@ import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.data.bean.MyFavorite;
+import com.joe.zatuji.data.bean.WelcomeCover;
+import com.joe.zatuji.helper.ResourceHelper;
+import com.joe.zatuji.helper.SettingHelper;
 import com.joe.zatuji.module.picdetailpage.PicDetailActivity;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.GalleryMenuDialog;
 import com.joe.zatuji.view.MessageDialog;
+import com.joe.zatuji.view.RecommendDialog;
 
 import java.util.List;
 
 import cc.solart.turbo.OnItemClickListener;
 import cc.solart.turbo.OnItemLongClickListener;
+
+import static u.aly.au.T;
 
 /**
  * 收藏详情页
@@ -34,8 +42,23 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
     @Override
     protected void initView() {
         super.initView();
+        if(SettingHelper.isFirstUse()){
+            showTipDialog();
+        }
         mGalleryAdapter = new GalleryAdapter(mActivity);
         mRecyclerView.setAdapter(mGalleryAdapter);
+    }
+
+    private void showTipDialog() {
+        MessageDialog dialog = new MessageDialog(mActivity);
+        dialog.setTitleAndContent("小提示", ResourceHelper.getString(R.string.tip_recommend_welcome));
+        dialog.setonConfirmListener(new MessageDialog.onConfirmListener() {
+            @Override
+            public void onConfirm() {
+                SettingHelper.setFirstUse();
+            }
+        });
+        dialog.show();
     }
 
     @Override
@@ -86,14 +109,49 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
                         mRemovePos = position;
                         showConfirmDialog(img,CONFIRM_DELETE);
                     }
+
+                    @Override
+                    public void onRecommend(MyFavorite img) {
+                        showRecommendDialog(img);
+                    }
                 });
                 dialog.show();
             }
         });
     }
+
+    /**
+     * 推荐dialog
+     * @param img 图片信息
+     */
+    private void showRecommendDialog(MyFavorite img) {
+        RecommendDialog dialog = new RecommendDialog(mActivity);
+        dialog.setImage(img.img_url);
+        dialog.setOnCompleteListener(new RecommendDialog.OnCompleteListener() {
+            @Override
+            public void onComplete(WelcomeCover cover, RecommendDialog dialog) {
+                showLoading("推荐中~");
+                mPresenter.recommend(cover);
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onEmptyReason() {
+                showToastMsg("理由不能为空!");
+            }
+        });
+        dialog.show();
+    }
+
     private final int CONFIRM_FRONT = 0;
     private final int CONFIRM_DELETE = 1;
     private int mRemovePos = -1;//当前被删除的条目
+
+    /**
+     * 编辑确定
+     * @param img
+     * @param type
+     */
     private void showConfirmDialog(final MyFavorite img, final int type) {
         final MessageDialog dialog = new MessageDialog(mActivity);
         switch (type){

@@ -11,14 +11,20 @@ import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.data.bean.Pointer;
 import com.joe.zatuji.data.bean.Relation;
 import com.joe.zatuji.data.bean.RelationQuery;
+import com.joe.zatuji.data.bean.WelcomeCover;
 import com.joe.zatuji.helper.GsonHelper;
+import com.joe.zatuji.helper.SchedulersHelper;
 import com.joe.zatuji.helper.TableHelper;
+
+import org.jsoup.Connection;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
 import rx.Observable;
+
+import static u.aly.au.T;
 
 /**
  * Created by joe on 16/6/12.
@@ -52,5 +58,12 @@ public class GalleryModel implements BaseModel{
         }
 
         return Api.getInstance().mBmobService.update("FavoriteTag",tag.objectId,GsonHelper.toJsonObject(map));
+    }
+
+    public Observable<BaseBmobBean> recommend(WelcomeCover cover){
+        return Api.getInstance().mBmobService
+                .recommendWelcome(GsonHelper.toJsonObject(cover))
+                .compose(SchedulersHelper.<BaseBmobBean>io_main());
+
     }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_container_drop"
+    android:orientation="vertical"
+    android:background="@color/Gray"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_edit_dialog"
+        style="@style/text_menu_bottom"
+        android:text="设为封面"
+         />
+    <TextView
+        android:id="@+id/tv_recommend_dialog"
+        style="@style/text_menu_bottom"
+        android:text="推荐启动页"
+        />
+    <TextView
+        android:id="@+id/tv_delete_dialog"
+        android:layout_marginTop="1dp"
+        style="@style/text_menu_bottom"
+        android:text="移除"
+         />
+    <TextView
+        android:id="@+id/tv_cancel_dialog"
+        android:layout_marginTop="15dp"
+        style="@style/text_menu_bottom"
+        android:text="取消"
+         />
+</LinearLayout>

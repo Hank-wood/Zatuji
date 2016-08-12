@@ -65,6 +65,7 @@ public class HomeActivity extends BaseActivity implements HideFabView, FloatingT
         super.onCreate(savedInstanceState);
         mUpdateHelper = new UpdateHelper(mActivity);
         mUpdateHelper.autoCheckUpdate();
+
         mFragmentManager = getSupportFragmentManager();
         if(savedInstanceState==null){
             initFragment();

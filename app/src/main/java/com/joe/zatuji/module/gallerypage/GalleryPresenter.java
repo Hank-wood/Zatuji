@@ -9,6 +9,7 @@ import com.joe.zatuji.data.BaseBmobBean;
 import com.joe.zatuji.data.BaseListBean;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.data.bean.MyFavorite;
+import com.joe.zatuji.data.bean.WelcomeCover;
 import com.joe.zatuji.helper.BmobSubscriber;
 import com.joe.zatuji.module.favoritepage.FavoriteModel;
 import com.joe.zatuji.utils.KToast;
@@ -143,6 +144,21 @@ public class GalleryPresenter extends BaseStaggeredPresenter<GalleryView,Gallery
                 mView.showToastMsg("移除成功");
                 mView.removeItem(true);
                 mRxJavaManager.post(Event.REMOVE_FAVORITE,baseBmobBean);
+            }
+        }));
+    }
+
+    public void recommend(WelcomeCover cover){
+        mRxJavaManager.add(mModel.recommend(cover)
+        .subscribe(new BmobSubscriber<BaseBmobBean>() {
+            @Override
+            public void onError(ResultException e) {
+                mView.showToastMsg("推荐失败");
+            }
+
+            @Override
+            public void onNext(BaseBmobBean baseBmobBean) {
+                mView.showToastMsg("推荐成功!");
             }
         }));
     }

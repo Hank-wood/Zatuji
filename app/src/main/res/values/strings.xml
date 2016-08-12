@@ -2,6 +2,8 @@
     <string name="app_name">杂图集</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
+    <!--welcome-->
+    <string name="welcome_recommend_by">By %s</string>
     <!--loading-->
     <string name="load_new_data">玩儿命加载...</string>
     <string name="load_new_discover">寻觅中...</string>
@@ -18,4 +20,5 @@
     <!--提示-->
     <string name="no_wifi_title">当前为非Wi-Fi网络状态！</string>
     <string name="no_wifi_content">当前网络状态非Wi-Fi，如果继续浏览可能会消耗大量流量，是否继续？（如果您不需要该提示，可以在设置中关闭）</string>
+    <string name="tip_recommend_welcome">长按图片,选择推荐启动页,被选中的话会作为应用的启动页三天噢,同时会放上您的昵称,快来试试吧!</string>
 </resources>

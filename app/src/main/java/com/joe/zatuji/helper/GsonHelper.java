@@ -18,6 +18,7 @@ public class GsonHelper {
         Gson gson = new Gson();
         return gson.toJsonTree(object);
     }
+
     public static <T> T fromJson(String json,Class<T> objectClass){
         Gson gson = new Gson();
         return gson.fromJson(json,objectClass);

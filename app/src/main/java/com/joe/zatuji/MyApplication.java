@@ -46,7 +46,9 @@ public class MyApplication extends Application {
         if(!PrefUtils.getBoolean(this,Constant.IS_EXIT,false)) autoLogin();
     }
 
-
+    public static Context getContext(){
+        return myApplication;
+    }
     private void registerEvent() {
         mRxManager = new RxJavaManager();
         mRxManager.subscribe(Event.LOGIN_SUCCESS, new Action1<Object>() {
