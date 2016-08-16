@@ -13,6 +13,7 @@ public class Constant {
     public static final String PIC_POS = "picPos";//图片位置
 
     public static final String GALLERY_TAG = "gallery_tag";//图片长
+    public static final String PUBLISH_TAG = "publish_tag";//图片长
 
     //文件夹
     public static final String DIR_APP = "杂图集";//文件夹

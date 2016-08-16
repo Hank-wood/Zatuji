@@ -10,10 +10,12 @@ import android.widget.TextView;
 import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.data.BmobResponseBean;
+import com.joe.zatuji.helper.Jumper;
 import com.joe.zatuji.module.homepage.HomeActivity;
 import com.joe.zatuji.R;
 import com.joe.zatuji.base.ui.BaseFragment;
 import com.joe.zatuji.data.bean.FavoriteTag;
+import com.joe.zatuji.module.publishpage.PublishActivity;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.BottomMenuDialog;
 import com.joe.zatuji.view.CreateTagDialog;
@@ -24,25 +26,28 @@ import com.joe.zatuji.view.MessageDialog;
 
 import java.util.ArrayList;
 
+import static u.aly.au.J;
+
 /**
  * Created by Joe on 2016/4/18.
  */
-public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements TagView{
+public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements TagView {
     private SwipeRefreshLayout mRefreshLayout;
 
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
     private HomeActivity activity;
     private FavoriteTagAdapter mAdapter;
-    private static FavoriteFragment mInstance;
+    //    private static FavoriteFragment mInstance;
     private TextView mEmptyView;
     private BottomMenuDialog mEditDialog;
-    public static synchronized FavoriteFragment getInstance(){
-        if(mInstance==null){
-            mInstance = new FavoriteFragment();
-        }
-        return mInstance;
-    }
+
+    //    public static synchronized FavoriteFragment getInstance(){
+//        if(mInstance==null){
+//            mInstance = new FavoriteFragment();
+//        }
+//        return mInstance;
+//    }
     @Override
     protected int getLayout() {
         return R.layout.fragment_favorite;
@@ -66,6 +71,7 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }
+
     @Override
     protected void initListener() {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -79,9 +85,9 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
             @Override
             public void onItemClickListener(int position, FavoriteTag tag) {
                 //判断是否上锁
-                if(tag.is_lock){
-                    showPwdDialog(tag,PWD_NORMAL);
-                }else{
+                if (tag.is_lock) {
+                    showPwdDialog(tag, PWD_NORMAL);
+                } else {
                     jumpFavoriteDetail(tag);
                 }
             }
@@ -98,9 +104,9 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(dy>0) {
+                if (dy > 0) {
                     activity.hideOrShowFAB(true);
-                }else{
+                } else {
                     activity.hideOrShowFAB(false);
                 }
             }
@@ -112,20 +118,22 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
     //调到图集详情页
     private void jumpFavoriteDetail(FavoriteTag tag) {
         Intent i = new Intent(mActivity, GalleryActivity.class);
-        i.putExtra(Constant.GALLERY_TAG,tag);
+        i.putExtra(Constant.GALLERY_TAG, tag);
         mActivity.startActivity(i);
     }
+
     private final int PWD_NORMAL = 0;
     private final int PWD_EDIT = 1;
     private final int PWD_DELETE = 2;
+
     //带锁的图集需要密码
     private void showPwdDialog(final FavoriteTag tag, final int type) {
-        LockTagDialog dialog = new LockTagDialog(mActivity,tag);
+        LockTagDialog dialog = new LockTagDialog(mActivity, tag);
         dialog.setOnPwdListener(new LockTagDialog.OnPwdListener() {
             @Override
             public void OnSuccess(LockTagDialog dialog) {
                 //跳转到图集列表页
-                switch (type){
+                switch (type) {
                     case PWD_NORMAL:
                         jumpFavoriteDetail(tag);
                         break;
@@ -141,16 +149,19 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
         });
         dialog.show();
     }
-    /**显示编辑的对话框*/
-    private void setEditDialog(FavoriteTag tag){
-        if(mEditDialog==null)mEditDialog = new BottomMenuDialog(mActivity);
+
+    /**
+     * 显示编辑的对话框
+     */
+    private void setEditDialog(FavoriteTag tag) {
+        if (mEditDialog == null) mEditDialog = new BottomMenuDialog(mActivity);
         mEditDialog.setTag(tag);
         mEditDialog.show();
         mEditDialog.setOnMenuClickListener(new BottomMenuDialog.OnMenuClickListener() {
             @Override
             public void onEdit(FavoriteTag tag) {
-                if(tag.is_lock) {
-                    showPwdDialog(tag,PWD_EDIT);
+                if (tag.is_lock) {
+                    showPwdDialog(tag, PWD_EDIT);
                     return;
                 }
                 showCreateTag(tag);
@@ -158,21 +169,40 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
 
             @Override
             public void onDelete(FavoriteTag tag) {
-                if(tag.is_lock) {
-                    showPwdDialog(tag,PWD_DELETE);
+                if (tag.is_lock) {
+                    showPwdDialog(tag, PWD_DELETE);
                     return;
                 }
                 showDeleteDialog(tag);
             }
+
+            @Override
+            public void onPublish(FavoriteTag tag) {
+                if(tag.is_lock){
+                    showToastMsg("加密相册不能发布噢~");
+                    return;
+                }
+                publishTag(tag);
+            }
         });
     }
+
+    /**
+     * 发布图集
+     */
+    private void publishTag(FavoriteTag tag) {
+        Jumper.getInstance()
+                .putSerializable(Constant.PUBLISH_TAG,tag)
+                .jumpTo(mActivity, PublishActivity.class);
+    }
+
     public void showCreateTag(FavoriteTag tag) {
-        if(!MyApplication.isLogin()){
+        if (!MyApplication.isLogin()) {
             showToastMsg("请先登录噢～");
             return;
         }
         CreateTagDialog dialog = new CreateTagDialog(mActivity);
-        if(tag!=null) dialog.showInfo(tag);
+        if (tag != null) dialog.showInfo(tag);
         dialog.setOnCreateCallBack(new CreateTagDialog.OnCreateCallBack() {
             @Override
             public void OnCreate(FavoriteTag tag) {
@@ -183,14 +213,15 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
             @Override
             public void onUpdate(FavoriteTag tag, String objectId) {
                 showLoading("修改图集");
-                mPresenter.updateTag(tag,objectId);}
+                mPresenter.updateTag(tag, objectId);
+            }
         });
         dialog.show();
     }
 
-    public void showDeleteDialog(final FavoriteTag tag){
+    public void showDeleteDialog(final FavoriteTag tag) {
         MessageDialog dialog = new MessageDialog(mActivity);
-        dialog.setTitleAndContent("删除-"+tag.tag,"您确定要删除图集:"+tag.tag+" 吗？一旦删除，将无法恢复！");
+        dialog.setTitleAndContent("删除-" + tag.tag, "您确定要删除图集:" + tag.tag + " 吗？一旦删除，将无法恢复！");
         dialog.setonConfirmListener(new MessageDialog.onConfirmListener() {
             @Override
             public void onConfirm() {
@@ -200,19 +231,20 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
         });
         dialog.show();
     }
+
     @Override
     public void showTag(ArrayList<FavoriteTag> tags) {
         doneLoading();
         showEmpty(false);
         mRefreshLayout.setRefreshing(false);
-        mAdapter.refreshData(tags,false);
+        mAdapter.refreshData(tags, false);
     }
 
     @Override
     public void showNotLogin() {
         doneLoading();
         mRefreshLayout.setRefreshing(false);
-        mAdapter.refreshData(new ArrayList<FavoriteTag>(),false);
+        mAdapter.refreshData(new ArrayList<FavoriteTag>(), false);
         mEmptyView.setText("登录后可查看图集噢～");
         showEmpty(true);
     }
@@ -221,18 +253,19 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
     public void showNoTag() {
         doneLoading();
         mRefreshLayout.setRefreshing(false);
-        mAdapter.refreshData(new ArrayList<FavoriteTag>(),false);
+        mAdapter.refreshData(new ArrayList<FavoriteTag>(), false);
         mEmptyView.setText("还没有图集噢～赶快收藏吧！");
         showEmpty(true);
     }
 
     private void showEmpty(boolean b) {
-        mEmptyView.setVisibility(b? View.VISIBLE:View.GONE);
+        mEmptyView.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
     private boolean isAddedNew = false;//是否有变动
-    public void update(){
-        if(isAddedNew) mPresenter.getFavoriteTag();
+
+    public void update() {
+        if (isAddedNew) mPresenter.getFavoriteTag();
         isAddedNew = false;
     }
 
@@ -240,11 +273,12 @@ public class FavoriteFragment extends BaseFragment<FavoritePresenter> implements
     public void setAddedNew(boolean isAdded) {
         isAddedNew = isAdded;
     }
+
     @Override
     public void addTag(ArrayList<FavoriteTag> tags) {
         doneLoading();
         showEmpty(false);
-        mAdapter.refreshData(tags,true);
+        mAdapter.refreshData(tags, true);
     }
 
     @Override

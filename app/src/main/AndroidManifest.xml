@@ -59,6 +59,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             />
+        <activity android:name=".module.publishpage.PublishActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".module.aboutpage.AboutActivity"
             android:screenOrientation="portrait"
             />

@@ -1,6 +1,6 @@
 package com.joe.zatuji.base.ui;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +22,7 @@ import com.squareup.leakcanary.RefWatcher;
  * Created by Joe on 2016/4/16.
  */
 public abstract class BaseFragment<T extends BasePresenter> extends android.support.v4.app.Fragment implements LoadingView {
-    protected Activity mActivity;
+    protected BaseActivity mActivity;
     protected View mRootView;
     protected AlertDialog dialog;
     protected MyApplication myApplication;
@@ -31,7 +31,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends android.supp
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mActivity=getActivity();
+        this.mActivity= (BaseActivity) getActivity();
         this.myApplication= (MyApplication) mActivity.getApplication();
         //initLeakCanary();
         onSaveFragmentInstance(savedInstanceState);
@@ -64,9 +64,15 @@ public abstract class BaseFragment<T extends BasePresenter> extends android.supp
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        this.mActivity=getActivity();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mActivity= (BaseActivity) getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.mActivity = null;
     }
 
     @Nullable

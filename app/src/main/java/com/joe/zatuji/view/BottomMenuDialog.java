@@ -55,6 +55,7 @@ public class BottomMenuDialog extends BaseDialog implements View.OnClickListener
         findViewById(R.id.tv_edit_dialog).setOnClickListener(this);
         findViewById(R.id.tv_delete_dialog).setOnClickListener(this);
         findViewById(R.id.tv_cancel_dialog).setOnClickListener(this);
+        findViewById(R.id.tv_publish_dialog).setOnClickListener(this);
         this.setCanceledOnTouchOutside(true);
     }
     @Override
@@ -69,11 +70,17 @@ public class BottomMenuDialog extends BaseDialog implements View.OnClickListener
             case R.id.tv_cancel_dialog:
                 dismiss();
                 break;
+            case R.id.tv_publish_dialog:
+                if(mListener!=null) mListener.onPublish(mTag);
+                dismiss();
+                break;
             case R.id.tv_edit_dialog:
+                if(mListener!=null)
                 mListener.onEdit(mTag);
                 dismiss();
                 break;
             case R.id.tv_delete_dialog:
+                if(mListener!=null)
                 mListener.onDelete(mTag);
                 dismiss();
                 break;
@@ -89,6 +96,7 @@ public class BottomMenuDialog extends BaseDialog implements View.OnClickListener
     public interface OnMenuClickListener{
         void onEdit(FavoriteTag tag);
         void onDelete(FavoriteTag tag);
+        void onPublish(FavoriteTag tag);
     }
 
     public void setTag(FavoriteTag tag){

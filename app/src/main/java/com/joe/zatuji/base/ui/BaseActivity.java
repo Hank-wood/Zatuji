@@ -1,6 +1,5 @@
 package com.joe.zatuji.base.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +22,7 @@ import com.umeng.analytics.MobclickAgent;
  */
 public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements LoadingView {
     protected T mPresenter;
-    protected Activity mActivity;
+    protected BaseActivity mActivity;
     protected MyApplication mApplication;
     private AlertDialog dialog;
     private View loadingView;
@@ -113,5 +112,10 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         super.onDestroy();
         if(mPresenter!=null) mPresenter.onRemove();
         doneLoading();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <E extends View> E findView(int id) {
+        return (E) findViewById(id);
     }
 }
