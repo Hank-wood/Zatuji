@@ -42,6 +42,8 @@ import com.joe.zatuji.utils.DPUtils;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.Random;
 
 import rx.Observable;
@@ -138,15 +140,23 @@ public class ImageHelper {
 
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-//                            LogUtils.d("size of big :"+resource.getHeight()+"*"+resource.getWidth());
-                            if (resource.getWidth() < resource.getHeight() && resource.getHeight() > MAX_HEIGHT_HEIGHT) {
-                                iv.setImageBitmap(Bitmap.createScaledBitmap(resource, resource.getWidth() * MAX_HEIGHT_HEIGHT / resource.getHeight(), MAX_HEIGHT_HEIGHT, true));
-                            } else if (resource.getWidth() > resource.getHeight() && resource.getWidth() > MAX_HEIGHT_HEIGHT) {
-                                iv.setImageBitmap(Bitmap.createScaledBitmap(resource, MAX_HEIGHT_HEIGHT, resource.getHeight() * MAX_HEIGHT_HEIGHT / resource.getWidth(), true));
-                            } else {
-                                iv.setImageBitmap(resource);
+                            SoftReference<Bitmap> old = new SoftReference<Bitmap>(resource);
+                            resource = null;
+                            int oldWidth = old.get().getWidth();
+                            int oldHeight = old.get().getHeight();
+//                            LogUtils.d("size of big :"+oldHeight+"*"+oldWidth);
+//                            LogUtils.d("size:"+old.get().getByteCount());
+                            try {
+                                if (oldWidth < oldHeight && oldHeight > MAX_HEIGHT_HEIGHT) {
+                                    iv.setImageBitmap(Bitmap.createScaledBitmap(old.get(), oldWidth * MAX_HEIGHT_HEIGHT / oldHeight, MAX_HEIGHT_HEIGHT, true));
+                                } else if (oldWidth > oldHeight && oldWidth > MAX_HEIGHT_HEIGHT) {
+                                    iv.setImageBitmap(Bitmap.createScaledBitmap(old.get(), MAX_HEIGHT_HEIGHT, oldHeight * MAX_HEIGHT_HEIGHT / oldWidth, true));
+                                } else {
+                                    iv.setImageBitmap(old.get());
+                                }
+                            }catch (NullPointerException e){
+                                e.printStackTrace();
                             }
-
                         }
                     });
 
