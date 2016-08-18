@@ -16,6 +16,7 @@ import com.joe.zatuji.utils.AppUtils;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.utils.PrefUtils;
 import com.squareup.leakcanary.RefWatcher;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 
 
@@ -40,6 +41,7 @@ public class MyApplication extends Application {
         myApplication = this;
         registerEvent();
         MobclickAgent.setDebugMode(Constant.IS_DEBUG);
+        CrashReport.initCrashReport(getApplicationContext(),"900047649",false);
         //refWatcher = LeakCanary.install(this);
         mDefaultTag = new TagBean().tagList.get(SettingHelper.getDefaultTag());
         if(Constant.IS_DEBUG) LogUtils.d(AppUtils.getDeviceInfo(this));

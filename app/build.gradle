@@ -1,4 +1,13 @@
 apply plugin: 'com.android.application'
+apply plugin: 'bugly'
+
+bugly {
+    appId = "900047649"
+    appKey = "sBBuZhhko9VEZh2Y"
+    execute true
+    upload true
+}
+
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
@@ -72,4 +81,7 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
     //Umeng
     compile 'com.umeng.analytics:analytics:latest.integration'
+
+    //腾讯bugly
+    compile 'com.tencent.bugly:crashreport:2.2.0'
 }
