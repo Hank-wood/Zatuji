@@ -70,7 +70,7 @@ public abstract class BaseStaggeredPresenter<T extends BaseStaggeredView, E exte
         }
     }
 
-    public void subcribeForPicDetail(){
+    public void subscribeForPicDetail(){
         final Observable observable =mRxJavaManager.subscribe(Event.LOAD_MORE_DATA, new Action1<Object>() {
             @Override
             public void call(Object o) {

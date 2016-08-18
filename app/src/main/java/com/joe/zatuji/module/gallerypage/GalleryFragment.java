@@ -2,15 +2,12 @@ package com.joe.zatuji.module.gallerypage;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.joe.zatuji.Constant;
-import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredFragment;
-import com.joe.zatuji.base.ui.basestaggered.BaseStaggeredView;
 import com.joe.zatuji.data.BaseBean;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.FavoriteTag;
@@ -29,8 +26,6 @@ import java.util.List;
 
 import cc.solart.turbo.OnItemClickListener;
 import cc.solart.turbo.OnItemLongClickListener;
-
-import static u.aly.au.T;
 
 /**
  * 收藏详情页
@@ -91,7 +86,7 @@ public class GalleryFragment extends BaseStaggeredFragment<GalleryPresenter> imp
                 i.putExtra(Constant.PIC_FROM_GALLERY,true);
                 i.putExtra(Constant.PIC_LIST,mGalleryAdapter.getAllItem());
                 mActivity.startActivity(i);
-                mPresenter.subcribeForPicDetail();
+                mPresenter.subscribeForPicDetail();
             }
         });
         mGalleryAdapter.addOnItemLongClickListener(new OnItemLongClickListener() {

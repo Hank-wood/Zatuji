@@ -153,7 +153,7 @@ public abstract class BaseStaggeredFragment<T extends BaseStaggeredPresenter>  e
                 i.putExtra(Constant.PIC_FROM_GALLERY,false);
                 i.putExtra(Constant.PIC_LIST,mAdapter.getAllData());
                 mActivity.startActivity(i);
-                mPresenter.subcribeForPicDetail();
+                mPresenter.subscribeForPicDetail();
             }
 
         });
