@@ -12,13 +12,11 @@ import android.view.View;
 
 public class SelectTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
-    private static final float MIN_ALPHA = 0.5f;
     @Override
     public void transformPage(View page, float position) {
         int pageWidth = page.getWidth();
         int pageHeight = page.getHeight();
 
-        Log.d("demo","page"+page.getId()+" position:"+position);
         if(position<-1){
             page.setAlpha(1);
         } else if(position<=1){

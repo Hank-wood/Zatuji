@@ -1,13 +1,13 @@
 package com.joe.zatuji.module.picdetailpage;
 
-import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.joe.zatuji.Event;
@@ -19,6 +19,7 @@ import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.FavoriteTag;
 import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.Constant;
+import com.joe.zatuji.helper.FabAnimatorHelper;
 import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.ChooseTagDialog;
@@ -34,12 +35,8 @@ import java.util.ArrayList;
  * 大图详情页面
  * Created by Joe on 2016/4/16.
  */
-public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implements PicDetailView {
+public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implements PicDetailView, View.OnClickListener {
     private TextView tvDesc;
-    private Toolbar toolbar;
-    private AppBarLayout appBarLayout;
-    private ActionBar mActionBar;
-    private boolean dontShowTv = false;
     private String desc;
     private DataBean.PicBean img;
     private MyFavorite mMyFavoriteImg;
@@ -49,7 +46,11 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     private boolean isFromGallery;
     private PicDetailAdapter mAdapter;
     private int mCurrentPos = 0;
-    //TODO 更换大图页UI样式,把 actionbar 干掉,换成 fab ,状态栏也干掉
+    private FloatingActionButton mFabBack;
+    private FloatingActionButton mFabDownload;
+    private FloatingActionButton mFabShare;
+    private FloatingActionButton mFabFavorite;
+
     @Override
     protected int getLayout() {
         return R.layout.activity_pic_detail;
@@ -62,21 +63,27 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
 
     @Override
     protected void initView() {
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mViewPager = (ScaleViewPager) findViewById(R.id.viewpager_detail);
         mAdapter = new PicDetailAdapter(mActivity);
         mViewPager.setPageTransformer(true,new SelectTransformer());
         mViewPager.setAdapter(mAdapter);
         getDataFromWhere();
         tvDesc = (TextView) findViewById(R.id.tv_desc_item);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        setSupportActionBar(toolbar);
         tvDesc.setVisibility(View.INVISIBLE);
-        toolbar.setVisibility(View.INVISIBLE);
-        appBarLayout.setVisibility(View.INVISIBLE);
-        mActionBar = getSupportActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        initFab();
         initData();
+    }
+
+    private void initFab() {
+        mFabBack = findView(R.id.fab_back);
+        mFabDownload = findView(R.id.fab_download);
+        mFabShare = findView(R.id.fab_share);
+        mFabFavorite = findView(R.id.fab_favorite);
+        mFabBack.setOnClickListener(this);
+        mFabDownload.setOnClickListener(this);
+        mFabShare.setOnClickListener(this);
+        mFabFavorite.setOnClickListener(this);
     }
 
     private void getDataFromWhere() {
@@ -103,10 +110,8 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         desc = img.raw_text;
         if (!TextUtils.isEmpty(desc)) {
             tvDesc.setText(desc);
-            dontShowTv = false;
         } else {
             tvDesc.setText("");
-            dontShowTv = true;
         }
 //        showBigImage(img.file.type);
         mMyFavoriteImg = new MyFavorite();
@@ -118,19 +123,13 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_back:
                 mPresenter.quiet(mCurrentPos);
                 finish();
                 break;
-            case R.id.action_save://收藏
+            case R.id.fab_favorite://收藏
                 MobclickAgent.onEvent(mActivity, Event.EVENT_FAVORITE);
                 if (!MyApplication.isLogin()) {
                     showToastMsg("请先登录帐号～");
@@ -139,20 +138,22 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
                     mPresenter.showTags();
                 }
                 break;
-            case R.id.action_download://保存
+            case R.id.fab_download://保存
                 MobclickAgent.onEvent(mActivity, Event.EVENT_DOWNLOAD);
                 showLoading("保存图片...");
                 mPresenter.saveToPhone(img.file.key, mMyFavoriteImg.type);
                 break;
-            case R.id.action_share://分享
+            case R.id.fab_share://分享
                 MobclickAgent.onEvent(mActivity, Event.EVENT_SHARE);
                 LogUtils.d("url:" + mMyFavoriteImg.img_url);
                 showLoading("正在分享...");
                 mPresenter.share(img.file.key, mMyFavoriteImg.type);
-//                ShareHelper.share("分享自杂图集", Uri.parse(mMyFavoriteImg.img_url),mActivity);
-//                showToastMsg("开发者还未添加该功能～");
                 break;
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
         return true;
     }
 
@@ -161,19 +162,18 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
         mAdapter.setOnItemClickListener(new PicDetailAdapter.onItemClickListener() {
             @Override
             public void OnItemClicked(int position, DataBean.PicBean picBean) {
-                hideOrShowAppBar();
+                hideOrShowMenu();
             }
         });
         mViewPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideOrShowAppBar();
+                hideOrShowMenu();
             }
         });
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                LogUtils.d("position:" + position);
                 if (position == mAdapter.getCount() - 1) {
                     mPresenter.getMoreData();
                 }
@@ -191,16 +191,14 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
             }
         });
     }
-
-    private void hideOrShowAppBar() {
-        if (appBarLayout.getVisibility() == View.VISIBLE) {
-            tvDesc.setVisibility(View.INVISIBLE);
-            toolbar.setVisibility(View.INVISIBLE);
-            appBarLayout.setVisibility(View.INVISIBLE);
-        } else {
-            toolbar.setVisibility(View.VISIBLE);
-            appBarLayout.setVisibility(View.VISIBLE);
-            if (!dontShowTv) tvDesc.setVisibility(View.VISIBLE);
+    private boolean isMenuHide = true;
+    private void hideOrShowMenu() {
+        if(isMenuHide){
+            FabAnimatorHelper.inst().startFabGroupAnimation(false,mFabFavorite,mFabShare,mFabDownload,mFabBack);
+            isMenuHide = false;
+        }else{
+            FabAnimatorHelper.inst().startFabGroupAnimation(true,mFabFavorite,mFabShare,mFabDownload,mFabBack);
+            isMenuHide = true;
         }
     }
 

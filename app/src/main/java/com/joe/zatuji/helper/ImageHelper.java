@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.opengl.GLES10;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
@@ -35,6 +37,8 @@ import com.joe.zatuji.utils.LogUtils;
 import java.io.File;
 import java.lang.ref.SoftReference;
 import java.util.Random;
+
+import javax.microedition.khronos.opengles.GL10;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -101,8 +105,8 @@ public class ImageHelper {
     /**
      * 展示全屏大图
      */
-    private static final int MAX_HEIGHT_HEIGHT = 4096;
-    public static void showBig(final PhotoView iv , DataBean.PicBean pic){
+    public static int sMaxTextureSize = -1;
+    public static void showBig(final PhotoView iv , final DataBean.PicBean pic){
         resizeImage(iv,pic);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         if(getType(pic.file.type).contains("gif")){
@@ -119,37 +123,31 @@ public class ImageHelper {
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(getRandomColor())
-                    .into(new SimpleTarget<Bitmap>() {
+                    .listener(new RequestListener<String, Bitmap>() {
                         @Override
-                        public void onStart() {
-                            iv.setImageResource(getRandomColor());
+                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                            LogUtils.e(e.getMessage());
+                            return false;
                         }
 
                         @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            SoftReference<Bitmap> old = new SoftReference<Bitmap>(resource);
-                            resource = null;
-                            int oldWidth = old.get().getWidth();
-                            int oldHeight = old.get().getHeight();
-//                            LogUtils.d("size of big :"+oldHeight+"*"+oldWidth);
-//                            LogUtils.d("size:"+old.get().getByteCount());
-                            try {
-                                if (oldWidth < oldHeight && oldHeight > MAX_HEIGHT_HEIGHT) {
-                                    iv.setImageBitmap(Bitmap.createScaledBitmap(old.get(), oldWidth * MAX_HEIGHT_HEIGHT / oldHeight, MAX_HEIGHT_HEIGHT, true));
-                                } else if (oldWidth > oldHeight && oldWidth > MAX_HEIGHT_HEIGHT) {
-                                    iv.setImageBitmap(Bitmap.createScaledBitmap(old.get(), MAX_HEIGHT_HEIGHT, oldHeight * MAX_HEIGHT_HEIGHT / oldWidth, true));
-                                } else {
-                                    iv.setImageBitmap(old.get());
-                                }
-                            }catch (NullPointerException e){
-                                e.printStackTrace();
+                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            int oldHeight = resource.getHeight();
+                            if(sMaxTextureSize < 0){
+                                Canvas canvas = new Canvas();
+                                sMaxTextureSize = canvas.getMaximumBitmapHeight() / 4;
                             }
+                            if(oldHeight>sMaxTextureSize){
+                                iv.setImageBitmap(Bitmap.createScaledBitmap(resource, resource.getWidth() * sMaxTextureSize / oldHeight, sMaxTextureSize, true));
+                                return true;
+                            }
+                            return false;
                         }
-                    });
+                    })
+                    .into(iv);
 
         }
     }
-
     /**展示头像*/
     public static void showAvatar(CircularImageView iv , String url){
         Glide.with(iv.getContext())

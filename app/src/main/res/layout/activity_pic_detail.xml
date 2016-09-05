@@ -3,24 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical">
+    >
 
     <com.joe.zatuji.view.ScaleViewPager
         android:id="@+id/viewpager_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
-    </android.support.design.widget.AppBarLayout>
 
     <TextView
         android:id="@+id/tv_desc_item"
@@ -32,4 +20,39 @@
         android:lineSpacingExtra="3dp"
         android:padding="10dp"
         android:textSize="16sp" />
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+        android:clipChildren="false"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <View
+            style="@style/placeholder_avg"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_favorite"
+            style="@style/fab_detail"
+            android:src="@drawable/icon_favorite"
+            />
+        <View
+            style="@style/placeholder_avg"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_share"
+            android:src="@drawable/icon_share"
+            style="@style/fab_detail" />
+        <View
+            style="@style/placeholder_avg"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_download"
+            android:src="@drawable/icon_download"
+            style="@style/fab_detail" />
+        <View
+            style="@style/placeholder_avg"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_back"
+            android:src="@mipmap/ic_back"
+            style="@style/fab_detail" />
+        <View
+            style="@style/placeholder_avg"/>
+    </LinearLayout>
+
 </RelativeLayout>
