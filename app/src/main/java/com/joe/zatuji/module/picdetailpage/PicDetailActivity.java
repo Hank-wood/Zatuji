@@ -24,6 +24,7 @@ import com.joe.zatuji.utils.LogUtils;
 import com.joe.zatuji.view.ChooseTagDialog;
 import com.joe.zatuji.view.CreateTagDialog;
 import com.joe.zatuji.view.ScaleViewPager;
+import com.joe.zatuji.view.transformer.SelectTransformer;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     protected void initView() {
         mViewPager = (ScaleViewPager) findViewById(R.id.viewpager_detail);
         mAdapter = new PicDetailAdapter(mActivity);
+        mViewPager.setPageTransformer(true,new SelectTransformer());
         mViewPager.setAdapter(mAdapter);
         getDataFromWhere();
         tvDesc = (TextView) findViewById(R.id.tv_desc_item);
