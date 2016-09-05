@@ -42,6 +42,7 @@ import rx.schedulers.Schedulers;
 import uk.co.senab.photoview.PhotoView;
 
 /**
+ * 图片帮助类
  * Created by joe on 16/5/21.
  */
 public class ImageHelper {
