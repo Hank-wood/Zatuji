@@ -3,6 +3,7 @@ package com.joe.zatuji.module.welcomepage;
 import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         TextView mVersion = (TextView) findViewById(R.id.tv_version);
         mVersion.setText("杂图集 "+MyApplication.getInstance().getVersionName());
         mIvBg = (ImageView) findViewById(R.id.bg_welcome);

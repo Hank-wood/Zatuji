@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.data.bean.DataBean;
-import com.joe.zatuji.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +33,7 @@ public class FavoriteImgDao extends BaseDao{
     }
     public FavoriteImgDao(){
         super(MyApplication.getInstance());
-        if(!tabbleIsExist(TABLE_PIC_CACHES)) createTable();
+        if(!tableIsExist(TABLE_PIC_CACHES)) createTable();
     }
     @Override
     protected String createSql() {

@@ -49,7 +49,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     private boolean isFromGallery;
     private PicDetailAdapter mAdapter;
     private int mCurrentPos = 0;
-
+    //TODO 更换大图页UI样式,把 actionbar 干掉,换成 fab ,状态栏也干掉
     @Override
     protected int getLayout() {
         return R.layout.activity_pic_detail;

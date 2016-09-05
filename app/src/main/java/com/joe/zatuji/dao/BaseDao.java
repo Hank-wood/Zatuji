@@ -53,7 +53,7 @@ public abstract class BaseDao {
         if(db!=null) db.close();
     }
 
-    public boolean tabbleIsExist(String tableName){
+    public boolean tableIsExist(String tableName){
         boolean result = false;
         if(tableName == null){
             return false;

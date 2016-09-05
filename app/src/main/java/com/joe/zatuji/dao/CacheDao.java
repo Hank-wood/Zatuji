@@ -4,14 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.joe.zatuji.Constant;
 import com.joe.zatuji.MyApplication;
 import com.joe.zatuji.data.bean.DataBean;
-import com.joe.zatuji.data.bean.PicData;
-import com.joe.zatuji.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +33,7 @@ public class CacheDao extends BaseDao{
     }
     public CacheDao(){
         super(MyApplication.getInstance());
-        if(!tabbleIsExist(TABLE_PIC_CACHES)) createTable();
+        if(!tableIsExist(TABLE_PIC_CACHES)) createTable();
     }
     @Override
     protected String createSql() {
