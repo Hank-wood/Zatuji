@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.opengl.GLES10;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -21,7 +23,9 @@ import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapDrawableResource;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -38,6 +42,11 @@ import java.io.File;
 import java.lang.ref.SoftReference;
 import java.util.Random;
 
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
 import rx.Observable;
@@ -110,7 +119,6 @@ public class ImageHelper {
         resizeImage(iv,pic);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         if(getType(pic.file.type).contains("gif")){
-            //iv.setZoomable(false);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)iv.getLayoutParams();
             params.gravity = Gravity.CENTER;
             iv.setLayoutParams(params);
@@ -120,30 +128,56 @@ public class ImageHelper {
             iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Glide.with(iv.getContext())
                     .load(Api.HOST_PIC+pic.file.key)
-                    .asBitmap()
+//                    .asBitmap()
+                    .crossFade(150)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(getRandomColor())
-                    .listener(new RequestListener<String, Bitmap>() {
+                    .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
-                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
-                            LogUtils.e(e.getMessage());
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                             return false;
                         }
 
                         @Override
-                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            int oldHeight = resource.getHeight();
-                            if(sMaxTextureSize < 0){
-                                Canvas canvas = new Canvas();
-                                sMaxTextureSize = canvas.getMaximumBitmapHeight() / 4;
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            int oldHeight = resource.getIntrinsicHeight();
+                            if(sMaxTextureSize <= 0){
+//                                Canvas canvas = new Canvas();
+//                                sMaxTextureSize = canvas.getMaximumBitmapHeight() / 4;
+                                sMaxTextureSize = getMaxTextureSize();
                             }
-                            if(oldHeight>sMaxTextureSize){
-                                iv.setImageBitmap(Bitmap.createScaledBitmap(resource, resource.getWidth() * sMaxTextureSize / oldHeight, sMaxTextureSize, true));
+                            LogUtils.d("max texture size:"+sMaxTextureSize);
+                            if(sMaxTextureSize == 0) return false;
+                            if(oldHeight > sMaxTextureSize){
+                                Drawable drawable = resource;
+                                BitmapDrawable bd = (BitmapDrawable) drawable;
+                                iv.setImageBitmap(Bitmap.createScaledBitmap(bd.getBitmap(), bd.getBitmap().getWidth() * sMaxTextureSize / oldHeight, sMaxTextureSize, true));
                                 return true;
                             }
                             return false;
                         }
                     })
+//                    .listener(new RequestListener<String, Bitmap>() {
+//                        @Override
+//                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+//                            LogUtils.e(e.getMessage());
+//                            return false;
+//                        }
+//
+//                        @Override
+//                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                            int oldHeight = resource.getHeight();
+//                            if(sMaxTextureSize < 0){
+//                                Canvas canvas = new Canvas();
+//                                sMaxTextureSize = canvas.getMaximumBitmapHeight() / 4;
+//                            }
+//                            if(oldHeight>sMaxTextureSize){
+//                                iv.setImageBitmap(Bitmap.createScaledBitmap(resource, resource.getWidth() * sMaxTextureSize / oldHeight, sMaxTextureSize, true));
+//                                return true;
+//                            }
+//                            return false;
+//                        }
+//                    })
                     .into(iv);
 
         }
@@ -323,5 +357,49 @@ public class ImageHelper {
         }else {
             return "jpeg";
         }
+    }
+
+    public static int getMaxTextureSize(){
+        EGL10 egl = (EGL10) EGLContext.getEGL();
+
+        EGLDisplay dpy = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+        int[] vers = new int[2];
+        egl.eglInitialize(dpy, vers);
+
+        int[] configAttr = {
+                EGL10.EGL_COLOR_BUFFER_TYPE, EGL10.EGL_RGB_BUFFER,
+                EGL10.EGL_LEVEL, 0,
+                EGL10.EGL_SURFACE_TYPE, EGL10.EGL_PBUFFER_BIT,
+                EGL10.EGL_NONE
+        };
+        EGLConfig[] configs = new EGLConfig[1];
+        int[] numConfig = new int[1];
+        egl.eglChooseConfig(dpy, configAttr, configs, 1, numConfig);
+        if (numConfig[0] == 0) {
+            // TROUBLE! No config found.
+        }
+        EGLConfig config = configs[0];
+
+        int[] surfAttr = {
+                EGL10.EGL_WIDTH, 64,
+                EGL10.EGL_HEIGHT, 64,
+                EGL10.EGL_NONE
+        };
+        EGLSurface surf = egl.eglCreatePbufferSurface(dpy, config, surfAttr);
+        final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;  // missing in EGL10
+        int[] ctxAttrib = {
+                EGL_CONTEXT_CLIENT_VERSION, 1,
+                EGL10.EGL_NONE
+        };
+        EGLContext ctx = egl.eglCreateContext(dpy, config, EGL10.EGL_NO_CONTEXT, ctxAttrib);
+        egl.eglMakeCurrent(dpy, surf, surf, ctx);
+        int[] maxSize = new int[1];
+        GLES10.glGetIntegerv(GLES10.GL_MAX_TEXTURE_SIZE, maxSize, 0);
+        egl.eglMakeCurrent(dpy, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE,
+                EGL10.EGL_NO_CONTEXT);
+        egl.eglDestroySurface(dpy, surf);
+        egl.eglDestroyContext(dpy, ctx);
+        egl.eglTerminate(dpy);
+        return maxSize[0];
     }
 }

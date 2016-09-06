@@ -42,7 +42,9 @@
             />
         <activity
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".module.picdetailpage.PicDetailActivity"/>
+            android:name=".module.picdetailpage.PicDetailActivity"
+            android:hardwareAccelerated="true"
+            />
         <activity
             android:screenOrientation="portrait"
             android:label="寻觅"
