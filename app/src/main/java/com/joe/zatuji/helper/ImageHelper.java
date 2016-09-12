@@ -169,6 +169,7 @@ public class ImageHelper {
                                 listener.onFinished(true);
                             }
                             int oldHeight = resource.getIntrinsicHeight();
+                            int oldWidth = resource.getIntrinsicWidth();
                             if(sMaxTextureSize <= 0){
                                 sMaxTextureSize = getMaxTextureSize();
                             }
@@ -178,6 +179,11 @@ public class ImageHelper {
                                 //TODO:cast exception:GlideDrawable can't be cast to BitmapDrawable
                                 GlideBitmapDrawable bd = (GlideBitmapDrawable) resource;
                                 iv.setImageBitmap(Bitmap.createScaledBitmap(bd.getBitmap(), bd.getBitmap().getWidth() * sMaxTextureSize / oldHeight, sMaxTextureSize, true));
+                                return true;
+                            }else if(oldWidth > sMaxTextureSize){
+                                LogUtils.d("oldHeight:"+oldHeight+" Max Texture Size:"+sMaxTextureSize);
+                                GlideBitmapDrawable bd = (GlideBitmapDrawable) resource;
+                                iv.setImageBitmap(Bitmap.createScaledBitmap(bd.getBitmap(), bd.getBitmap().getHeight() * sMaxTextureSize / oldWidth, sMaxTextureSize, true));
                                 return true;
                             }
                             return false;

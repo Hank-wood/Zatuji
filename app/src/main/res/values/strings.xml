@@ -3,7 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <!--welcome-->
-    <string name="welcome_recommend_by">By %s</string>
+    <string name="welcome_recommend_by">%s</string>
     <!--loading-->
     <string name="load_new_data">玩儿命加载...</string>
     <string name="load_new_discover">寻觅中...</string>
