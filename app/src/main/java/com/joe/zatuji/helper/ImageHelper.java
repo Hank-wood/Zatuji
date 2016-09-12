@@ -129,7 +129,7 @@ public class ImageHelper {
             Glide.with(iv.getContext())
                     .load(Api.HOST_PIC+pic.file.key)
 //                    .asBitmap()
-                    .crossFade(150)
+                    .crossFade(300)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(getRandomColor())
                     .listener(new RequestListener<String, GlideDrawable>() {
@@ -149,6 +149,7 @@ public class ImageHelper {
                             LogUtils.d("max texture size:"+sMaxTextureSize);
                             if(sMaxTextureSize == 0) return false;
                             if(oldHeight > sMaxTextureSize){
+                                //TODO:cast exception:GlideDrawable can't be cast to BitmapDrawable
                                 Drawable drawable = resource;
                                 BitmapDrawable bd = (BitmapDrawable) drawable;
                                 iv.setImageBitmap(Bitmap.createScaledBitmap(bd.getBitmap(), bd.getBitmap().getWidth() * sMaxTextureSize / oldHeight, sMaxTextureSize, true));

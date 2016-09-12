@@ -100,7 +100,8 @@
         <!--Umeng-->
         <meta-data android:value="571af892e0f55ae32f0016ed" android:name="UMENG_APPKEY"></meta-data>
         <meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>
-
+        <meta-data android:name="com.joe.zatuji.helper.HQGlideModule"
+                   android:value="GlideModule"/>
     </application>
 
 </manifest>
