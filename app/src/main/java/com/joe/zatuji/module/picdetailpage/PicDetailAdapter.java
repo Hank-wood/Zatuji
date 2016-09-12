@@ -5,12 +5,14 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.joe.zatuji.R;
 import com.joe.zatuji.api.Api;
 import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.data.bean.MyFavorite;
 import com.joe.zatuji.helper.ImageHelper;
+import com.joe.zatuji.utils.KToast;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -33,39 +35,40 @@ public class PicDetailAdapter extends PagerAdapter {
         this.context = context;
     }
 
-    public void setMyFavorites(ArrayList<MyFavorite> myFavorites){
-        if(myFavorites!=null){
+    public void setMyFavorites(ArrayList<MyFavorite> myFavorites) {
+        if (myFavorites != null) {
             this.myFavorites = myFavorites;
             isGallery = true;
             notifyDataSetChanged();
         }
     }
 
-    public void setPics(ArrayList<DataBean.PicBean> mPics){
-        if(mPics!=null){
+    public void setPics(ArrayList<DataBean.PicBean> mPics) {
+        if (mPics != null) {
             this.mPics = mPics;
             isGallery = false;
             notifyDataSetChanged();
         }
     }
 
-    public void addMyFavorites(ArrayList<MyFavorite> myFavorites){
-        if(myFavorites!=null){
+    public void addMyFavorites(ArrayList<MyFavorite> myFavorites) {
+        if (myFavorites != null) {
             this.myFavorites.addAll(myFavorites);
             notifyDataSetChanged();
         }
     }
 
-    public void addPics(ArrayList<DataBean.PicBean> mPics){
-        if(mPics!=null){
+    public void addPics(ArrayList<DataBean.PicBean> mPics) {
+        if (mPics != null) {
             this.mPics.addAll(mPics);
             notifyDataSetChanged();
         }
     }
+
     @Override
     public int getCount() {
 
-        return myFavorites.size()==0?mPics.size():myFavorites.size();
+        return myFavorites.size() == 0 ? mPics.size() : myFavorites.size();
     }
 
     @Override
@@ -80,15 +83,31 @@ public class PicDetailAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View view = View.inflate(context, R.layout.item_pic_detail_viewpager,null);
+        View view = View.inflate(context, R.layout.item_pic_detail_viewpager, null);
         container.addView(view);
+        final ProgressBar loadingBar = (ProgressBar) view.findViewById(R.id.loading_detail);
         PhotoView image = (PhotoView) view.findViewById(R.id.iv_pic_gif);
         image.setMinimumScale(1f);
+        DataBean.PicBean picBean;
         if(isGallery) {
-            showPic(image, gallery2PicBean(myFavorites.get(position)));
+            picBean = gallery2PicBean(myFavorites.get(position));
         }else {
-            showPic(image,mPics.get(position));
+            picBean = mPics.get(position);
         }
+        showPic(image, picBean, new ImageHelper.OnFinishListener() {
+            @Override
+            public void onStart() {
+                loadingBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFinished(boolean success) {
+                if(!success){
+                    KToast.show("哎呀,加载图片失败啦!");
+                }
+                loadingBar.setVisibility(View.GONE);
+            }
+        });
         image.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float v, float v1) {
@@ -111,8 +130,8 @@ public class PicDetailAdapter extends PagerAdapter {
         return view;
     }
 
-    private void showPic(PhotoView gif, DataBean.PicBean picBean) {
-        ImageHelper.showBig(gif,picBean);
+    private void showPic(PhotoView gif, DataBean.PicBean picBean, ImageHelper.OnFinishListener listener) {
+        ImageHelper.showBig(gif, picBean, listener);
     }
 
     private DataBean.PicBean gallery2PicBean(MyFavorite favorite) {
@@ -121,21 +140,23 @@ public class PicDetailAdapter extends PagerAdapter {
         picBean.raw_text = favorite.desc;
         picBean.file.height = favorite.height;
         picBean.file.width = favorite.width;
-        picBean.file.type =favorite.type;
-        picBean.file.key =favorite.img_url.substring(Api.HOST_PIC.length());
+        picBean.file.type = favorite.type;
+        picBean.file.key = favorite.img_url.substring(Api.HOST_PIC.length());
         return picBean;
     }
-    public DataBean.PicBean getItem(int position){
-        if(isGallery) return (gallery2PicBean(myFavorites.get(position)));
+
+    public DataBean.PicBean getItem(int position) {
+        if (isGallery) return (gallery2PicBean(myFavorites.get(position)));
         return mPics.get(position);
     }
+
     public void setOnItemClickListener(onItemClickListener mListener) {
         this.mListener = mListener;
     }
+
     private onItemClickListener mListener;
 
-    public interface onItemClickListener{
+    public interface onItemClickListener {
         void OnItemClicked(int position, DataBean.PicBean picBean);
     }
-
 }

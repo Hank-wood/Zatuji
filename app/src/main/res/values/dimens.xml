@@ -19,6 +19,8 @@
     <dimen name="d13">13dp</dimen>
     <dimen name="d14">14dp</dimen>
     <dimen name="d15">15dp</dimen>
+    <dimen name="d200">200dp</dimen>
+    <dimen name="d300">300dp</dimen>
 
 
     <dimen name="s1">1sp</dimen>

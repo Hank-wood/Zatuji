@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.joe.zatuji.Event;
@@ -48,6 +49,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     private FloatingActionButton mFabDownload;
     private FloatingActionButton mFabShare;
     private FloatingActionButton mFabFavorite;
+    private ProgressBar mLoadingBar;
 
     @Override
     protected int getLayout() {
@@ -63,6 +65,7 @@ public class PicDetailActivity extends BaseActivity<PicDetailPresenter> implemen
     protected void initView() {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mViewPager = (ScaleViewPager) findViewById(R.id.viewpager_detail);
+        mLoadingBar = findView(R.id.loading_detail);
         mAdapter = new PicDetailAdapter(mActivity);
         mViewPager.setPageTransformer(true,new SelectTransformer());
         mViewPager.setAdapter(mAdapter);

@@ -88,7 +88,7 @@ dependencies {
     //turboRecyclerView
     compile 'cc.solart:turbo-recyclerview-helper:1.0.9-beta'
     //floating tool bar
-    compile 'com.github.rubensousa:FloatingToolbar:1.0.0'
+    compile 'com.github.rubensousa:FloatingToolbar:1.1.1'
     compile 'com.github.medyo:android-about-page:1.0.8'
     //switch
     compile 'com.kyleduo.switchbutton:library:1.4.1'

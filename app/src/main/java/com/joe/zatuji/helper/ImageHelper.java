@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.opengl.GLES10;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -17,18 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapDrawableResource;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.joe.zatuji.Constant;
@@ -39,7 +37,6 @@ import com.joe.zatuji.data.bean.DataBean;
 import com.joe.zatuji.utils.LogUtils;
 
 import java.io.File;
-import java.lang.ref.SoftReference;
 import java.util.Random;
 
 import javax.microedition.khronos.egl.EGL10;
@@ -47,7 +44,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
-import javax.microedition.khronos.opengles.GL10;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -73,7 +69,8 @@ public class ImageHelper {
                 .load(key)
                 .crossFade(150)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .placeholder(getRandomColor());
+                .placeholder(getRandomColor())
+                .error(R.color.white);
 
     }
     /**
@@ -85,7 +82,8 @@ public class ImageHelper {
                 .asGif()
                 .crossFade(150)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .placeholder(getRandomColor());
+                .placeholder(getRandomColor())
+                .error(R.color.white);
     }
     /**
      * 展示缩略图
@@ -115,70 +113,76 @@ public class ImageHelper {
      * 展示全屏大图
      */
     public static int sMaxTextureSize = -1;
-    public static void showBig(final PhotoView iv , final DataBean.PicBean pic){
+    public static void showBig(PhotoView iv,DataBean.PicBean pic){
+        showBig(iv, pic, null);
+    }
+    public static void showBig(final PhotoView iv , final DataBean.PicBean pic, final OnFinishListener listener){
+        if(listener != null){
+            listener.onStart();
+        }
         resizeImage(iv,pic);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         if(getType(pic.file.type).contains("gif")){
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)iv.getLayoutParams();
-            params.gravity = Gravity.CENTER;
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)iv.getLayoutParams();
+//            params.gravity = Gravity.CENTER;
             iv.setLayoutParams(params);
-            baseGif(iv,Api.HOST_PIC+pic.file.key).into(iv);
+            baseGif(iv,Api.HOST_PIC+pic.file.key)
+                    .listener(new RequestListener<String, GifDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GifDrawable> target, boolean isFirstResource) {
+                            if(listener!=null){
+                                listener.onFinished(false);
+                            }
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GifDrawable resource, String model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            if(listener!=null){
+                                listener.onFinished(true);
+                            }
+                            return false;
+                        }
+                    })
+                    .into(iv);
         }else{
             iv.setZoomable(true);
             iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Glide.with(iv.getContext())
                     .load(Api.HOST_PIC+pic.file.key)
-//                    .asBitmap()
                     .crossFade(300)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(getRandomColor())
+                    .error(R.color.white)
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            if(listener!=null){
+                                listener.onFinished(false);
+                            }
                             return false;
                         }
 
                         @Override
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            if(listener!=null){
+                                listener.onFinished(true);
+                            }
                             int oldHeight = resource.getIntrinsicHeight();
                             if(sMaxTextureSize <= 0){
-//                                Canvas canvas = new Canvas();
-//                                sMaxTextureSize = canvas.getMaximumBitmapHeight() / 4;
                                 sMaxTextureSize = getMaxTextureSize();
                             }
-                            LogUtils.d("max texture size:"+sMaxTextureSize);
                             if(sMaxTextureSize == 0) return false;
                             if(oldHeight > sMaxTextureSize){
+                                LogUtils.d("oldHeight:"+oldHeight+" Max Texture Size:"+sMaxTextureSize);
                                 //TODO:cast exception:GlideDrawable can't be cast to BitmapDrawable
-                                Drawable drawable = resource;
-                                BitmapDrawable bd = (BitmapDrawable) drawable;
+                                GlideBitmapDrawable bd = (GlideBitmapDrawable) resource;
                                 iv.setImageBitmap(Bitmap.createScaledBitmap(bd.getBitmap(), bd.getBitmap().getWidth() * sMaxTextureSize / oldHeight, sMaxTextureSize, true));
                                 return true;
                             }
                             return false;
                         }
                     })
-//                    .listener(new RequestListener<String, Bitmap>() {
-//                        @Override
-//                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
-//                            LogUtils.e(e.getMessage());
-//                            return false;
-//                        }
-//
-//                        @Override
-//                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                            int oldHeight = resource.getHeight();
-//                            if(sMaxTextureSize < 0){
-//                                Canvas canvas = new Canvas();
-//                                sMaxTextureSize = canvas.getMaximumBitmapHeight() / 4;
-//                            }
-//                            if(oldHeight>sMaxTextureSize){
-//                                iv.setImageBitmap(Bitmap.createScaledBitmap(resource, resource.getWidth() * sMaxTextureSize / oldHeight, sMaxTextureSize, true));
-//                                return true;
-//                            }
-//                            return false;
-//                        }
-//                    })
                     .into(iv);
 
         }
@@ -402,5 +406,10 @@ public class ImageHelper {
         egl.eglDestroyContext(dpy, ctx);
         egl.eglTerminate(dpy);
         return maxSize[0];
+    }
+
+    public interface OnFinishListener {
+        void onStart();
+        void onFinished(boolean success);
     }
 }
