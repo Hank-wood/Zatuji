@@ -154,6 +154,7 @@ public class ImageHelper {
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(getRandomColor())
                     .error(R.color.white)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -173,7 +174,7 @@ public class ImageHelper {
                             if(sMaxTextureSize <= 0){
                                 sMaxTextureSize = getMaxTextureSize();
                             }
-                            if(sMaxTextureSize == 0) return false;
+                            if(sMaxTextureSize <= 0) return false;
                             if(oldHeight > sMaxTextureSize){
                                 LogUtils.d("oldHeight:"+oldHeight+" Max Texture Size:"+sMaxTextureSize);
                                 //TODO:cast exception:GlideDrawable can't be cast to BitmapDrawable

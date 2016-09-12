@@ -162,3 +162,6 @@ public static final int *;
 #bugly
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
+
+#HQ
+-keep public class * extends com.bumptech.glide.module.GlideModule
